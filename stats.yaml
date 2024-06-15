@@ -1,0 +1,11 @@
+database:
+  articles: 0
+  articles_fetched: 0
+  categories_count: 0
+  categories_list: []
+model:
+  accuracy: 0
+  feedback_correct: 0
+  feedback_wrong: 0
+  predict_correct: 0
+  predict_wrong: 0

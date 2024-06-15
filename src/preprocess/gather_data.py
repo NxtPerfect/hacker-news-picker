@@ -1,12 +1,18 @@
 from bs4 import BeautifulSoup
 import requests
+import random
 
 URL = "https://news.ycombinator.com/"
-PAGINATION = "https://news.ycombinator.com/?p=" # then add number
+# then add number
+PAGINATION = "https://news.ycombinator.com/?p="
+# Randomize user_agent on startup or every 30 minutes
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36"
+USER_AGENT_LIST = ["Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.3", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.3", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36 Edg/125.0.0.", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:126.0) Gecko/20100101 Firefox/126.", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.3"]
 
 def run():
-    headers = {'User-Agent': USER_AGENT}
+    random_index = random.randint(0, len(USER_AGENT_LIST))
+    user_agent = USER_AGENT_LIST[random_index]
+    headers = {'User-Agent': user_agent}
     try:
         page = requests.get(URL, headers=headers)
         soup = BeautifulSoup(page.content, 'html.parser')
@@ -14,10 +20,16 @@ def run():
 
         # td class="title" for title and <a href> inside of span class="titleline" for link
         # span class="age" for age of post
-        title = soup.find("span", class_="titleline")
-        link = title.find_next("a")
-        age = soup.find("span", class_="age")
+        title = soup.find("span", class_="titleline") # Should find_all instead
+        link = title.find_next("a") # Should find_all_next instead
+        age = soup.find("span", class_="age") # Should find_all instead
         print(title, age, link)
+
+        # Extract text inside link
+        # extract age from span maybe just text is better than date
+        # as then i can run script every x hours, and if age is more than that
+        # i can skip it, maybe i don't need the age if i just skip article
+        # if it has same title and link
     except Exception as e:
         print("Failed to get page data.")
         """

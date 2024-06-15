@@ -19,13 +19,18 @@
 - [ ] Ideally, it should be able to both categorize the article, and judge if it's interesting and on what scale
 
 ## Step 1
-- [ ] Model to predict the interesting rate of an article based on title
-    - Needs at least 80% accuracy
-
-## Step 2
 - [ ] Model to categorize article based on title
     - Use already existing categories from file
     - At least 90% accuracy
+    - RNN, especially LSTM or GRU might be good,
+    but computionally expensive
+    - CNN can be faster but less effective
+
+## Step 2
+- [ ] Model to predict the interesting rate of an article based on title
+    - Needs at least 80% accuracy
+    - MLP easy to implement but worse than RNN
+    - RNN, better than MLP but more computionally expensive
 
 ## Optional
 - [ ] Create one model to do it all or somehow join them together
