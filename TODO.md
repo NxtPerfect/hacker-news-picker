@@ -1,14 +1,11 @@
 # Data preparing
 ## Step 1
-- [/] script to go onto hacker news and fetch titles with links of articles
-    - if article in db, skip
-    - if not, give a choice, either interesting or not interesting and discard
-        - if interesting, what rating and category
-    - if article discarded once, don't show it again
-    - for pagination when all articles done, link is [https://news.ycombinator.com/?p=2] for 2 = page
-    - script should be seperate from the model, so that if at any point i want to change website to get news from
+- [x] script to go onto hacker news and fetch titles with links of articles
+    - [x] if article in db, skip
+    - [x] for pagination when all articles done, link is [https://news.ycombinator.com/?p=2] for 2 = page
+    - [x] script should be seperate from the model, so that if at any point i want to change website to get news from
         it should only require the script to be changed, not the model
-- [ ] add at least 5000 articles
+- [/] add at least 5000 articles
 
 ## Step 2
 - [ ] One-hot-encode the titles or some other way to turn text into numbers
