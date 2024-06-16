@@ -26,14 +26,14 @@ def updateModel(accuracy: float, feedback_correct: int, feedback_wrong: int, pre
             print(e)
             return False
 
-def updateDatabase(articles: int, articles_fetched: int, categories_count: int, categories_list: list):
+def updateDatabase(articles: int, categories_count: int, categories_list: list):
     # articles: 0 # unique articles in database
     # articles_fetched: 0 # articles fetched from website
     # categories_count: 0 # unique categories in database
     # categories_list: [] # unique categories in database
     with open(YAML_PATH, "r") as f:
         data = load(f, Loader=Loader)
-        new_data = {'articles': articles, 'articles_fetched': articles_fetched, 'categories_count': categories_count, 'categories_list': categories_list}
+        new_data = {'articles': articles, 'categories_count': categories_count, 'categories_list': categories_list}
         try:
             data["database"] = new_data
             with open(YAML_PATH, "w") as fw:

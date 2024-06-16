@@ -1,5 +1,4 @@
-My thoughts on Python in Excel,Programming,https://www.xlwings.org/blog/my-thoughts-on-python-in-exce,6.0
-Fungus breaks down ocean plastic,Science,https://www.nioz.nl/en/news/fungus-breaks-down-ocean-plastic,8.0
+Title,Category,Link,Interest_Rating,Is_Fake_News
 Microsoft to delay release of Recall AI feature on security concerns,Operating Systems,https://www.reuters.com/technology/artificial-intelligence/microsoft-delay-release-recall-ai-feature-security-concerns-2024-06-14/,6.0
 Scan HTML faster with SIMD instructions – Chrome edition,Websites,https://lemire.me/blog/2024/06/08/scan-html-faster-with-simd-instructions-chrome-edition/,7.0
 "Show HN: Shpool, a Lightweight Tmux Alternative",Software,https://github.com/shell-pool/shpool,6.0
@@ -22,7 +21,7 @@ Nvidia Warp: A Python framework for high performance GPU simulation and graphics
 Cost of self hosting Llama-3 8B-Instruct,AI,https://blog.lytix.co/posts/self-hosting-llama-3,8.0
 Effect – Build robust apps in TypeScript,Programming,https://effect.website/,8.0
 Start presentations on the second slide,Lifehack,https://tidyfirst.substack.com/p/start-presentations-on-the-second,8.0
-Map of forest sounds from around the world,Apps,https://timberfestival.org.uk/soundsoftheforest-soundmap/,6.0
+Map of forest sounds from around the world,Websites,https://timberfestival.org.uk/soundsoftheforest-soundmap/,6.0
 YouTube embeds ads into videos to beat ad blockers,Websites,https://searchengineland.com/youtube-embeds-ads-videos-ad-blockers-443187,7.0
 Sleep deprivation disrupts memory,Science,https://www.nature.com/articles/d41586-024-01732-y,9.0
 Dark Software,Software,https://notes.mtb.xyz/p/dark-software,9.0
@@ -31,175 +30,175 @@ Turning the Tables on AI,AI,https://ia.net/topics/turning-the-tables-on-ai,8.0
 Hydra: Generalizing Peephole Optimizations with Program Synthesis [pdf],Programming,https://users.cs.utah.edu/~regehr/generalization-oopsla24.pdf,5.0
 Vercel ends open-source sponsorship program giving projects 24hr notice,Websites,https://vercel.com/guides/can-vercel-sponsor-my-open-source-project,6.0
 Effect of passenger position on crash injury risk in aircraft (2015) [pdf],Science,https://www.tc.faa.gov/its/worldpac/techrpt/am15-17.pdf,6.0
-ESASky,,https://sky.esa.int/esasky/,5.0
+ESASky,Websites,https://sky.esa.int/esasky/,8.0
 Perplexity AI Is Lying about Their User Agent,AI,https://rknight.me/blog/perplexity-ai-is-lying-about-its-user-agent/,7.0
 Engineer's Solar Panels Are Breaking Efficiency Records,Science,https://spectrum.ieee.org/solar-panels-breaking-efficiency-records,7.0
-Show HN: Keydogger – Minimal keyboard macro for Linux(Wayland),Apps,https://github.com/jarusll/keydogger,6.0
+Show HN: Keydogger – Minimal keyboard macro for Linux(Wayland),Software,https://github.com/jarusll/keydogger,6.0
 Leveraging Zig's Allocators,Programming,https://www.openmymind.net/Leveraging-Zigs-Allocators/,6.0
 A most profound video game: a good cognitive aid for research,Science,https://thoughtforms.life/a-most-profound-video-game-a-good-cognitive-aid-for-research-at-the-frontier-of-life-and-mind/,6.0
 Acorn Computer Systems catalogue circa 1983,Websites,https://blog.jgc.org/2024/06/acorn-computer-systems-catalogue-circa.html,4.0
-Threescaper: A website for loading Townscaper models into Three.js,Apps,https://github.com/meliharvey/threescaper,5.0
-Embedded Swift [video],Programming,https://www.youtube.com/watch?v=LqxbsADqDI4,"3,0"
+Threescaper: A website for loading Townscaper models into Three.js,Websites,https://github.com/meliharvey/threescaper,5.0
+Embedded Swift [video],Programming,https://www.youtube.com/watch?v=LqxbsADqDI4,3.0
 DARPA Shows Concepts for the Future of VTOL Uncrewed Aerial Systems,Science,https://www.darpa.mil/news-events/2024-05-22,6.0
-Address Sanitizer Internals,,https://blog.gistre.epita.fr/posts/benjamin.peter-2022-10-28-address_sanitizer_internals/,5.0
+Address Sanitizer Internals,Programming,https://blog.gistre.epita.fr/posts/benjamin.peter-2022-10-28-address_sanitizer_internals/,5.0
 Some early results for feed reader behavior monitoring,Software,http://rachelbythebay.com/w/2024/06/11/fsr/,5.0
 Can Language Models Serve as Text-Based World Simulators?,AI,https://arxiv.org/abs/2406.06485,7.0
 Perfectionism is optimizing at the wrong scale,Programming,https://www.autodidacts.io/holistic-perfectionism/,8.0
 Voyager 1 is back online! NASA spacecraft returns data from all 4 instruments,Science,https://www.space.com/voyager-1-fully-operational,7.0
 Nango (YC W23) Is Hiring a Senior Product Engineer (100% Remote),Programming,https://www.nango.dev/jobs,7.0
 The Four Kinds of Research-and-Development Teams,Science,http://blogs.newardassociates.com/blog/2024/four-kinds-of-rd-teams.html,6.0
-Southwest flight came within 400 feet of crashing into the ocean,,https://www.cnn.com/2024/06/15/us/southwest-flight-hawaii-federal-investigation/index.html,
-Is This the First Nintendo Commercial?,,https://gamehistory.org/mego-time-out-commercial/,
-Survey of Rickrolling in Academic Literature [pdf],,https://arxiv.org/abs/2204.06826,
-Diagnosing video signal loss on Wii and GBS-Control,,https://nyanpasu64.gitlab.io/blog/wii-gbs-c-sync-loss/,
-Introduction to the Odin Programming Language,,https://zylinski.se/posts/introduction-to-odin/,
-Exponentially Better Rotations (2022),,http://thenumb.at/Exponential-Rotations/,
-"Syzygy: An open standard for low cost, compact and high-performance peripherals",,https://syzygyfpga.io/,
-Radioactive drugs strike cancer with precision,,https://knowablemagazine.org/content/article/health-disease/2024/cancer-fighting-radiopharmaceuticals-are-taking-off,
-Eden Abhez: The strangest hit songwriter,,https://www.honest-broker.com/p/the-strangest-hit-songwriter-in-history,
-Apple announced RCS with a whimper when it should have been a bang,,https://www.theverge.com/2024/6/15/24178470/apple-rcs-support-wwdc-announcement-android-imessage,
-"How to Raise a Tribal Army in Pre-Roman Europe, Part II",,https://acoup.blog/2024/06/14/collections-how-to-raise-a-tribal-army-in-pre-roman-europe-part-ii-government-without-states/,
-Chaos in the medium: Watercolour plotting,,https://www.amygoodchild.com/blog/watercolour-plots,
-Useful and Overlooked Skills,,https://collabfund.com/blog/useful-and-overlooked-skills/,
-"Two announcements: AI for Math resources, and erdosproblems.com",,https://terrytao.wordpress.com/2024/04/19/two-announcements-ai-for-math-resources-and-erdosproblems-com/,
-Face of ancient Australian 'giga-goose' revealed after fossil skull found,,https://www.nhm.ac.uk/discover/news/2024/june/face-ancient-australian-giga-goose-revealed-after-fossil-skull-found.html,
-Ventoy: Remove BLOBs from the Source Tree,,https://github.com/ventoy/Ventoy/issues/2795,
-What About libjpeg v9? (2013),,https://libjpeg-turbo.org/About/Jpeg-9,
-Tesla in self-drive mode slams into police car in Orange County,,https://ktla.com/news/local-news/tesla-in-self-drive-mode-slams-into-police-car-in-orange-county/,
-America Is Losing the Shoe Race with China,,https://www.csis.org/blogs/working-papers/america-losing-shoe-race-china,
-From grep to SPLADE: a journey through semantic search,,https://blog.elicit.com/semantic-search/,
-The Day I Learned to Think Like a Browser,,https://www.thebookwormsburrow.com/p/the-day-i-learned-to-think-like-a,
-AI Search: The Bitter-Er Lesson,,https://yellow-apartment-148.notion.site/AI-Search-The-Bitter-er-Lesson-44c11acd27294f4495c3de778cd09c8d,
-The borrow checker within,,https://smallcultfollowing.com/babysteps/blog/2024/06/02/the-borrow-checker-within/,
-Using a 1965 Dutch Rotary Phone via VoIP (T65) in 2024,,https://raymii.org/s/blog/Using_a_1965_Dutch_Rotaty_Phone_T65_via_VoIP_in_2024.html,
-Nondeterminism in Formal Specification,,https://buttondown.email/hillelwayne/archive/nondeterminism-in-formal-specification/,
-Kizhi Pogost,,https://whc.unesco.org/en/list/544/,
-Overcoming pitfalls of Postgres logical decoding,,https://blog.peerdb.io/overcoming-pitfalls-of-postgres-logical-decoding,
-I found a 55 year old bug in the first Lunar Lander game,,https://martincmartin.com/2024/06/14/how-i-found-a-55-year-old-bug-in-the-first-lunar-lander-game/,
-Show HN: Elles – A nicer /bin/ls,,https://github.com/arp242/elles,
-How to design and manufacture your own chip [video],,https://www.youtube.com/watch?v=caXwuuXSB-A,
-Jean Stein's Rolodex: The legendary editor's social genius,,https://yalereview.org/article/benjamin-anastas-jean-steins-rolodex,
-"Inkdown is an open source Markdown reading, editing, and sharing tool",,https://github.com/1943time/bluestone,
-Tracing Intel's Atom Journey: Goldmont Plus,,https://chipsandcheese.com/2024/06/10/tracing-intels-atom-journey-goldmont-plus/,
-Mewz: Unikernel written in Zig for running WASI-compatible WASM applications,,https://github.com/mewz-project/mewz,
-"What, Me Worry? Or Should We Fear Intelligent Machines? – Gerald Jay Sussman [video]",,https://www.youtube.com/watch?v=skvP2tlVPVA,
-Spaced repetition for teaching two-year olds how to read,,https://chrislakin.blog/p/spaced-repetition-for-teaching-two,
-The sun's magnetic field is about to flip,,https://www.space.com/sun-magnetic-field-flip-solar-maximum-2024,
-"""The Door Problem"" (2014)",,https://lizengland.com/blog/2014/04/the-door-problem/,
-H.264 Is Magic (2016),,https://sidbala.com/h-264-is-magic/,
-Herbert A. Simon and Jorge Luis Borges About Free Will (2023),,https://www.cambridge.org/core/journals/journal-of-the-history-of-economic-thought/article/abs/on-herbert-a-simon-and-jorge-luis-borges-about-free-will/27D7CC976FF4C903881C7F5C91C53664,
-Anticipatory Anxiety,,https://www.lrb.co.uk/the-paper/v46/n12/william-davies/anticipatory-anxiety,
-Making my local LLM voice assistant faster and more scalable with RAG,,https://johnthenerd.com/blog/faster-local-llm-assistant/,
-New algorithm discovers language just by watching videos,,https://www.csail.mit.edu/news/new-algorithm-discovers-language-just-watching-videos,
-Sonos changes terms and conditions and may now pass on data to third parties,,https://www.notebookcheck.net/Sonos-changes-terms-and-conditions-and-may-now-pass-on-data-to-third-parties.848124.0.html,
-Edmond Albius's method of pollination is now used by all vanilla growers,,https://nautil.us/the-boy-who-was-king-of-vanilla-522772/,
-True Defamation [pdf],,https://www.journaloffreespeechlaw.org/helmreich.pdf,
-"The 3-way fight for a 1,800km long mountain ridge under the Arctic",,https://everythingisamazing.substack.com/p/theres-something-incredible-under,
-The Microsoft Excel superstars throw down in Vegas,,https://www.theverge.com/c/24133822/microsoft-excel-spreadsheet-competition-championship,
-Study finds juvenile dolphins who play together are more successful as adults,,https://phys.org/news/2024-06-juvenile-dolphins-play-successful-adults.html,
-The first 'major lunar standstill' in more than 18 years is about to occur,,https://www.livescience.com/space/the-moon/the-1st-major-lunar-standstill-in-more-than-18-years-is-about-to-occur-heres-how-to-see-it,
-FAA investigating how counterfeit titanium got into Boeing and Airbus jets,,https://www.nytimes.com/2024/06/14/us/politics/boeing-airbus-titanium-faa.html,
-I bought an encyclopedia,,https://www.optoutproject.net/what-is-true-on-the-internet/,
-Satellite data show electromagnetic anomalies 19 days before Turkey earthquake,,https://phys.org/news/2024-06-satellite-reveal-electromagnetic-anomalies-days.html,
-Japanese addresses: No street names. Block numbers (2009),,https://sive.rs/jadr,
-"Fear and hardship for the last community inside Chitwan, Nepal's tiger central",,https://news.mongabay.com/2024/06/fear-and-hardship-for-the-last-community-inside-chitwan-nepals-tiger-central/,
-Hopac: Concurrent ML Implementation in F#,,https://github.com/Hopac/Hopac/blob/master/Docs/Programming.md,
-Stanford Internet Observatory wilts under legal pressure during election year,,https://www.theregister.com/2024/06/14/stanford_internet_observatory/,
-Hydra: Generalizing peephole optimizations with program synthesis [pdf],,https://users.cs.utah.edu/~regehr/generalization-oopsla24.pdf,
-Pico SDR,,https://blog.porucha.net/2024/pico-sdr/index.html,
-Scientists develop fatigue-free ferroelectric material,,https://phys.org/news/2024-06-scientists-fatigue-free-ferroelectric-material.html,
-Germany after the European elections,,https://adamtooze.substack.com/p/chartbook-293-nope-or-the-political,
-"'Cheapfake' Biden videos enrapture right-wing media, but deeply mislead",,https://www.washingtonpost.com/politics/2024/06/14/cheapfake-biden-videos-enrapture-right-wing-media-deeply-mislead/,
-Britain's 'Pompeii': UK's Largest Bronze Age Find,,https://www.bbc.com/news/articles/cx8q32rj2yjo,
-"Lies, Damn Lies, and Data Science",,https://beabytes.com/data-science-lies/,
-The challenge of writing a on-demand transcoder,,https://zoriya.dev/blogs/transcoder/,
-Driving forward in Android drivers,,https://googleprojectzero.blogspot.com/2024/06/driving-forward-in-android-drivers.html,
-James Webb Space Telescope spots asteroid collision in neighboring star system,,https://www.space.com/james-webb-space-telescope-asteroid-collision-beta-pictoris,
-Freenet 2024 – a drop-in decentralized replacement for the web [video],,https://www.youtube.com/watch?v=enTAromEeHo,
-Alan Bates the campaigner for the Post Office IT scandal has been knighted,,https://www.theguardian.com/uk-news/article/2024/jun/14/post-office-campaigner-alan-bates-knighted-in-kings-birthday-honours,
-Show HN: SHAllenge – Compete to get the lowest hash,,https://shallenge.quirino.net/,
-The oldest ecosystems on Earth,,https://nautil.us/the-oldest-ecosystems-on-earth-650875/,
-The Impossibility of Supersized Machines (2017),,https://arxiv.org/abs/1703.10987,
-Milk-V Duo: A RISC-V SBC that runs Linux and RTOS/Arduino for $5,,https://milkv.io/duo#,
-DARPA unveils 6 new designs for uncrewed vertical-takeoff military aircraft,,https://www.livescience.com/technology/engineering/darpa-considers-6-new-designs-for-uncrewed-vtol-aircraft-that-carry-weapons-payloads-with-test-flights-set-for-2026,
-Which Root Certificates should you trust? Find out with CertInfo,,https://raymii.org/s/software/Which_Root_Certificates_Should_You_Trust_CertInfo.html,
-Rest of World's 2024 global playlist,,https://restofworld.org/music/,
-Django SQLite Production Config,,https://blog.pecar.me/sqlite-django-config,
-"The ""uncanny"" is the experience of a loss of control",,https://ykulbashian.medium.com/the-uncanny-is-the-experience-of-a-loss-of-control-06a3fb4dbcd1,
-My thoughts on Python in Excel,,https://www.xlwings.org/blog/my-thoughts-on-python-in-excel,
-The Measure of Intelligence,,https://arxiv.org/abs/1911.01547,
-Stanford files amicus brief in Murthy vs. Missouri,,https://cyber.fsi.stanford.edu/io/news/update-amicus-sio-2024,
-Mouth-based touchpad enables people living with paralysis to use computers,,https://news.mit.edu/2024/mouth-based-touchpad-augmental-0605,
-Show HN: Paramount – Human Evals of AI Customer Support,,https://github.com/ask-fini/paramount,
-ASHA for Linux,,https://github.com/thewierdnut/asha_pipewire_sink,
-Kaprekar's Magic 6174,,https://www.oranlooney.com/post/kaprekar/,
-PlayStation Portal (Remote Play): Stack-buffer overflow in HEVC decoder,,https://github.com/google/security-research/security/advisories/GHSA-c24v-5836-j27w,
-"Show HN: XDeck – An ad-blocking client app for macOS, like TweetDeck",,https://github.com/morishin/XDeck,
-"Snowden: ""They've gone full mask-off: do not ever trust OpenAI or its products""",,https://twitter.com/Snowden/status/1801610725229498403,
-POSIX.1-2024 is published,,https://ieeexplore.ieee.org/document/10555529,
-The Swift compiler is slow due to how types are inferred,,https://danielchasehooper.com/posts/why-swift-is-slow/,
-ZeroPoint's nanosecond-scale memory compression could tame power-hungry AI infra,,https://techcrunch.com/2024/05/23/zeropoints-nanosecond-scale-memory-compression-could-tame-power-hungry-ai-infrastructure/,
-Camping – Ruby Web Microframework,,https://github.com/camping/camping,
-Microsoft answered Congress' questions on security. The White House needs to act,,https://www.theregister.com/2024/06/15/microsoft_brad_smith_congress/,
-Banana giant Chiquita held liable by US court for funding paramilitaries,,https://www.bbc.com/news/articles/c6pprpd3x96o,
-Nemotron-4-340B,,https://blogs.nvidia.com/blog/nemotron-4-synthetic-data-generation-llm-training/,
-"The rise and fall of Koo, India’s once-thriving Twitter alternative",,https://restofworld.org/2024/twitter-alternative-koo/,
-Oracle is shutting down its ad business,,https://www.adweek.com/programmatic/oracle-is-shutting-down-its-ad-business/,
-Uncensor any LLM with abliteration,,https://huggingface.co/blog/mlabonne/abliteration,
-"Bibliography keys: It's as easy as [1], [2], [3]",,http://blog.cr.yp.to/20240612-bibkeys.html,
-TorrentGalaxy Goes Offline with Mysterious Message to Users,,https://torrentfreak.com/torrentgalaxy-goes-offline-with-mysterious-message-to-users-240614/,
-A new map of medieval London,,https://londonist.substack.com/p/a-new-map-of-medieval-london,
-Gerald Sussman: Programming is (should be) fun (2022) [video],,https://www.youtube.com/watch?v=2MYzvQ1v8Ww,
-KDE Receives New Human Interface Guidelines for 2024,,https://www.phoronix.com/news/KDE-New-HIG-2024,
-"GitBook, Effortless API Documentation",,https://www.gitbook.com/,
-Former Neuralink Staffer Sues After Scratches from Herpes Monkey,,https://www.bloomberg.com/news/articles/2024-06-15/former-neuralink-staffer-sues-after-scratches-from-herpes-monkey,
-Huawei reportedly selling beef it received as sanctions-evading payment,,https://wccftech.com/huawei-is-now-reportedly-selling-beef-products-that-it-received-as-sanctions-evading-payment-for-the-5g-equipment/,
-Converting In-Context Learning to Weights in Linearized-Attention Transformers,,https://arxiv.org/abs/2406.02847,
-Drawing Machines,,https://drawingmachines.org/,
-Mushroom hunters can't stop finding mysterious fungi,,https://www.nytimes.com/2024/06/11/science/mushroom-hunters-dna.html,
-The ‘Network of Web Trees’ in Gaza,,https://globalvoices.org/2024/06/13/the-ingenious-network-tree-defying-gazas-connectivity-blockade/,
-100-foot 'walking tree' in New Zealand,,https://www.livescience.com/planet-earth/plants/100-foot-walking-tree-in-new-zealand-looks-like-an-ent-from-lord-of-the-rings-and-is-the-lone-survivor-of-a-lost-forest,
-"The Cleantech Revolution It's exponential, disruptive, and now",,https://rmi.org/insight/the-cleantech-revolution/,
-Land value tax in online games and virtual worlds (2022),,https://progressandpoverty.substack.com/p/land-value-tax-in-online-games-and,
-Crypto Titans' $160M War Chest Threatens Senate Democrats,,https://www.yahoo.com/news/crypto-titans-160-million-war-100000741.html,
-We spent a week in China. Here's what we learned about our global rival,,https://text.npr.org/g-s1-4569,
-What If We Recaption Billions of Web Images with LLaMA-3?,,https://arxiv.org/abs/2406.08478,
-Wild elephants may have names that other elephants use to call them,,https://www.npr.org/2024/06/07/nx-s1-4994426/wild-elephants-individual-names,
-Ask HN: Would you use an architecture diagram tool to save infra costs?,,item?id=40688245,
-How much did the Apollo program cost?,,https://www.planetary.org/space-policy/cost-of-apollo,
-"Twenty, a modern CRM alternative to Salesforce",,https://twenty.com,
-Ottertune.ai Is Shut Down,,https://ottertune.com/index.html,
-Browser extension that globally blocks vertical video?,,item?id=40684982,
-Apple and Meta could face charges for violating EU tech rules,,https://www.theverge.com/2024/6/14/24178724/apple-meta-eu-charges-dma,
-Z80 CPU User Manual [pdf],,http://www.zilog.com/docs/z80/um0080.pdf,
-Whose CIDR is it anyway?,,https://www.netmeister.org/blog/cidr-allocations.html,
-Terence Tao on proof checkers and AI programs,,https://www.scientificamerican.com/article/ai-will-become-mathematicians-co-pilot/,
-Group chats rule the world,,https://sriramk.com/group-chats-rule-the-world,
-Progressive Web Apps (PWAs) Phishing,,https://mrd0x.com/progressive-web-apps-pwa-phishing/,
-Borges on Chaos Theory,,https://aethermug.com/posts/borges-on-chaos-theory,
-Centuries of Childhood,,https://resobscura.substack.com/p/centuries-of-childhood,
-Philips Tableaux with 13-inch E Ink Display Launched at InfoComm 2024,,https://goodereader.com/blog/e-paper/philips-tableaux-with-13-inch-e-ink-display-launched-at-infocomm-2024,
-Using AI to decode dog vocalization,,https://news.umich.edu/using-ai-to-decode-dog-vocalizations/,
-Turning the Tables on AI,,https://ia.net/topics/turning-the-tables-on-ai,
-Ask HN: Why is nobody manufacturing low tech electric cars in 2024?,,item?id=40668427,
-MLow: Meta's low bitrate audio codec,,https://engineering.fb.com/2024/06/13/web/mlow-metas-low-bitrate-audio-codec/,
-Three Views on the California Math Framework [pdf],,https://www.ams.org/journals/notices/202406/rnoti-p797.pdf,
-"ASML Aims for Hyper-NA EUV, Shrinking Chip Limits",,https://www.eetimes.com/asml-aims-for-hyper-na-euv-shrinking-chip-limits/,
-Southwest Plane Plunged Within 400 Feet of Ocean Near Hawaii,,https://www.msn.com/en-us/money/other/southwest-plane-plunged-within-400-feet-of-ocean-near-hawaii/ar-BB1ofg8n,
-"Microsoft Chose Profit over Security, Whistleblower Says",,https://www.propublica.org/article/microsoft-solarwinds-golden-saml-data-breach-russian-hackers,
-The 30-meter pass in the Pyrenees through which millions of insects migrate,,https://english.elpais.com/climate/2024-06-13/the-30-meter-pass-in-the-pyrenees-through-which-millions-of-insects-migrate.html,
-Invention to Impact: The story of LASIK eye surgery,,https://new.nsf.gov/science-matters/invention-impact-story-lasik-eye-surgery,
-Perspective-Correct Interpolation,,https://andrewkchan.dev/posts/perspective-interpolation.html,
-IntelliJ GitHub Plugin leaking credentials,,https://blog.jetbrains.com/security/2024/06/updates-for-security-issue-affecting-intellij-based-ides-2023-1-and-github-plugin/,
-HumanPlus: Humanoid Shadowing and Imitation from Humans,,https://humanoid-ai.github.io/,
-ChatGPT-like self-hosted platform,,https://github.com/singulatron/singulatron,
-"What Emacs got right, or how modern apps were more like 50 year old text editor",,https://danielde.dev/blog/what-emacs-got-right,
-Tesla's FSD – A Useless Technology Demo,,https://tomverbeure.github.io/2024/05/20/Tesla-FSD-First-and-Last-Impressions.html,
-Lexbor – An open source HTML Renderer library,,https://github.com/lexbor/lexbor,
-Swift Static Linux SDK,,https://www.swift.org/documentation/articles/static-linux-getting-started.html,
-The development process of Wordbots (2016–2023),,https://alex.nisnevich.com/blog/2024/06/02/wordbots_retrospective.html,
-The GJK Algorithm: A weird and beautiful way to do a simple thing,,https://computerwebsite.net/writing/gjk,
-Meta will not launch Meta AI in Europe for now,,https://www.reuters.com/technology/artificial-intelligence/meta-will-not-launch-meta-ai-europe-now-2024-06-14/,
+Southwest flight came within 400 feet of crashing into the ocean,Science,https://www.cnn.com/2024/06/15/us/southwest-flight-hawaii-federal-investigation/index.html,4.0
+Is This the First Nintendo Commercial?,Gaming,https://gamehistory.org/mego-time-out-commercial/,5.0
+Survey of Rickrolling in Academic Literature [pdf],Science,https://arxiv.org/abs/2204.06826,6.0
+Diagnosing video signal loss on Wii and GBS-Control,Science,https://nyanpasu64.gitlab.io/blog/wii-gbs-c-sync-loss/,6.0
+Introduction to the Odin Programming Language,Programming,https://zylinski.se/posts/introduction-to-odin/,7.0
+Exponentially Better Rotations (2022),Science,http://thenumb.at/Exponential-Rotations/,7.0
+"Syzygy: An open standard for low cost, compact and high-performance peripherals",Hardware,https://syzygyfpga.io/,6.0
+Radioactive drugs strike cancer with precision,Science,https://knowablemagazine.org/content/article/health-disease/2024/cancer-fighting-radiopharmaceuticals-are-taking-off,8.0
+Eden Abhez: The strangest hit songwriter,Music,https://www.honest-broker.com/p/the-strangest-hit-songwriter-in-history,5.0
+Apple announced RCS with a whimper when it should have been a bang,Hardware,https://www.theverge.com/2024/6/15/24178470/apple-rcs-support-wwdc-announcement-android-imessage,6.0
+"How to Raise a Tribal Army in Pre-Roman Europe, Part II",Science,https://acoup.blog/2024/06/14/collections-how-to-raise-a-tribal-army-in-pre-roman-europe-part-ii-government-without-states/,6.0
+Chaos in the medium: Watercolour plotting,Science,https://www.amygoodchild.com/blog/watercolour-plots,6.0
+Useful and Overlooked Skills,Lifehack,https://collabfund.com/blog/useful-and-overlooked-skills/,8.0
+"Two announcements: AI for Math resources, and erdosproblems.com",AI,https://terrytao.wordpress.com/2024/04/19/two-announcements-ai-for-math-resources-and-erdosproblems-com/,8.0
+Face of ancient Australian 'giga-goose' revealed after fossil skull found,Science,https://www.nhm.ac.uk/discover/news/2024/june/face-ancient-australian-giga-goose-revealed-after-fossil-skull-found.html,5.0
+Ventoy: Remove BLOBs from the Source Tree,Software,https://github.com/ventoy/Ventoy/issues/2795,5.0
+What About libjpeg v9? (2013),Programming,https://libjpeg-turbo.org/About/Jpeg-9,5.0
+Tesla in self-drive mode slams into police car in Orange County,AI,https://ktla.com/news/local-news/tesla-in-self-drive-mode-slams-into-police-car-in-orange-county/,7.0
+America Is Losing the Shoe Race with China,Politics,https://www.csis.org/blogs/working-papers/america-losing-shoe-race-china,4.0
+From grep to SPLADE: a journey through semantic search,Software,https://blog.elicit.com/semantic-search/,5.0
+The Day I Learned to Think Like a Browser,Programming,https://www.thebookwormsburrow.com/p/the-day-i-learned-to-think-like-a,6.0
+AI Search: The Bitter-Er Lesson,AI,https://yellow-apartment-148.notion.site/AI-Search-The-Bitter-er-Lesson-44c11acd27294f4495c3de778cd09c8d,6.0
+The borrow checker within,Programming,https://smallcultfollowing.com/babysteps/blog/2024/06/02/the-borrow-checker-within/,7.0
+Using a 1965 Dutch Rotary Phone via VoIP (T65) in 2024,Hardware,https://raymii.org/s/blog/Using_a_1965_Dutch_Rotaty_Phone_T65_via_VoIP_in_2024.html,7.0
+Nondeterminism in Formal Specification,Science,https://buttondown.email/hillelwayne/archive/nondeterminism-in-formal-specification/,5.0
+Kizhi Pogost,Places,https://whc.unesco.org/en/list/544/,5.0
+Overcoming pitfalls of Postgres logical decoding,Programming,https://blog.peerdb.io/overcoming-pitfalls-of-postgres-logical-decoding,6.0
+I found a 55 year old bug in the first Lunar Lander game,Programming,https://martincmartin.com/2024/06/14/how-i-found-a-55-year-old-bug-in-the-first-lunar-lander-game/,8.0
+Show HN: Elles – A nicer /bin/ls,Operating Systems,https://github.com/arp242/elles,6.0
+How to design and manufacture your own chip [video],Hardware,https://www.youtube.com/watch?v=caXwuuXSB-A,7.0
+Jean Stein's Rolodex: The legendary editor's social genius,Celebrities,https://yalereview.org/article/benjamin-anastas-jean-steins-rolodex,5.0
+"Inkdown is an open source Markdown reading, editing, and sharing tool",Software,https://github.com/1943time/bluestone,8.0
+Tracing Intel's Atom Journey: Goldmont Plus,Hardware,https://chipsandcheese.com/2024/06/10/tracing-intels-atom-journey-goldmont-plus/,6.0
+Mewz: Unikernel written in Zig for running WASI-compatible WASM applications,Programming,https://github.com/mewz-project/mewz,6.0
+"What, Me Worry? Or Should We Fear Intelligent Machines? – Gerald Jay Sussman [video]",AI,https://www.youtube.com/watch?v=skvP2tlVPVA,6.0
+Spaced repetition for teaching two-year olds how to read,Science,https://chrislakin.blog/p/spaced-repetition-for-teaching-two,8.0
+The sun's magnetic field is about to flip,Science,https://www.space.com/sun-magnetic-field-flip-solar-maximum-2024,6.0
+"""The Door Problem"" (2014)",Programming,https://lizengland.com/blog/2014/04/the-door-problem/,5.0
+H.264 Is Magic (2016),Software,https://sidbala.com/h-264-is-magic/,6.0
+Herbert A. Simon and Jorge Luis Borges About Free Will (2023),Science,https://www.cambridge.org/core/journals/journal-of-the-history-of-economic-thought/article/abs/on-herbert-a-simon-and-jorge-luis-borges-about-free-will/27D7CC976FF4C903881C7F5C91C53664,8.0
+Anticipatory Anxiety,Science,https://www.lrb.co.uk/the-paper/v46/n12/william-davies/anticipatory-anxiety,8.0
+Making my local LLM voice assistant faster and more scalable with RAG,AI,https://johnthenerd.com/blog/faster-local-llm-assistant/,8.0
+New algorithm discovers language just by watching videos,Programming,https://www.csail.mit.edu/news/new-algorithm-discovers-language-just-watching-videos,9.0
+Sonos changes terms and conditions and may now pass on data to third parties,Privacy,https://www.notebookcheck.net/Sonos-changes-terms-and-conditions-and-may-now-pass-on-data-to-third-parties.848124.0.html,8.0
+Edmond Albius's method of pollination is now used by all vanilla growers,Science,https://nautil.us/the-boy-who-was-king-of-vanilla-522772/,7.0
+True Defamation [pdf],Science,https://www.journaloffreespeechlaw.org/helmreich.pdf,6.0
+"The 3-way fight for a 1,800km long mountain ridge under the Arctic",Science,https://everythingisamazing.substack.com/p/theres-something-incredible-under,4.0
+The Microsoft Excel superstars throw down in Vegas,Software,https://www.theverge.com/c/24133822/microsoft-excel-spreadsheet-competition-championship,4.0
+Study finds juvenile dolphins who play together are more successful as adults,Science,https://phys.org/news/2024-06-juvenile-dolphins-play-successful-adults.html,7.0
+The first 'major lunar standstill' in more than 18 years is about to occur,Science,https://www.livescience.com/space/the-moon/the-1st-major-lunar-standstill-in-more-than-18-years-is-about-to-occur-heres-how-to-see-it,6.0
+FAA investigating how counterfeit titanium got into Boeing and Airbus jets,Security,https://www.nytimes.com/2024/06/14/us/politics/boeing-airbus-titanium-faa.html,6.0
+I bought an encyclopedia,Science,https://www.optoutproject.net/what-is-true-on-the-internet/,7.0
+Satellite data show electromagnetic anomalies 19 days before Turkey earthquake,Science,https://phys.org/news/2024-06-satellite-reveal-electromagnetic-anomalies-days.html,6.0
+Japanese addresses: No street names. Block numbers (2009),Science,https://sive.rs/jadr,8.0
+"Fear and hardship for the last community inside Chitwan, Nepal's tiger central",Politics,https://news.mongabay.com/2024/06/fear-and-hardship-for-the-last-community-inside-chitwan-nepals-tiger-central/,6.0
+Hopac: Concurrent ML Implementation in F#,AI,https://github.com/Hopac/Hopac/blob/master/Docs/Programming.md,6.0
+Stanford Internet Observatory wilts under legal pressure during election year,Politics,https://www.theregister.com/2024/06/14/stanford_internet_observatory/,4.0
+Hydra: Generalizing peephole optimizations with program synthesis [pdf],Programming,https://users.cs.utah.edu/~regehr/generalization-oopsla24.pdf,6.0
+Pico SDR,Programming,https://blog.porucha.net/2024/pico-sdr/index.html,6.0
+Scientists develop fatigue-free ferroelectric material,Science,https://phys.org/news/2024-06-scientists-fatigue-free-ferroelectric-material.html,4.0
+Germany after the European elections,Politics,https://adamtooze.substack.com/p/chartbook-293-nope-or-the-political,5.0
+"'Cheapfake' Biden videos enrapture right-wing media, but deeply mislead",Politics,https://www.washingtonpost.com/politics/2024/06/14/cheapfake-biden-videos-enrapture-right-wing-media-deeply-mislead/,3.0
+Britain's 'Pompeii': UK's Largest Bronze Age Find,Science,https://www.bbc.com/news/articles/cx8q32rj2yjo,3.0
+"Lies, Damn Lies, and Data Science",Programming,https://beabytes.com/data-science-lies/,7.0
+The challenge of writing a on-demand transcoder,Programming,https://zoriya.dev/blogs/transcoder/,6.0
+Driving forward in Android drivers,Programming,https://googleprojectzero.blogspot.com/2024/06/driving-forward-in-android-drivers.html,5.0
+James Webb Space Telescope spots asteroid collision in neighboring star system,Science,https://www.space.com/james-webb-space-telescope-asteroid-collision-beta-pictoris,6.0
+Freenet 2024 – a drop-in decentralized replacement for the web [video],Websites,https://www.youtube.com/watch?v=enTAromEeHo,7.0
+Alan Bates the campaigner for the Post Office IT scandal has been knighted,Politics,https://www.theguardian.com/uk-news/article/2024/jun/14/post-office-campaigner-alan-bates-knighted-in-kings-birthday-honours,4.0
+Show HN: SHAllenge – Compete to get the lowest hash,Programming,https://shallenge.quirino.net/,6.0
+The oldest ecosystems on Earth,Science,https://nautil.us/the-oldest-ecosystems-on-earth-650875/,9.0
+The Impossibility of Supersized Machines (2017),Science,https://arxiv.org/abs/1703.10987,8.0
+Milk-V Duo: A RISC-V SBC that runs Linux and RTOS/Arduino for $5,Hardware,https://milkv.io/duo#,6.0
+DARPA unveils 6 new designs for uncrewed vertical-takeoff military aircraft,Science,https://www.livescience.com/technology/engineering/darpa-considers-6-new-designs-for-uncrewed-vtol-aircraft-that-carry-weapons-payloads-with-test-flights-set-for-2026,4.0
+Which Root Certificates should you trust? Find out with CertInfo,Lifehack,https://raymii.org/s/software/Which_Root_Certificates_Should_You_Trust_CertInfo.html,6.0
+Rest of World's 2024 global playlist,Science,https://restofworld.org/music/,4.0
+Django SQLite Production Config,Programming,https://blog.pecar.me/sqlite-django-config,5.0
+"The ""uncanny"" is the experience of a loss of control",Science,https://ykulbashian.medium.com/the-uncanny-is-the-experience-of-a-loss-of-control-06a3fb4dbcd1,6.0
+My thoughts on Python in Excel,Programming,https://www.xlwings.org/blog/my-thoughts-on-python-in-excel,6.0
+The Measure of Intelligence,Science,https://arxiv.org/abs/1911.01547,7.0
+Stanford files amicus brief in Murthy vs. Missouri,Politics,https://cyber.fsi.stanford.edu/io/news/update-amicus-sio-2024,4.0
+Mouth-based touchpad enables people living with paralysis to use computers,Science,https://news.mit.edu/2024/mouth-based-touchpad-augmental-0605,6.0
+Show HN: Paramount – Human Evals of AI Customer Support,AI,https://github.com/ask-fini/paramount,7.0
+ASHA for Linux,Software,https://github.com/thewierdnut/asha_pipewire_sink,6.0
+Kaprekar's Magic 6174,Programming,https://www.oranlooney.com/post/kaprekar/,6.0
+PlayStation Portal (Remote Play): Stack-buffer overflow in HEVC decoder,Software,https://github.com/google/security-research/security/advisories/GHSA-c24v-5836-j27w,6.0
+"Show HN: XDeck – An ad-blocking client app for macOS, like TweetDeck",Software,https://github.com/morishin/XDeck,6.0
+"Snowden: ""They've gone full mask-off: do not ever trust OpenAI or its products""",AI,https://twitter.com/Snowden/status/1801610725229498403,9.0
+POSIX.1-2024 is published,Programming,https://ieeexplore.ieee.org/document/10555529,6.0
+The Swift compiler is slow due to how types are inferred,Programming,https://danielchasehooper.com/posts/why-swift-is-slow/,6.0
+ZeroPoint's nanosecond-scale memory compression could tame power-hungry AI infra,AI,https://techcrunch.com/2024/05/23/zeropoints-nanosecond-scale-memory-compression-could-tame-power-hungry-ai-infrastructure/,8.0
+Camping – Ruby Web Microframework,Websites,https://github.com/camping/camping,6.0
+Microsoft answered Congress' questions on security. The White House needs to act,Security,https://www.theregister.com/2024/06/15/microsoft_brad_smith_congress/,5.0
+Banana giant Chiquita held liable by US court for funding paramilitaries,Politics,https://www.bbc.com/news/articles/c6pprpd3x96o,2.0
+Nemotron-4-340B,AI,https://blogs.nvidia.com/blog/nemotron-4-synthetic-data-generation-llm-training/,8.0
+"The rise and fall of Koo, India’s once-thriving Twitter alternative",Websites,https://restofworld.org/2024/twitter-alternative-koo/,4.0
+Oracle is shutting down its ad business,Privacy,https://www.adweek.com/programmatic/oracle-is-shutting-down-its-ad-business/,2.0
+Uncensor any LLM with abliteration,AI,https://huggingface.co/blog/mlabonne/abliteration,9.0
+"Bibliography keys: It's as easy as [1], [2], [3]",Lifehack,http://blog.cr.yp.to/20240612-bibkeys.html,7.0
+TorrentGalaxy Goes Offline with Mysterious Message to Users,Privacy,https://torrentfreak.com/torrentgalaxy-goes-offline-with-mysterious-message-to-users-240614/,7.0
+A new map of medieval London,Science,https://londonist.substack.com/p/a-new-map-of-medieval-london,6.0
+Gerald Sussman: Programming is (should be) fun (2022) [video],Programming,https://www.youtube.com/watch?v=2MYzvQ1v8Ww,7.0
+KDE Receives New Human Interface Guidelines for 2024,Operating Systems,https://www.phoronix.com/news/KDE-New-HIG-2024,8.0
+"GitBook, Effortless API Documentation",Programming,https://www.gitbook.com/,6.0
+Former Neuralink Staffer Sues After Scratches from Herpes Monkey,Politics,https://www.bloomberg.com/news/articles/2024-06-15/former-neuralink-staffer-sues-after-scratches-from-herpes-monkey,7.0
+Huawei reportedly selling beef it received as sanctions-evading payment,Privacy,https://wccftech.com/huawei-is-now-reportedly-selling-beef-products-that-it-received-as-sanctions-evading-payment-for-the-5g-equipment/,6.0
+Converting In-Context Learning to Weights in Linearized-Attention Transformers,AI,https://arxiv.org/abs/2406.02847,7.0
+Drawing Machines,Science,https://drawingmachines.org/,8.0
+Mushroom hunters can't stop finding mysterious fungi,Science,https://www.nytimes.com/2024/06/11/science/mushroom-hunters-dna.html,6.0
+The ‘Network of Web Trees’ in Gaza,Hardware,https://globalvoices.org/2024/06/13/the-ingenious-network-tree-defying-gazas-connectivity-blockade/,7.0
+100-foot 'walking tree' in New Zealand,Science,https://www.livescience.com/planet-earth/plants/100-foot-walking-tree-in-new-zealand-looks-like-an-ent-from-lord-of-the-rings-and-is-the-lone-survivor-of-a-lost-forest,6.0
+"The Cleantech Revolution It's exponential, disruptive, and now",Science,https://rmi.org/insight/the-cleantech-revolution/,6.0
+Land value tax in online games and virtual worlds (2022),Science,https://progressandpoverty.substack.com/p/land-value-tax-in-online-games-and,8.0
+Crypto Titans' $160M War Chest Threatens Senate Democrats,Politics,https://www.yahoo.com/news/crypto-titans-160-million-war-100000741.html,7.0
+We spent a week in China. Here's what we learned about our global rival,Politics,https://text.npr.org/g-s1-4569,4.0
+What If We Recaption Billions of Web Images with LLaMA-3?,AI,https://arxiv.org/abs/2406.08478,8.0
+Wild elephants may have names that other elephants use to call them,Science,https://www.npr.org/2024/06/07/nx-s1-4994426/wild-elephants-individual-names,7.0
+Ask HN: Would you use an architecture diagram tool to save infra costs?,Programming,item?id=40688245,6.0
+How much did the Apollo program cost?,Science,https://www.planetary.org/space-policy/cost-of-apollo,6.0
+"Twenty, a modern CRM alternative to Salesforce",Websites,https://twenty.com,4.0
+Ottertune.ai Is Shut Down,Websites,https://ottertune.com/index.html,4.0
+Browser extension that globally blocks vertical video?,Software,item?id=40684982,5.0
+Apple and Meta could face charges for violating EU tech rules,Politics,https://www.theverge.com/2024/6/14/24178724/apple-meta-eu-charges-dma,6.0
+Z80 CPU User Manual [pdf],Hardware,http://www.zilog.com/docs/z80/um0080.pdf,2.0
+Whose CIDR is it anyway?,Websites,https://www.netmeister.org/blog/cidr-allocations.html,2.0
+Terence Tao on proof checkers and AI programs,AI,https://www.scientificamerican.com/article/ai-will-become-mathematicians-co-pilot/,7.0
+Group chats rule the world,Privacy,https://sriramk.com/group-chats-rule-the-world,6.0
+Progressive Web Apps (PWAs) Phishing,Websites,https://mrd0x.com/progressive-web-apps-pwa-phishing/,8.0
+Borges on Chaos Theory,Science,https://aethermug.com/posts/borges-on-chaos-theory,6.0
+Centuries of Childhood,,https://resobscura.substack.com/p/centuries-of-childhood,1.0
+Philips Tableaux with 13-inch E Ink Display Launched at InfoComm 2024,Hardware,https://goodereader.com/blog/e-paper/philips-tableaux-with-13-inch-e-ink-display-launched-at-infocomm-2024,6.0
+Using AI to decode dog vocalization,AI,https://news.umich.edu/using-ai-to-decode-dog-vocalizations/,8.0
+Turning the Tables on AI,AI,https://ia.net/topics/turning-the-tables-on-ai,8.0
+Ask HN: Why is nobody manufacturing low tech electric cars in 2024?,Hardware,item?id=40668427,7.0
+MLow: Meta's low bitrate audio codec,Software,https://engineering.fb.com/2024/06/13/web/mlow-metas-low-bitrate-audio-codec/,7.0
+Three Views on the California Math Framework [pdf],Science,https://www.ams.org/journals/notices/202406/rnoti-p797.pdf,6.0
+"ASML Aims for Hyper-NA EUV, Shrinking Chip Limits",Hardware,https://www.eetimes.com/asml-aims-for-hyper-na-euv-shrinking-chip-limits/,7.0
+Southwest Plane Plunged Within 400 Feet of Ocean Near Hawaii,Politics,https://www.msn.com/en-us/money/other/southwest-plane-plunged-within-400-feet-of-ocean-near-hawaii/ar-BB1ofg8n,3.0
+"Microsoft Chose Profit over Security, Whistleblower Says",Security,https://www.propublica.org/article/microsoft-solarwinds-golden-saml-data-breach-russian-hackers,5.0
+The 30-meter pass in the Pyrenees through which millions of insects migrate,Science,https://english.elpais.com/climate/2024-06-13/the-30-meter-pass-in-the-pyrenees-through-which-millions-of-insects-migrate.html,6.0
+Invention to Impact: The story of LASIK eye surgery,Science,https://new.nsf.gov/science-matters/invention-impact-story-lasik-eye-surgery,7.0
+Perspective-Correct Interpolation,Science,https://andrewkchan.dev/posts/perspective-interpolation.html,8.0
+IntelliJ GitHub Plugin leaking credentials,Security,https://blog.jetbrains.com/security/2024/06/updates-for-security-issue-affecting-intellij-based-ides-2023-1-and-github-plugin/,7.0
+HumanPlus: Humanoid Shadowing and Imitation from Humans,AI,https://humanoid-ai.github.io/,9.0
+ChatGPT-like self-hosted platform,AI,https://github.com/singulatron/singulatron,9.0
+"What Emacs got right, or how modern apps were more like 50 year old text editor",Software,https://danielde.dev/blog/what-emacs-got-right,6.0
+Tesla's FSD – A Useless Technology Demo,AI,https://tomverbeure.github.io/2024/05/20/Tesla-FSD-First-and-Last-Impressions.html,7.0
+Lexbor – An open source HTML Renderer library,Programming,https://github.com/lexbor/lexbor,7.0
+Swift Static Linux SDK,Programming,https://www.swift.org/documentation/articles/static-linux-getting-started.html,6.0
+The development process of Wordbots (2016–2023),Programming,https://alex.nisnevich.com/blog/2024/06/02/wordbots_retrospective.html,5.0
+The GJK Algorithm: A weird and beautiful way to do a simple thing,Science,https://computerwebsite.net/writing/gjk,8.0
+Meta will not launch Meta AI in Europe for now,AI,https://www.reuters.com/technology/artificial-intelligence/meta-will-not-launch-meta-ai-europe-now-2024-06-14/,7.0
 "Apple punishes women for same behaviors that get men promoted, lawsuit says",,https://arstechnica.com/tech-policy/2024/06/apple-deliberately-pays-women-less-than-men-lawsuit-says/,
 Why not just embed Neovim?,,https://zed.dev/blog/zed-decoded-vim,
 SSH agent extensions as an arbitrary RPC mechanism,,https://mjg59.dreamwidth.org/69646.html,
@@ -577,3 +576,103 @@ Ask HN: Who'll take ownership of AI's mistakes?,,item?id=40637927,
 Ask HN: How do you iterate on and manage prompts in production?,,item?id=40647316,
 Spectrum of Covid-19: From Asymptomatic Organ Damage to Long Covid Syndrome,,https://whn.global/scientific/spectrum-of-covid-19-from-asymptomatic-organ-damage-to-long-covid-syndrome/,
 Working with utilities to create a new model for clean energy,,https://blog.google/outreach-initiatives/sustainability/google-clean-energy-partnership/,
+What You Get After Running an SSH Honeypot for 30 Days,,https://blog.sofiane.cc/ssh_honeypot/,
+Show HN: We Made The World's Smallest and Cheapest Network Switch,,https://docs.murexrobotics.com/elec/boards/networking/switch,
+Just Enough Software Architecture (2010),,https://www.georgefairbanks.com/book/,
+SimCity in the web browser using WebAssembly and OpenGL,,https://micropolisweb.com/,
+The Architecture Behind a One-Person Tech Startup (2021),,https://anthonynsimon.com/blog/one-man-saas-architecture/,
+VVVV – A hybrid visual/textual development environment for .NET,,https://visualprogramming.net/,
+"Ernest Shackleton's Last Ship, Quest, Discovered Off the Coast of Canada",,https://www.smithsonianmag.com/smart-news/ernest-shackletons-last-ship-quest-discovered-off-the-coast-of-canada-180984545/,
+Reverse engineering a restaurant pager system,,https://k3xec.com/td158/,
+Hokusai's 'Great Wave' features on new Japanese banknotes,,https://www.cnn.com/style/article/japan-new-banknotes-great-wave/index.html,
+Is there an algorithm as beautiful as a poem?,,https://tblm.substack.com/p/as-lovely-as-a-tree,
+"AI for math resources, and erdosproblems.com",,https://terrytao.wordpress.com/2024/04/19/two-announcements-ai-for-math-resources-and-erdosproblems-com/,
+"Sequential Search, Correctly",,http://siek.blogspot.com/2024/06/sequential-search-correctly.html,
+Show HN: Keydogger – Minimal keyboard macro for Linux (Wayland),,https://github.com/jarusll/keydogger,
+Topological Problems in Voting,,https://www.ryantolsma.com/thoughts/2024/06/14/topological-voting.html,
+How/Why to Sweep Async Tasks Under a Postgres Table [video],,https://www.youtube.com/watch?v=wXXJuz_spcU&list=PLlrxD0HtieHg5ldHlEn3nMMpClX0RUntH&index=29,
+Survival of the Mediocre Mediocre (2018),,https://www.ribbonfarm.com/2018/04/24/survival-of-the-mediocre-mediocre/,
+Finding New Pastures: Big Nerd Ranch's Next Chapter,,https://bignerdranch.com/blog/finding-new-pastures-big-nerd-ranchs-next-chapter/,
+Engineer's solar panels are breaking efficiency records,,https://spectrum.ieee.org/solar-panels-breaking-efficiency-records,
+"Google, Cloudflare and Cisco will poison DNS to stop piracy block circumvention",,https://torrentfreak.com/google-cloudflare-cisco-will-poison-dns-to-stop-piracy-block-circumvention-240613/,
+Sans Bullshit Sans (2015),,https://www.sansbullshitsans.com/,
+The Sociological Study of Mental Illness: A Historical Perspective (2016),,https://www.madinamerica.com/2016/07/the-sociological-study-of-mental-illness-a-historical-perspective/,
+Martin Amis and the pursuit of pleasure,,https://www.newstatesman.com/culture/books/2024/06/martin-amis-and-the-pursuit-of-pleasure,
+Impulse Tracker source code now available on GitHub,,https://github.com/jthlim/impulse-tracker,
+Why you shouldn't parse the output of ls(1),,https://mywiki.wooledge.org/ParsingLs,
+Subducting plate structure and megathrust morphology at Cascadia,,https://www.science.org/doi/10.1126/sciadv.adl3198,
+Doom for SNES full source code released by former Sculptured Software employee,,https://gbatemp.net/threads/doom-for-snes-full-source-code-released-by-former-sculptured-software-employees.657118/,
+The LaTeX fetish (Or: Don't write in LaTeX It's just for typesetting) (2016),,http://www.danielallington.net/2016/09/the-latex-fetish/,
+Fifty Years of Diff,,https://exple.tive.org/blarg/2024/06/14/fifty-years-of-diff-and-merge/,
+Fecal transplant pill replaces antibiotics for serious infections,,https://english.elpais.com/health/2024-06-13/fecal-transplant-pill-replaces-antibiotics-for-serious-infections-for-the-first-time.html,
+Can language models serve as text-based world simulators?,,https://arxiv.org/abs/2406.06485,
+Astronomers discover Earth-sized exoplanet orbiting a nearby cool dwarf star,,https://phys.org/news/2024-06-astronomers-earth-sized-exoplanet-orbiting.html,
+"Ask HN: Do You Have a Copy of IBM ""Logo: Programming with Turtle Graphics""?",,item?id=40691792,
+Perplexity AI is lying about their user agent,,https://rknight.me/blog/perplexity-ai-is-lying-about-its-user-agent/,
+The state of carbon dioxide removal,,https://www.stateofcdr.org,
+"A collection of 2,299 blogs about every topic",,https://ooh.directory/,
+"You've Read Your Last Free Article, Such Is the Nature of Mortality",,https://www.mcsweeneys.net/articles/youve-read-your-last-free-article-such-is-the-nature-of-mortality,
+Common Lisp Community Survey 2024,,https://cl-survey-2024.djhaskin.com/,
+Are animals conscious? How new research is changing minds,,https://www.bbc.com/news/articles/cv223z15mpmo,
+Voyager 1 is back online: NASA spacecraft returns data from all 4 instruments,,https://www.space.com/voyager-1-fully-operational,
+"Covid is coming for Calif., and it's already hitting the Bay Area the hardest",,https://www.sfgate.com/bayarea/article/covid-california-san-francisco-wastewater-19509336.php,
+Observable Framework 1.9,,https://github.com/observablehq/framework/releases/tag/v1.9.0,
+Show HN: Collate multiple PDFs into one with cover and automatic TOC,,https://github.com/rossant/collatepdf,
+New Linux malware is controlled through emojis sent from Discord,,https://www.bleepingcomputer.com/news/security/new-linux-malware-is-controlled-through-emojis-sent-from-discord/,
+Bullshit.js,,https://mourner.github.io/bullshit.js/,
+The Weird Pod Metro That Lies Forgotten Under a Paris Suburb,,https://www.youtube.com/watch?v=bWxESIzJhCU,
+Reformatting 100k Files at Google in 2011,,https://laurent.le-brun.eu/blog/the-story-of-reformatting-100k-files-at-google-in-2011,
+SQLite is likely used more than all other database engines combined,,https://sqlite.org/mostdeployed.html,
+SpiderBasic Code Viewer,,https://www.spiderbasic.com/showcase/onlineviewer/,
+Large birds can boost forest carbon storage – if deforestation doesn't interfere,,https://news.mongabay.com/2024/06/large-birds-can-boost-forest-carbon-storage-if-deforestation-doesnt-interfere/,
+Docker Considered Harmful (2021),,https://catern.com/docker.html,
+Go is more than a language;Go is a platform,,https://eltonminetto.dev/en/post/2024-06-12-go-is-a-plataform/,
+"OpenAI CEO says company could become for-profit corporation, Information reports",,https://www.reuters.com/technology/artificial-intelligence/openai-ceo-says-company-could-become-benefit-corporation-information-2024-06-15/,
+Isograph – the UI framework for teams that move fast – without breaking things,,https://isograph.dev/,
+Fungus breaks down ocean plastic,,https://www.nioz.nl/en/news/fungus-breaks-down-ocean-plastic,
+CryptGPT: A Simple Approach to Privacy-Preserving LLMs Using Vigenere Cipher,,https://huggingface.co/blog/diwank/cryptgpt-part1,
+"Joining Strings in Python: A ""Huh"" Moment",,https://berglyd.net/blog/2024/06/joining-strings-in-python/,
+Rethinking the Transcript Editing Experience,,https://blog.wordflo.ai/rethinking-transcript-editing-experience-22112,
+Ollama v0.1.45,,https://github.com/ollama/ollama/releases/tag/v0.1.45-rc1,
+Global Warming and Ice Ages (1997) [pdf],,https://mronline.org/wp-content/uploads/2020/07/29043613.pdf,
+London Underground hosts tests for 'quantum compass' that could replace GPS,,https://www.theguardian.com/science/article/2024/jun/15/london-underground-quantum-compass-gps-subatomic-instrument-locations,
+PiWings 2.0 is a tiny drone based on Raspberry Pi Pico and ESP8266 WiFi module,,https://www.cnx-software.com/2024/06/07/piwings-2-0-tiny-drone-based-on-raspberry-pi-pico-and-esp8266-wifi-module/,
+"Ask HN: Transitioning from web dev to more ""impactful"" tech",,item?id=40692481,
+When to Write a Simulator,,https://sirupsen.com/napkin/problem-16-simulation,
+Sharing wildlife sounds from all over the world,,https://xeno-canto.org/,
+A practical guide to starting out with Ollama LLM and Open WebUI,,https://www.theregister.com/2024/06/15/ai_rag_guide/,
+Uber and Lyft made a deal to raise drivers' wages: another victory for big tech,,https://www.theguardian.com/technology/article/2024/jun/07/uber-lyft-wage-increase-big-tech-win,
+Why cheap US gas costs a fortune in Europe,,https://www.politico.eu/article/cheap-us-gas-cost-fortune-europe-russia-ukraine-energy/,
+Show HN: 100% open-source voice assistant – as a HAL9000,,https://github.com/juergenpabel/HAL9000,
+Building an O2 concentrator for welding and vacuum tube work,,https://www.nickpoole.me/2024/06/01/building-an-oxikit-o2-concentrator-part-2/,
+Sweden says Russian warplane violated its airspace,,https://www.euronews.com/2024/06/15/sweden-says-russian-warplane-violated-its-airspace,
+A brief history of Mac enclaves and exclaves,,https://eclecticlight.co/2024/06/15/a-brief-history-of-mac-enclaves-and-exclaves/,
+Building Generative AI Apps with .NET 8 and Semantic Kernel,,https://devblogs.microsoft.com/semantic-kernel/building-generative-ai-apps-with-net-8-and-semantic-kernel/,
+Apple Intelligence Won’t Work on Hundreds of Millions of iPhones,,https://www.wired.com/story/apple-intelligence-wont-work-on-100s-of-millions-of-iphones-but-maybe-it-could/,
+Former CDC director predicts bird flu pandemic,,https://thehill.com/policy/healthcare/4723753-former-cdc-director-predicts-bird-flu-pandemic/,
+Reverse Engineering a Restaurant Pager System,,https://k3xec.com/td158/,
+Google is testing server-side ads that break adblockers,,https://www.ghacks.net/2024/06/13/seeing-ads-on-youtube-google-is-testing-server-side-ads-that-break-adblockers/,
+"After Baillie Gifford, who is 'clean' enough to fund the arts?",,https://www.ft.com/content/f17a7914-c6ac-4bcc-8aa6-3ad615ce8940,
+Syscallargs: A new tool for listing all Linux system calls with their arguments,,https://tanelpoder.com/posts/list-linux-system-call-arguments-with-syscallargs/,
+"Scale AI: We hire for MEI: merit, excellence, and intelligence",,https://twitter.com/alexandr_wang/status/1801331034916851995,
+Why I Like Programming in C. [video],,https://www.youtube.com/watch?v=uWM0JvR972s,
+Enhancing Code Completion for Rust in Cody,,https://sourcegraph.com/blog/enhancing-code-completion-for-rust-in-cody,
+Using drones to move cement bags up a mountain,,https://twitter.com/AshinChina/status/1801459781376610349,
+North Dakota voters just approved an age limit for congressional candidates,,https://apnews.com/article/north-dakota-congressional-candidates-age-limit-b9ffa598e76bf1dd440b3fb8efd4c33b,
+Amazon has a way to scrape GitHub and feed its AI model,,https://dataconomy.com/2024/06/14/amazon-has-a-secret-way-to-scrape-microsofts-github-and-feed-its-ai-model/,
+"Edward Stone, 88, Physicist Who Oversaw Voyager Missions, Is Dead",,https://www.nytimes.com/2024/06/14/science/space/edward-stone-physicist-dead.html,
+The world famous Roman Baths could help scientists counter antibiotic resistance,,https://phys.org/news/2024-05-world-famous-roman-scientists-counter.html,
+The Impersonator: The Fake Data Were Coming from Inside the Lab,,https://datacolada.org/117,
+Ask HN: Do you have a visual note taking app you enjoy?,,item?id=40661049,
+Ask HN: AI for converting Figma to Code,,item?id=40670296,
+Would astronauts' kidneys survive a roundtrip to Mars?,,https://www.ucl.ac.uk/news/2024/jun/would-astronauts-kidneys-survive-roundtrip-mars,
+Kia Issues 'Park Outside' Recall for 2020-2024 Telluride Vehicles for Fire Risk,,https://www.nhtsa.gov/press-releases/kia-telluride-recall-fire-risk,
+Ask HN: What non-mainstream programming languages are you checking out?,,item?id=40660760,
+AI discovers new rare-earth-free magnet at 200 times the speed of man,,https://newatlas.com/materials/ai-rare-earth-free-magnet-discovery/,
+Ending the 15% NYC broker's fee,,https://www.nytimes.com/2024/06/12/nyregion/broker-fees-rent-nyc.html,
+Ask HN: Multicast over UDP vs. Multicast Mellanox Infiniband,,item?id=40650957,
+"Show HN: I made first declaritive SVG,canvas framework",,https://flitter.pages.dev,
+"Show HN: Paste2Download – No Login, No Ads, Download Videos Watermark Free",,https://www.paste2download.com/,
+Pinterest Scaled to 11M Users with Only 6 Engineers,,https://medium.com/codex/how-pinterest-scaled-to-11-million-users-with-only-6-engineers-a0f62cea62b8,
+Go is more than a language; Go is a platform,,https://eltonminetto.dev/en/post/2024-06-12-go-is-a-plataform/,
+"Show HN: Open Source Version of AI ""Math Notes"" from Apple WWDC",,https://github.com/ayushpai/AI-Math-Notes,

@@ -1,8 +1,7 @@
 database:
-  articles: 0
-  articles_fetched: 0
-  categories_count: 0
-  categories_list: []
+  articles: 677
+  categories_count: 15
+  categories_list: ["Operating Systems", "Software", "Hardware", "Programming", "AI", "Websites", "Science", "Security", "Privacy", "Politics", "Gaming", "Music", "Places", "Celebrities"]
 model:
   accuracy: 0
   feedback_correct: 0

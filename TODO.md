@@ -5,18 +5,25 @@
     - [x] for pagination when all articles done, link is [https://news.ycombinator.com/?p=2] for 2 = page
     - [x] script should be seperate from the model, so that if at any point i want to change website to get news from
         it should only require the script to be changed, not the model
+- [x] when adding article, update stats
 - [/] add at least 5000 articles
+    - Maybe it's not needed
+- [ ] Ensure categories are consistent, don't create categories for a singular article
 
 ## Step 2
-- [ ] One-hot-encode the titles or some other way to turn text into numbers
+- [x] One-hot-encode the titles or some other way to turn text into numbers
     - ensure all titles are of same length
-- [ ] Ensure categories are consistent, don't create categories for a singular article
+    - preprocess before splitting data
+    - actually LabelEncoder is better for categories
+- [/] Encode titles into numbers, probably tensor
+    - Uses TfidfVectorizer
+    - [ ] csr_matrix has no attribute 'to' when trying to move tfidf vector to cuda
 
 # Model
 - [ ] Ideally, it should be able to both categorize the article, and judge if it's interesting and on what scale
 
 ## Step 1
-- [ ] Model to categorize article based on title
+- [/] Model to categorize article based on title
     - Use already existing categories from file
     - At least 90% accuracy
     - RNN, especially LSTM or GRU might be good,
