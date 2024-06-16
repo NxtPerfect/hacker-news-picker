@@ -17,7 +17,8 @@
     - actually LabelEncoder is better for categories
 - [/] Encode titles into numbers, probably tensor
     - Uses TfidfVectorizer
-    - [ ] csr_matrix has no attribute 'to' when trying to move tfidf vector to cuda
+    - [x] csr_matrix has no attribute 'to' when trying to move tfidf vector to cuda
+    - [ ] Create custom dataset in src/categorize/dataset.py
 
 # Model
 - [ ] Ideally, it should be able to both categorize the article, and judge if it's interesting and on what scale

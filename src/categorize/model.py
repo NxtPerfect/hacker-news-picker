@@ -19,22 +19,6 @@ def train(model):
     pass
     data = CategoryDataset()
 
-    labels = data["Category"].values
-    features = data["Title"].values
-
-    # One Hot Encoding
-    # enc = OneHotEncoder(handle_unknown='ignore')
-    # TfidfVectorizer convert text to numbers and to tensor
-    enc = TfidfVectorizer()
-    features = torch.from_numpy(enc.fit_transform(features).toarray())
-    # print(features)
-
-    # LabelEncoding to numerical values
-    enc = LabelEncoder()
-    labels = torch.from_numpy(enc.fit_transform(labels))
-    # print(labels)
-
-
     # My labels are 1d, with features being 2d, both are tensors
     features_train, features_test, labels_train, labels_test = train_test_split(features, labels, test_size=0.2, random_state=42)
     print(features_train, labels_train)
