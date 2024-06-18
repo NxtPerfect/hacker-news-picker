@@ -7,18 +7,43 @@ import time
 from src.database.db import DB_URL
 from src.stats.stats import readStats, updateDatabase
 
-URL = "https://news.ycombinator.com/"
-# then add number
-PAGINATION = "https://news.ycombinator.com/?p="
+# Check url for past posts etc
+
+URL = "https://news.ycombinator.com/?p="
+PAST_URL = "https://news.ycombinator.com/front?day=2024-06-17&p="
+
 # Randomize user_agent on startup or every 30 minutes
 USER_AGENT_LIST = ["Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.3", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.3", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36 Edg/125.0.0.", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:126.0) Gecko/20100101 Firefox/126.", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.3"]
+
 # Free proxies from https://free-proxy-list.net/#list
-PROXIES_LIST = ["http://155.94.241.130:3128", "http://128.199.202.122:3128", "http://198.44.255.3:80", "http://31.220.78.244:80", "http://50.174.145.8:80", "http://58.234.116.197:80", "http://65.109.189.49:80", "http://123.30.154.171:7777", "http://50.168.163.177:80"]
+# 9 / 20
+PROXIES_LIST = [
+        "http://155.94.241.130:3128",
+        "http://128.199.202.122:3128",
+        "http://198.44.255.3:80",
+        "http://31.220.78.244:80",
+        "http://50.174.145.8:80",
+        "http://58.234.116.197:80",
+        "http://65.109.189.49:80",
+        "http://123.30.154.171:7777",
+        "http://50.168.163.177:80",
+        "http://62.99.138.162:80",
+        "http://91.92.155.207:3128",
+        "http://85.8.68.2:80",
+        "http://47.74.152.29:8888",
+        "http://83.1.176.118:80",
+        "http://167.102.133.111:80",
+        "http://50.207.199.84:80",
+        "http://103.163.51.254:80",
+        "http://50.172.75.126:80",
+        "http://211.128.96.206:80",
+        "http://51.254.78.223:80",
+        ]
 # Amount of pages to scrape
 PAGES_AMOUNT = 20
 # Time between requests, not sure if needed if i have proxies
 # but better safe than sorry
-TIMEOUT_TIME = 5
+TIMEOUT_TIME = 1
 
 def parseArticle(article):
     link = article.find_next("a")
@@ -58,7 +83,8 @@ def run():
         stats = readStats()
 
         try:
-            url = URL if n == 0 else PAGINATION + str(n)
+            url = f"{URL}{n+1}"
+            print(f"\n{30*'#'}\n")
             print(f"Currently looking at {url}")
             page = requests.get(url, headers=headers, proxies=proxy)
             soup = BeautifulSoup(page.content, 'html.parser')

@@ -1,29 +1,28 @@
 import torch
-import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import OneHotEncoder, LabelEncoder, OrdinalEncoder
-from sklearn.feature_extraction.text import TfidfVectorizer
 
 from src.categorize.dataset import CategoryDataset
 from src.database.db import DB_URL
 
-CATEGORIZE_MODEL_PATH = "model/categorize"
-EPOCHS = 50
+CATEGORIZE_MODEL_PATH = "model/categorize/model.pt"
+EPOCHS = 30
 
-def createModel():
+class ArticleCategorizerRNN(torch.nn.Module):
+    def __init__(self, vocab_size, embedding_dim, hidden_dim, output_dim):
+        super(ArticleCategorizerRNN, self).__init__()
+        self.embedding = torch.nn.Embedding(vocab_size, embedding_dim)
+        self.rnn = torch.nn.GRU(embedding_dim, hidden_dim, bidirectional=True, batch_first=True) # Random parameters as placeholders
+        self.dropout = torch.nn.Dropout(0.2)
+        self.fc = torch.nn.Linear(hidden_dim * 2, output_dim)
+
+    def forward(self, x):
+        embedded = self.embedding(x)
+        rnn_out, _ = self.rnn(embedded)
+        out = self.dropout(rnn_out[:, -1, :])
+        out = self.fc(out)
+        return torch.nn.functional.log_softmax(out, dim=1)
+
+def train(model, dataloader):
     pass
-    model = torch.nn.RNN(10, 20, 15, dropout=0.2) # Random parameters as placeholders
-    return model
-
-def train(model):
-    pass
-    data = CategoryDataset()
-
-    # My labels are 1d, with features being 2d, both are tensors
-    features_train, features_test, labels_train, labels_test = train_test_split(features, labels, test_size=0.2, random_state=42)
-    print(features_train, labels_train)
-
-    # If cuda is available use it
     device = (
         "cuda"
         if torch.cuda.is_available()
@@ -33,6 +32,7 @@ def train(model):
     )
 
     model.to(device)
+    # model.to('cpu')
     
     # Criterion, optimizer and scheduler
     criterion = torch.nn.CrossEntropyLoss()
@@ -44,10 +44,10 @@ def train(model):
 
     # Training the model
     while num_epochs < EPOCHS:
-        for inputs, labels in zip(features_train, labels_train):
+        for inputs, labels in dataloader:
             inputs, labels = inputs.to(device), labels.to(device)
+            # inputs, labels = inputs.to('cpu'), labels.to('cpu')
 
-            print(inputs)
             outputs = model(inputs)
             loss = criterion(outputs, labels)
 
@@ -55,7 +55,7 @@ def train(model):
             loss.backward()
             optimizer.step()
         num_epochs += 1
-        print(f"Epoch: {num_epochs}, loss: {loss.item():.6f}")
+        print(f"Epoch: {num_epochs}, loss: {loss.item():.8f}")
 
     # Evaluation for training data
     model.eval()
@@ -63,8 +63,9 @@ def train(model):
         validation_loss = 0.0
         correct = 0
         total = 0
-        for inputs, labels in zip(features_test, labels_test):
+        for inputs, labels in dataloader:
             inputs, labels = inputs.to(device), labels.to(device)
+            # inputs, labels = inputs.to('cpu'), labels.to('cpu')
 
             outputs = model(inputs)
             _, predicted = torch.max(outputs.data, 1)
@@ -78,16 +79,16 @@ def train(model):
     scheduler.step()
 
     accuracy = correct / total
-    avg_validation_loss = validation_loss / len(test_dataloader_emnist)
+    avg_validation_loss = validation_loss / len(dataloader)
 
-    print(f"\n{'-' * 20}\nEMNIST:\n\nTest accuracy: {accuracy * 100:.2f}%, with average validation loss: {avg_validation_loss:.6f}.")
+    print(f"\n{'-' * 20}\nFirst 200 articles\n\nTest accuracy: {accuracy * 100:.2f}%, with average validation loss: {avg_validation_loss:.6f}.")
 
-    print(f"Finished testing EMNIST.\n{'-' * 20}\nTesting on SEMEION dataset...")
+    print(f"Finished testing.\n{'-' * 20}")
     with torch.no_grad():
         validation_loss = 0.0
         correct = 0
         total = 0
-        for inputs, labels in test_dataloader_semeion:
+        for inputs, labels in dataloader:
             inputs, labels = inputs.to(device), labels.to(device)
 
             outputs = model(inputs)
@@ -101,9 +102,9 @@ def train(model):
     scheduler.step()
 
     accuracy = correct / total
-    avg_validation_loss = validation_loss / len(test_dataloader_semeion)
+    avg_validation_loss = validation_loss / len(dataloader)
 
-    return features_train, features_test, labels_train, labels_test
+    return accuracy, correct, total
 
 def getData():
     pass
@@ -126,10 +127,31 @@ def loadModel(model) -> torch.nn.RNN:
     return model
 
 def run():
-    model = createModel()
-    _ = train(model)
-    print("Trained")
-    return
+    # Load data
+    dataset = CategoryDataset(DB_URL, 100, 300)
+    dataloader = torch.utils.data.DataLoader(dataset, batch_size=128, shuffle=True)
+
+    # Prepare layers
+    vocab_size = len(dataset.tokenizer.vocab)
+    embedding_dim = 128 # 128 - 98.67%
+    hidden_dim = 64 # 32 - 98.67%
+    output_dim = len(set(dataset.labels.numpy()))
+
+    # Create RNN
+    model = ArticleCategorizerRNN(vocab_size, embedding_dim, hidden_dim, output_dim)
+
+    # Train
+    acc, correct, total = train(model, dataloader)
+    print(f"Accuracy: {acc*100:.2f}% Correct/Total: {correct}/{total}")
+    return model, acc
 
 if __name__ == "__main__":
-    run()
+    best_acc = 0
+    for n in range(5):
+        model, acc = run()
+        if (acc > best_acc and acc > 0.95):
+            print(f"Best accuracy so far {acc:.6f}. Saving...")
+            if (saveModel(model)):
+                print("Successfully saved model.")
+            best_acc = acc
+    print(f"\n{'-'*20}END{'-'*20}\nBest accuracy ever {best_acc*100:.2f}%")

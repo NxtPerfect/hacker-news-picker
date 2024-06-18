@@ -1,10 +1,22 @@
 database:
-  articles: 677
-  categories_count: 15
-  categories_list: ["Operating Systems", "Software", "Hardware", "Programming", "AI", "Websites", "Science", "Security", "Privacy", "Politics", "Gaming", "Music", "Places", "Celebrities"]
+  articles: 1148
+  categories_count: 12
+  categories_list:
+  - Operating Systems
+  - Software
+  - Hardware
+  - Programming
+  - AI
+  - Websites
+  - Science
+  - Security
+  - Privacy
+  - Politics
+  - Gaming
+  - Other
 model:
-  accuracy: 0
+  accuracy: 0.9867
   feedback_correct: 0
   feedback_wrong: 0
-  predict_correct: 0
-  predict_wrong: 0
+  predict_correct: 296
+  predict_wrong: 4

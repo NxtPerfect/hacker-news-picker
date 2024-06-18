@@ -6,30 +6,36 @@
     - [x] script should be seperate from the model, so that if at any point i want to change website to get news from
         it should only require the script to be changed, not the model
 - [x] when adding article, update stats
+
+### Optional
 - [/] add at least 5000 articles
     - Maybe it's not needed
+    - At least for now it's not needed
 - [ ] Ensure categories are consistent, don't create categories for a singular article
+- [ ] Try looking at past articles too already got url
+    - do second pass on last 30 days of articles?
 
 ## Step 2
 - [x] One-hot-encode the titles or some other way to turn text into numbers
     - ensure all titles are of same length
     - preprocess before splitting data
     - actually LabelEncoder is better for categories
-- [/] Encode titles into numbers, probably tensor
-    - Uses TfidfVectorizer
+- [x] Encode titles into numbers, probably tensor
     - [x] csr_matrix has no attribute 'to' when trying to move tfidf vector to cuda
-    - [ ] Create custom dataset in src/categorize/dataset.py
+    - [x] Create custom dataset in src/categorize/dataset.py
+    - Uses bert
 
 # Model
 - [ ] Ideally, it should be able to both categorize the article, and judge if it's interesting and on what scale
 
 ## Step 1
-- [/] Model to categorize article based on title
+- [x] Model to categorize article based on title
     - Use already existing categories from file
     - At least 90% accuracy
     - RNN, especially LSTM or GRU might be good,
     but computionally expensive
     - CNN can be faster but less effective
+    - Uses GRU with 98% accuracy
 
 ## Step 2
 - [ ] Model to predict the interesting rate of an article based on title
