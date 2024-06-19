@@ -1,15 +1,15 @@
-from src.stats.stats import readStats, updateModelCategorizer
+from src.stats.stats import readStats, updateModelPredicter
 import torch
 
-from src.categorize.dataset import CategoryDataset
+from src.predict.dataset import InterestDataset
 from src.database.db import DB_URL
 
-CATEGORIZE_MODEL_PATH = "model/categorize/model.pt"
+PREDICT_MODEL_PATH = "model/predict/model.pt"
 EPOCHS = 40
 
-class ArticleCategorizerRNN(torch.nn.Module):
+class ArticlePredicterRNN(torch.nn.Module):
     def __init__(self, vocab_size, embedding_dim, hidden_dim, output_dim):
-        super(ArticleCategorizerRNN, self).__init__()
+        super(ArticlePredicterRNN, self).__init__()
         self.embedding = torch.nn.Embedding(vocab_size, embedding_dim)
         self.rnn = torch.nn.GRU(embedding_dim, hidden_dim, bidirectional=True, batch_first=True) # Random parameters as placeholders
         self.dropout = torch.nn.Dropout(0.2)
@@ -114,7 +114,7 @@ def getData():
 def saveModel(model) -> bool:
     pass
     try:
-        torch.save(model.state_dict(), CATEGORIZE_MODEL_PATH)
+        torch.save(model.state_dict(), PREDICT_MODEL_PATH)
         return True
     except Exception as e:
         print("Failed to save model.")
@@ -123,13 +123,13 @@ def saveModel(model) -> bool:
 
 def loadModel(model) -> torch.nn.RNN:
     pass
-    model.load_state_dict(torch.load(CATEGORIZE_MODEL_PATH))
+    model.load_state_dict(torch.load(PREDICT_MODEL_PATH))
     model.eval()
     return model
 
 def run():
     # Load data
-    dataset = CategoryDataset(DB_URL, 100, 400)
+    dataset = InterestDataset(DB_URL, 100, 200)
     dataloader = torch.utils.data.DataLoader(dataset, batch_size=128, shuffle=True)
 
     # Prepare layers
@@ -139,7 +139,7 @@ def run():
     output_dim = len(set(dataset.labels.numpy()))
 
     # Create RNN
-    model = ArticleCategorizerRNN(vocab_size, embedding_dim, hidden_dim, output_dim)
+    model = ArticlePredicterRNN(vocab_size, embedding_dim, hidden_dim, output_dim)
 
     # Train
     acc, correct, total = train(model, dataloader)
@@ -148,10 +148,10 @@ def run():
 
 if __name__ == "__main__":
     stats = readStats()
-    categorizer = stats["model"]["categorizer"]
-    best_acc = categorizer["accuracy"]
-    best_correct = categorizer["predict_correct"]
-    best_wrong = categorizer["predict_wrong"]
+    predicter = stats["model"]["predicter"]
+    best_acc = predicter["accuracy"]
+    best_correct = predicter["predict_correct"]
+    best_wrong = predicter["predict_wrong"]
     for n in range(5):
         model, acc, correct, total = run()
         if (acc > best_acc):
@@ -161,5 +161,5 @@ if __name__ == "__main__":
             best_acc = acc
             best_correct = correct
             best_wrong = total - correct
-    print(updateModelCategorizer(best_acc, categorizer["feedback_correct"], categorizer["feedback_wrong"], best_correct, best_wrong))
+    print(updateModelPredicter(best_acc, predicter["feedback_correct"], predicter["feedback_wrong"], best_correct, best_wrong))
     print(f"\n{'-'*20}END{'-'*20}\nBest accuracy ever {best_acc*100:.2f}%")
