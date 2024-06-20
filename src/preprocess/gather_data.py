@@ -43,7 +43,7 @@ PROXIES_LIST = [
 PAGES_AMOUNT = 20
 # Time between requests, not sure if needed if i have proxies
 # but better safe than sorry
-TIMEOUT_TIME = 1
+TIMEOUT_TIME = 0
 
 def parseArticle(article):
     link = article.find_next("a")
@@ -71,7 +71,7 @@ def saveArticles(df, title, link) -> pd.DataFrame | None:
 
     return df_new_rows
 
-def run():
+def runScraper():
     for n in range(PAGES_AMOUNT):
         random_index = random.randint(0, len(USER_AGENT_LIST)-1)
         user_agent = USER_AGENT_LIST[random_index]
@@ -132,4 +132,4 @@ def run():
     print(f"\n{'-'*40}\nFinished running process with {articles_count - stats['database']['articles']} new articles")
 
 if __name__ == "__main__":
-    run()
+    runScraper()

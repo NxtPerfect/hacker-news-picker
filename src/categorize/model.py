@@ -6,6 +6,7 @@ from src.database.db import DB_URL
 
 CATEGORIZE_MODEL_PATH = "model/categorize/model.pt"
 EPOCHS = 40
+ARTICLES_COUNT = 400
 
 class ArticleCategorizerRNN(torch.nn.Module):
     def __init__(self, vocab_size, embedding_dim, hidden_dim, output_dim):
@@ -82,7 +83,7 @@ def train(model, dataloader):
     accuracy = correct / total
     avg_validation_loss = validation_loss / len(dataloader)
 
-    print(f"\n{'-' * 20}\nFirst 200 articles\n\nTest accuracy: {accuracy * 100:.2f}%, with average validation loss: {avg_validation_loss:.6f}.")
+    print(f"\n{'-' * 20}\nFirst {ARTICLES_COUNT} articles\n\nTest accuracy: {accuracy * 100:.2f}%, with average validation loss: {avg_validation_loss:.6f}.")
 
     print(f"Finished testing.\n{'-' * 20}")
     with torch.no_grad():
@@ -127,9 +128,9 @@ def loadModel(model) -> torch.nn.RNN:
     model.eval()
     return model
 
-def run():
+def runTraining():
     # Load data
-    dataset = CategoryDataset(DB_URL, 100, 400)
+    dataset = CategoryDataset(DB_URL, 100, ARTICLES_COUNT)
     dataloader = torch.utils.data.DataLoader(dataset, batch_size=128, shuffle=True)
 
     # Prepare layers
@@ -146,14 +147,15 @@ def run():
     print(f"Accuracy: {acc*100:.2f}% Correct/Total: {correct}/{total}")
     return model, acc, correct, total
 
-if __name__ == "__main__":
+def runCategorizer():
+    print(f"\n{'#'*20}Running Categorizer{'#'*20}\n")
     stats = readStats()
     categorizer = stats["model"]["categorizer"]
     best_acc = categorizer["accuracy"]
     best_correct = categorizer["predict_correct"]
     best_wrong = categorizer["predict_wrong"]
     for n in range(5):
-        model, acc, correct, total = run()
+        model, acc, correct, total = runTraining()
         if (acc > best_acc):
             print(f"Best accuracy so far {acc:.6f}. Saving...")
             if (saveModel(model)):
@@ -163,3 +165,6 @@ if __name__ == "__main__":
             best_wrong = total - correct
     print(updateModelCategorizer(best_acc, categorizer["feedback_correct"], categorizer["feedback_wrong"], best_correct, best_wrong))
     print(f"\n{'-'*20}END{'-'*20}\nBest accuracy ever of categorizer {best_acc*100:.2f}%")
+
+if __name__ == "__main__":
+    runCategorizer()

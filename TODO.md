@@ -38,11 +38,16 @@
     - Uses GRU with 98% accuracy
 
 ## Step 2
-- [/] Model to predict the interesting rate of an article based on title
+- [x] Model to predict the interesting rate of an article based on title
     - Needs at least 80% accuracy
     - MLP easy to implement but worse than RNN
     - RNN, better than MLP but more computionally expensive
-    - [ ] How to embed title + category
+    - [x] How to embed title + category
+
+# Generalization
+- [/] main.py should run scraper
+    - [ ] categorize articles that don't have label
+    - [ ] predict interest rating
 
 ## Optional
 - [ ] Create one model to do it all or somehow join them together
