@@ -11,7 +11,7 @@ class ArticlePredicterRNN(torch.nn.Module):
     def __init__(self, vocab_size, embedding_dim, hidden_dim, output_dim):
         super(ArticlePredicterRNN, self).__init__()
         self.embedding = torch.nn.Embedding(vocab_size, embedding_dim)
-        self.rnn = torch.nn.GRU(embedding_dim, hidden_dim, bidirectional=True, batch_first=True) # Random parameters as placeholders
+        self.rnn = torch.nn.RNN(embedding_dim, hidden_dim, bidirectional=True, batch_first=True) # Random parameters as placeholders
         self.dropout = torch.nn.Dropout(0.2)
         self.fc = torch.nn.Linear(hidden_dim * 2, output_dim)
 
@@ -129,14 +129,14 @@ def loadModel(model) -> torch.nn.RNN:
 
 def run():
     # Load data
-    dataset = InterestDataset(DB_URL, 100, 200)
+    dataset = InterestDataset(DB_URL, 100, 100)
     dataloader = torch.utils.data.DataLoader(dataset, batch_size=128, shuffle=True)
 
     # Prepare layers
     vocab_size = len(dataset.tokenizer.vocab)
     embedding_dim = 128 # 128 - 98.67%
     hidden_dim = 64 # 32 - 98.67%
-    output_dim = len(set(dataset.labels.numpy()))
+    output_dim = len(set(dataset.labels))
 
     # Create RNN
     model = ArticlePredicterRNN(vocab_size, embedding_dim, hidden_dim, output_dim)
@@ -147,11 +147,17 @@ def run():
     return model, acc, correct, total
 
 if __name__ == "__main__":
-    stats = readStats()
-    predicter = stats["model"]["predicter"]
-    best_acc = predicter["accuracy"]
-    best_correct = predicter["predict_correct"]
-    best_wrong = predicter["predict_wrong"]
+    best_acc = 0
+    best_correct = 0
+    best_wrong = 0
+    try:
+        stats = readStats()
+        predicter = stats["model"]["predicter"]
+        best_acc = predicter["accuracy"]
+        best_correct = predicter["predict_correct"]
+        best_wrong = predicter["predict_wrong"]
+    except Exception as e:
+        print("[!] Failed to load stats")
     for n in range(5):
         model, acc, correct, total = run()
         if (acc > best_acc):

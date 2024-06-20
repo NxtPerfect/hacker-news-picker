@@ -12,9 +12,8 @@ class InterestDataset(torch.utils.data.Dataset):
         self.labels = data["Interest_Rating"].values
         self.tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
 
-        # # LabelEncoding to numerical values
-        # self.label_encoder = LabelEncoder()
-        # self.labels = torch.tensor(self.label_encoder.fit_transform(self.labels))
+        # Cast labels to long integers
+        self.labels = torch.tensor(self.labels, dtype=torch.long)
 
     def __len__(self):
         return len(self.labels)

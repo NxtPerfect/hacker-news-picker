@@ -50,7 +50,7 @@ def parseArticle(article):
 
     title = link.contents[0]
     link = link["href"]
-    print(f"Found title: '{title}' with link: '{link}'")
+    print(f"[i] Found title: '{title}' with link: '{link}'")
     return title, link
 
 def saveArticles(df, title, link) -> pd.DataFrame | None:
@@ -58,7 +58,6 @@ def saveArticles(df, title, link) -> pd.DataFrame | None:
     # if title in df["Title"].isin([title]).any().any() and df["Link"].isin([link]).any().any():
     has_title = df["Title"].isin([title]).any().any()
     has_link = df["Link"].isin([link]).any().any()
-    print(f"Has title: {has_title} has link: {has_link} for title: {title} and link: {link}")
     if has_title and has_link:
         return None
 
@@ -85,7 +84,7 @@ def run():
         try:
             url = f"{URL}{n+1}"
             print(f"\n{30*'#'}\n")
-            print(f"Currently looking at {url}")
+            print(f"[i] Currently looking at {url}")
             page = requests.get(url, headers=headers, proxies=proxy)
             soup = BeautifulSoup(page.content, 'html.parser')
 
@@ -97,39 +96,40 @@ def run():
             articles = soup.find_all("span", class_="titleline")
             for article in articles:
                 # Parse the article to get title, link and age
-                print("Parsing article...")
+                print("[i] Parsing article...")
                 title, link = parseArticle(article)
-                print("Article successfully parsed.")
+                print("[i] Article successfully parsed.")
 
                 # Append new article to existing dataframe
-                print("Saving article as dataframe...")
+                print("[u] Saving article as dataframe...")
                 new_df = saveArticles(df, title, link)
-                print("Article successfully saved as dataframe.")
+                print("[u] Article successfully saved as dataframe.")
 
                 # If new dataframe is empty, article exists in db, skip
                 if type(new_df) != pd.DataFrame:
-                    print("Already exists in the database, skipping...")
+                    print("[s] Already exists in the database, skipping...")
                     continue
 
-                print("Adding article to database.")
+                print("[u] Adding article to database.")
                 df = pd.concat([df, new_df])
                 articles_count += 1
 
-            print("Saving df to file...")
+            print("[u] Saving df to file...")
             df.to_csv(DB_URL, index=False)
-            print("Filed saved successfully.")
+            print("[u] Filed saved successfully.")
 
-            print("Updating stats...")
+            print("[u] Updating stats...")
             updateDatabase(articles_count, stats["database"]["categories_count"], stats["database"]["categories_list"])
-            print("Stats updated.")
+            print("[u] Stats updated.")
 
             # Timeout as to not spam requests and get blocked
-            print(f"Sleeping for {TIMEOUT_TIME}seconds")
+            print(f"[i] Sleeping for {TIMEOUT_TIME}seconds")
             time.sleep(TIMEOUT_TIME)
         except Exception as e:
             print("Failed to get page data.")
             print(e)
             return None
+    print(f"\n{'-'*40}\nFinished running process with {articles_count - stats['database']['articles']} new articles")
 
 if __name__ == "__main__":
     run()
