@@ -11,7 +11,7 @@ class ArticlePredicterRNN(torch.nn.Module):
     def __init__(self, vocab_size, embedding_dim, hidden_dim, output_dim):
         super(ArticlePredicterRNN, self).__init__()
         self.embedding = torch.nn.Embedding(vocab_size, embedding_dim)
-        self.rnn = torch.nn.RNN(embedding_dim, hidden_dim, bidirectional=True, batch_first=True) # Random parameters as placeholders
+        self.rnn = torch.nn.GRU(embedding_dim, hidden_dim, bidirectional=True, batch_first=True) # Random parameters as placeholders
         self.dropout = torch.nn.Dropout(0.2)
         self.fc = torch.nn.Linear(hidden_dim * 2, output_dim)
 
@@ -129,13 +129,13 @@ def loadModel(model) -> torch.nn.RNN:
 
 def run():
     # Load data
-    dataset = InterestDataset(DB_URL, 100, 100)
+    dataset = InterestDataset(DB_URL, 100, 300)
     dataloader = torch.utils.data.DataLoader(dataset, batch_size=128, shuffle=True)
 
     # Prepare layers
     vocab_size = len(dataset.tokenizer.vocab)
-    embedding_dim = 128 # 128 - 98.67%
-    hidden_dim = 64 # 32 - 98.67%
+    embedding_dim = 128 # 128 - 97.00%
+    hidden_dim = 64 # 32 - 97.00%
     output_dim = len(set(dataset.labels))
 
     # Create RNN
@@ -163,9 +163,9 @@ if __name__ == "__main__":
         if (acc > best_acc):
             print(f"Best accuracy so far {acc:.6f}. Saving...")
             if (saveModel(model)):
-                print("Successfully saved model.")
+                print("Successfully saved predict model.")
             best_acc = acc
             best_correct = correct
             best_wrong = total - correct
     print(updateModelPredicter(best_acc, predicter["feedback_correct"], predicter["feedback_wrong"], best_correct, best_wrong))
-    print(f"\n{'-'*20}END{'-'*20}\nBest accuracy ever {best_acc*100:.2f}%")
+    print(f"\n{'-'*20}END{'-'*20}\nBest accuracy ever for predict model {best_acc*100:.2f}%")

@@ -157,9 +157,9 @@ if __name__ == "__main__":
         if (acc > best_acc):
             print(f"Best accuracy so far {acc:.6f}. Saving...")
             if (saveModel(model)):
-                print("Successfully saved model.")
+                print("Successfully saved categorizer model.")
             best_acc = acc
             best_correct = correct
             best_wrong = total - correct
     print(updateModelCategorizer(best_acc, categorizer["feedback_correct"], categorizer["feedback_wrong"], best_correct, best_wrong))
-    print(f"\n{'-'*20}END{'-'*20}\nBest accuracy ever {best_acc*100:.2f}%")
+    print(f"\n{'-'*20}END{'-'*20}\nBest accuracy ever of categorizer {best_acc*100:.2f}%")

@@ -8,7 +8,7 @@ class InterestDataset(torch.utils.data.Dataset):
     def __init__(self, file_path, max_len=100, articles_count=200) -> None:
         data = pd.read_csv(file_path)[:articles_count]
         self.max_len = max_len
-        self.features = (data["Title"] + data["Category"]).values # also include categories
+        self.features = (data["Title"] + ' ' + data["Category"]).values # also include categories
         self.labels = data["Interest_Rating"].values
         self.tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
 
