@@ -1,4 +1,4 @@
-import pandas as pd
+from src.database.db import loadData
 import torch
 from sklearn.preprocessing import LabelEncoder
 from transformers import BertTokenizer
@@ -6,7 +6,7 @@ from transformers import BertTokenizer
 
 class CategoryDataset(torch.utils.data.Dataset):
     def __init__(self, file_path, max_len=100, articles_count=200) -> None:
-        data = pd.read_csv(file_path)
+        data = loadData(file_path)
         if articles_count != 0:
             data = data[:articles_count]
         self.max_len = max_len

@@ -2,8 +2,22 @@ import pandas as pd
 
 DB_URL = "data/news.csv"
 
-# Title / Category / Link / Interest_Rating / Is_Fake_News
-def save(title: str, category: str, link: str, interest_rating: int):
-    d = {'Title': title, 'Category': category, "Link": link, "Interest_Rating": interest_rating}
-    df = pd.DataFrame(data=d)
-    df.to_csv(DB_URL, mode='a', header=False)
+# Title / Category / Link / Interest_Rating
+def saveData(df: pd.DataFrame, path="data/new_news.csv", mode='w'):
+    try:
+        print("[u] Saving data...")
+        data = pd.DataFrame(data=df)
+        data.to_csv(path, mode=mode)
+        print("[u] Data saved successfully.")
+        return True
+    except Exception as e:
+        print(f"Failed to save file.\n{e}")
+        return False
+
+def loadData(path="data/news.csv"):
+    try:
+        df = pd.read_csv(path)
+        return df
+    except Exception as e:
+        print(f"Failed to load data.\n{e}")
+        return None

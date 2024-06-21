@@ -4,7 +4,7 @@ import random
 import pandas as pd
 import time
 
-from src.database.db import DB_URL
+from src.database.db import DB_URL, saveData
 from src.stats.stats import readStats, updateDatabase
 
 # Check url for past posts etc
@@ -115,7 +115,7 @@ def runScraper():
                 articles_count += 1
 
             print("[u] Saving df to file...")
-            df.to_csv(DB_URL, index=False)
+            saveData(df, DB_URL)
             print("[u] Filed saved successfully.")
 
             print("[u] Updating stats...")

@@ -2,10 +2,10 @@ from src.stats.stats import readStats, updateModelPredicter
 import torch
 
 from src.predict.dataset import InterestDataset
-from src.database.db import DB_URL
+from src.database.db import DB_URL, loadData, saveData
 
 PREDICT_MODEL_PATH = "model/predict/model.pt"
-EPOCHS = 40
+EPOCHS = 50
 ARTICLES_COUNT = 300
 
 class ArticlePredicterRNN(torch.nn.Module):
@@ -24,7 +24,6 @@ class ArticlePredicterRNN(torch.nn.Module):
         return torch.nn.functional.log_softmax(out, dim=1)
 
 def train(model, dataloader):
-    pass
     device = (
         "cuda"
         if torch.cuda.is_available()
@@ -108,12 +107,50 @@ def train(model, dataloader):
 
     return accuracy, correct, total
 
-def getData():
-    pass
+def predictInterest():
+    device = (
+        "cuda"
+        if torch.cuda.is_available()
+        else "mps"
+        if torch.backends.mps.is_available()
+        else "cpu"
+    )
+
+    dataset = InterestDataset(DB_URL, 100, 0)
+    dataloader = torch.utils.data.DataLoader(dataset, batch_size=128, shuffle=True)
+
+
+    # Prepare layers
+    vocab_size = len(dataset.tokenizer.vocab)
+    embedding_dim = 128 # 128 - 98.67%
+    hidden_dim = 64 # 32 - 98.67%
+    output_dim = len(set(dataset.labels))
+
+    # Create RNN
+    model = ArticlePredicterRNN(vocab_size, embedding_dim, hidden_dim, output_dim)
+    model = loadModel(model)
+    model.to(device)
+
+    df = loadData()
+    index = 0
+    with torch.no_grad():
+        for inputs, labels in dataloader:
+            inputs, labels = inputs.to(device), labels.to(device)
+
+            outputs = model(inputs)
+            _, predicted = torch.max(outputs.data, 1)
+
+            for pred in predicted:
+                predicted_label = int(pred)
+                print(f"Predicted label {predicted_label}")
+                # Save new labels to dataframe
+    #             df.at[index, "Category"] = predicted_label
+    #             index += 1
+    # # Save dataframe to test file
+    # saveData(df)
 
 # Save model
 def saveModel(model) -> bool:
-    pass
     try:
         torch.save(model.state_dict(), PREDICT_MODEL_PATH)
         return True
@@ -123,7 +160,6 @@ def saveModel(model) -> bool:
         return False
 
 def loadModel(model) -> torch.nn.RNN:
-    pass
     model.load_state_dict(torch.load(PREDICT_MODEL_PATH))
     model.eval()
     return model
@@ -159,7 +195,8 @@ def runPredicter():
         best_correct = predicter["predict_correct"]
         best_wrong = predicter["predict_wrong"]
     except Exception as e:
-        print("[!] Failed to load stats")
+        print("[!] Failed to load stats.\n{e}")
+        return None
     for n in range(5):
         model, acc, correct, total = runTraining()
         if (acc > best_acc):
@@ -169,8 +206,9 @@ def runPredicter():
             best_acc = acc
             best_correct = correct
             best_wrong = total - correct
-    print(updateModelPredicter(best_acc, predicter["feedback_correct"], predicter["feedback_wrong"], best_correct, best_wrong))
+    print(updateModelPredicter(round(best_acc, 4), predicter["feedback_correct"], predicter["feedback_wrong"], best_correct, best_wrong))
     print(f"\n{'-'*20}END{'-'*20}\nBest accuracy ever for predict model {best_acc*100:.2f}%")
 
 if __name__ == "__main__":
     runPredicter()
+    predictInterest()

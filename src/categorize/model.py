@@ -1,11 +1,12 @@
 from src.stats.stats import readStats, updateModelCategorizer
 import torch
+import pandas as pd
 
 from src.categorize.dataset import CategoryDataset
-from src.database.db import DB_URL
+from src.database.db import DB_URL, loadData, saveData
 
 CATEGORIZE_MODEL_PATH = "model/categorize/model.pt"
-EPOCHS = 40
+EPOCHS = 50
 ARTICLES_COUNT = 400
 
 class ArticleCategorizerRNN(torch.nn.Module):
@@ -131,6 +132,8 @@ def predictCategory():
     model = loadModel(model)
     model.to(device)
 
+    df = loadData()
+    index = 0
     with torch.no_grad():
         for inputs, labels in dataloader:
             inputs, labels = inputs.to(device), labels.to(device)
@@ -138,16 +141,20 @@ def predictCategory():
             outputs = model(inputs)
             _, predicted = torch.max(outputs.data, 1)
 
-            # Predicted is a tensor, i should instead get each value from it
-            predicted_label = dataset.category_labels[predicted]
-            print(f"Predicted label {predicted_label}")
+            for pred in predicted:
+                predicted_label = dataset.category_labels[int(pred)]
+                # print(f"Predicted label {predicted_label}")
+                # Save new labels to dataframe
+                df.at[index, "Category"] = predicted_label
+                index += 1
+    # Save dataframe to test file
+    saveData(df)
 
 def getData():
     pass
 
 # Save model
 def saveModel(model) -> bool:
-    pass
     try:
         torch.save(model.state_dict(), CATEGORIZE_MODEL_PATH)
         return True
@@ -181,12 +188,19 @@ def runTraining():
     return model, acc, correct, total
 
 def runCategorizer():
-    print(f"\n{'#'*20}Running Categorizer{'#'*20}\n")
-    stats = readStats()
-    categorizer = stats["model"]["categorizer"]
-    best_acc = categorizer["accuracy"]
-    best_correct = categorizer["predict_correct"]
-    best_wrong = categorizer["predict_wrong"]
+    best_acc = 0
+    best_correct = 0
+    best_wrong = 0
+    try:
+        print(f"\n{'#'*20}Running Categorizer{'#'*20}\n")
+        stats = readStats()
+        categorizer = stats["model"]["categorizer"]
+        best_acc = categorizer["accuracy"]
+        best_correct = categorizer["predict_correct"]
+        best_wrong = categorizer["predict_wrong"]
+    except Exception as e:
+        print("[!] Failed to load stats.\n{e}")
+        return None
     for n in range(5):
         model, acc, correct, total = runTraining()
         if (acc > best_acc):
@@ -196,8 +210,9 @@ def runCategorizer():
             best_acc = acc
             best_correct = correct
             best_wrong = total - correct
-    print(updateModelCategorizer(best_acc, categorizer["feedback_correct"], categorizer["feedback_wrong"], best_correct, best_wrong))
+    print(updateModelCategorizer(round(best_acc, 4), categorizer["feedback_correct"], categorizer["feedback_wrong"], best_correct, best_wrong))
     print(f"\n{'-'*20}END{'-'*20}\nBest accuracy ever of categorizer {best_acc*100:.2f}%")
 
 if __name__ == "__main__":
-    runCategorizer()
+    # runCategorizer()
+    predictCategory()
