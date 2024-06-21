@@ -46,8 +46,15 @@
 
 # Generalization
 - [/] main.py should run scraper
-    - [ ] categorize articles that don't have label
+    - [/] categorize articles that don't have label
+        - almost getting labels, just need to each
+        each value from the tensor
     - [ ] predict interest rating
+    - [ ] once all data is labeled and has good accuracy
+        load models and only retrain on feedback
+
+Feedback should change data in the .csv
+then there's an option to retrain the model
 
 ## Optional
 - [ ] Create one model to do it all or somehow join them together

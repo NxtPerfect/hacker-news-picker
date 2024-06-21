@@ -24,7 +24,6 @@ class ArticleCategorizerRNN(torch.nn.Module):
         return torch.nn.functional.log_softmax(out, dim=1)
 
 def train(model, dataloader):
-    pass
     device = (
         "cuda"
         if torch.cuda.is_available()
@@ -108,6 +107,41 @@ def train(model, dataloader):
 
     return accuracy, correct, total
 
+def predictCategory():
+    device = (
+        "cuda"
+        if torch.cuda.is_available()
+        else "mps"
+        if torch.backends.mps.is_available()
+        else "cpu"
+    )
+
+    dataset = CategoryDataset(DB_URL, 100, 0)
+    dataloader = torch.utils.data.DataLoader(dataset, batch_size=128, shuffle=True)
+
+
+    # Prepare layers
+    vocab_size = len(dataset.tokenizer.vocab)
+    embedding_dim = 128 # 128 - 98.67%
+    hidden_dim = 64 # 32 - 98.67%
+    output_dim = len(set(dataset.labels.numpy()))
+
+    # Create RNN
+    model = ArticleCategorizerRNN(vocab_size, embedding_dim, hidden_dim, output_dim)
+    model = loadModel(model)
+    model.to(device)
+
+    with torch.no_grad():
+        for inputs, labels in dataloader:
+            inputs, labels = inputs.to(device), labels.to(device)
+
+            outputs = model(inputs)
+            _, predicted = torch.max(outputs.data, 1)
+
+            # Predicted is a tensor, i should instead get each value from it
+            predicted_label = dataset.category_labels[predicted]
+            print(f"Predicted label {predicted_label}")
+
 def getData():
     pass
 
@@ -123,7 +157,6 @@ def saveModel(model) -> bool:
         return False
 
 def loadModel(model) -> torch.nn.RNN:
-    pass
     model.load_state_dict(torch.load(CATEGORIZE_MODEL_PATH))
     model.eval()
     return model

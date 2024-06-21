@@ -1,7 +1,6 @@
 from src.predict.model import runPredicter
 from src.preprocess.gather_data import runScraper
-from src.categorize.model import runCategorizer
-
+from src.categorize.model import predictCategory, runCategorizer
 
 def runMain():
     # Preprocess data
@@ -9,6 +8,9 @@ def runMain():
     
     # Run categorizer
     runCategorizer()
+
+    # Fill out data
+    predictCategory()
 
     # Run predicter
     runPredicter()
