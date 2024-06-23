@@ -50,7 +50,7 @@
     - [x] predict interest rating
         - bad size when loading model
         - input size is equal to how many articles there are
-    - [/] once all data is labeled and has good accuracy
+    - [x] once all data is labeled and has good accuracy
         load models and only retrain on feedback
 
 # Feedback
@@ -66,6 +66,9 @@ then there's an option to retrain the model
     - supposedly it needs python backend,
     but if i only need .csv file of data the model spits out,
     I could get away with using nextjs or htmx
+    - maybe using streamlit?
+    or mesop
+    - or use flask and htmx?
 
 ## Step 2
 - [ ] Create UI in Figma
@@ -89,6 +92,3 @@ then there's an option to retrain the model
         - accuracy based on user feedback
 
 - [ ] Implement it
-    - maybe using streamlit?
-    or mesop
-    - or use flask and htmx?
