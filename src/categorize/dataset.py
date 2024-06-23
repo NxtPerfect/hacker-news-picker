@@ -34,4 +34,3 @@ class CategoryDataset(torch.utils.data.Dataset):
         tokens = tokens + ([0] * padding_length)
 
         return torch.tensor(tokens), self.labels[idx]
-        # return self.features[idx], self.labels[idx]

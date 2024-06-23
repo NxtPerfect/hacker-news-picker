@@ -1,4 +1,4 @@
-from src.predict.model import runPredicter
+from src.predict.model import predictInterest, runPredicter
 from src.preprocess.gather_data import runScraper
 from src.categorize.model import predictCategory, runCategorizer
 
@@ -15,8 +15,8 @@ def runMain():
     # Run predicter
     runPredicter()
 
-    # The runs should instead
-    # fill out the dataframe
+    # Fill out interest data
+    predictInterest()
 
 if __name__ == "__main__":
     runMain()

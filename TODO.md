@@ -11,9 +11,7 @@
 - [/] add at least 5000 articles
     - Maybe it's not needed
     - At least for now it's not needed
-- [ ] Ensure categories are consistent, don't create categories for a singular article
-- [ ] Try looking at past articles too already got url
-    - do second pass on last 30 days of articles?
+- [x] Ensure categories are consistent, don't create categories for a singular article
 
 ## Step 2
 - [x] One-hot-encode the titles or some other way to turn text into numbers
@@ -46,14 +44,17 @@
 
 # Generalization
 - [/] main.py should run scraper
-    - [/] categorize articles that don't have label
+    - [x] categorize articles that don't have label
         - almost getting labels, just need to each
         each value from the tensor
-    - [ ] predict interest rating
-    - [ ] once all data is labeled and has good accuracy
+    - [x] predict interest rating
+        - bad size when loading model
+        - input size is equal to how many articles there are
+    - [/] once all data is labeled and has good accuracy
         load models and only retrain on feedback
 
-Feedback should change data in the .csv
+# Feedback
+- [ ] Feedback should change data in the .csv
 then there's an option to retrain the model
 
 ## Optional
@@ -88,3 +89,6 @@ then there's an option to retrain the model
         - accuracy based on user feedback
 
 - [ ] Implement it
+    - maybe using streamlit?
+    or mesop
+    - or use flask and htmx?

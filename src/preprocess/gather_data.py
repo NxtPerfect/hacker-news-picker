@@ -66,12 +66,12 @@ def saveArticles(df, title, link) -> pd.DataFrame | None:
         'Category': [None],
         'Link': [link],
         'Interest_Rating': [None],
-        'Is_Fake_News': [None]
     })
 
     return df_new_rows
 
 def runScraper():
+    new_article_count = 0
     for n in range(PAGES_AMOUNT):
         random_index = random.randint(0, len(USER_AGENT_LIST)-1)
         user_agent = USER_AGENT_LIST[random_index]
@@ -113,6 +113,7 @@ def runScraper():
                 print("[u] Adding article to database.")
                 df = pd.concat([df, new_df])
                 articles_count += 1
+                new_article_count += 1
 
             print("[u] Saving df to file...")
             saveData(df, DB_URL)
@@ -129,7 +130,7 @@ def runScraper():
             print("Failed to get page data.")
             print(e)
             return None
-    print(f"\n{'-'*40}\nFinished running process with {articles_count - stats['database']['articles']} new articles")
+    print(f"\n{'-'*40}\nFinished running process with {new_article_count} new articles")
 
 if __name__ == "__main__":
     runScraper()

@@ -13,8 +13,12 @@ class InterestDataset(torch.utils.data.Dataset):
         self.labels = data["Interest_Rating"].values
         self.tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
 
-        # Cast labels to long integers
-        self.labels = torch.tensor(self.labels, dtype=torch.long)
+        # Cast labels to long integersunique_labels = sorted(set(self.labels))
+        if articles_count != 0:
+            unique_labels = sorted(set(self.labels))
+            self.label_to_index = {label: idx for idx, label in enumerate(unique_labels)}
+            self.index_to_label = {idx: label for label, idx in self.label_to_index.items()}
+            self.labels = torch.tensor([self.label_to_index[label] for label in self.labels], dtype=torch.long)
 
     def __len__(self):
         return len(self.labels)
@@ -29,4 +33,3 @@ class InterestDataset(torch.utils.data.Dataset):
         tokens = tokens + ([0] * padding_length)
 
         return torch.tensor(tokens), self.labels[idx]
-        # return self.features[idx], self.labels[idx]

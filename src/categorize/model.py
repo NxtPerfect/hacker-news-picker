@@ -1,13 +1,12 @@
 from src.stats.stats import readStats, updateModelCategorizer
 import torch
-import pandas as pd
 
 from src.categorize.dataset import CategoryDataset
 from src.database.db import DB_URL, loadData, saveData
 
 CATEGORIZE_MODEL_PATH = "model/categorize/model.pt"
 EPOCHS = 50
-ARTICLES_COUNT = 400
+ARTICLES_COUNT = 500
 
 class ArticleCategorizerRNN(torch.nn.Module):
     def __init__(self, vocab_size, embedding_dim, hidden_dim, output_dim):
@@ -34,13 +33,12 @@ def train(model, dataloader):
     )
 
     model.to(device)
-    # model.to('cpu')
     
     # Criterion, optimizer and scheduler
     criterion = torch.nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=0.1)
     scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=25, gamma=0.1)
-
+    
     num_epochs = 0
     loss = 0
 
@@ -117,6 +115,8 @@ def predictCategory():
         else "cpu"
     )
 
+    print(f"[i] Started predicting category...")
+
     dataset = CategoryDataset(DB_URL, 100, 0)
     dataloader = torch.utils.data.DataLoader(dataset, batch_size=128, shuffle=True)
 
@@ -125,7 +125,7 @@ def predictCategory():
     vocab_size = len(dataset.tokenizer.vocab)
     embedding_dim = 128 # 128 - 98.67%
     hidden_dim = 64 # 32 - 98.67%
-    output_dim = len(set(dataset.labels.numpy()))
+    output_dim = len(set(dataset.labels.numpy())) - 1 # Exclude null values
 
     # Create RNN
     model = ArticleCategorizerRNN(vocab_size, embedding_dim, hidden_dim, output_dim)
@@ -150,8 +150,7 @@ def predictCategory():
     # Save dataframe to test file
     saveData(df)
 
-def getData():
-    pass
+    print(f"[i] Finished predicting category.")
 
 # Save model
 def saveModel(model) -> bool:
@@ -192,7 +191,7 @@ def runCategorizer():
     best_correct = 0
     best_wrong = 0
     try:
-        print(f"\n{'#'*20}Running Categorizer{'#'*20}\n")
+        print(f"\n{'#'*20} Running Categorizer {'#'*20}\n")
         stats = readStats()
         categorizer = stats["model"]["categorizer"]
         best_acc = categorizer["accuracy"]
@@ -202,6 +201,7 @@ def runCategorizer():
         print("[!] Failed to load stats.\n{e}")
         return None
     for n in range(5):
+        print(f"\n{'#'*20} Running {n + 1} time out of 5 {'#'*20}\n")
         model, acc, correct, total = runTraining()
         if (acc > best_acc):
             print(f"Best accuracy so far {acc:.6f}. Saving...")

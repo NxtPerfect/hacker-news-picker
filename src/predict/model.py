@@ -6,7 +6,7 @@ from src.database.db import DB_URL, loadData, saveData
 
 PREDICT_MODEL_PATH = "model/predict/model.pt"
 EPOCHS = 50
-ARTICLES_COUNT = 300
+ARTICLES_COUNT = 500
 
 class ArticlePredicterRNN(torch.nn.Module):
     def __init__(self, vocab_size, embedding_dim, hidden_dim, output_dim):
@@ -116,7 +116,9 @@ def predictInterest():
         else "cpu"
     )
 
-    dataset = InterestDataset(DB_URL, 100, 0)
+    print(f"[i] Starting predicting interest...")
+
+    dataset = InterestDataset("data/new_news.csv", 100, 0)
     dataloader = torch.utils.data.DataLoader(dataset, batch_size=128, shuffle=True)
 
 
@@ -124,30 +126,34 @@ def predictInterest():
     vocab_size = len(dataset.tokenizer.vocab)
     embedding_dim = 128 # 128 - 98.67%
     hidden_dim = 64 # 32 - 98.67%
-    output_dim = len(set(dataset.labels))
+    # output_dim = len(set(dataset.labels))
+    output_dim = 10
 
+    # TODO: Input size is equal to how many articles there are, which is bad bad
     # Create RNN
     model = ArticlePredicterRNN(vocab_size, embedding_dim, hidden_dim, output_dim)
     model = loadModel(model)
     model.to(device)
 
-    df = loadData()
+    df = loadData("data/new_news.csv")
     index = 0
     with torch.no_grad():
-        for inputs, labels in dataloader:
-            inputs, labels = inputs.to(device), labels.to(device)
+        for inputs, _ in dataloader:
+            inputs = inputs.to(device)
 
             outputs = model(inputs)
             _, predicted = torch.max(outputs.data, 1)
 
             for pred in predicted:
                 predicted_label = int(pred)
-                print(f"Predicted label {predicted_label}")
+                # print(f"Predicted label {predicted_label}")
                 # Save new labels to dataframe
-    #             df.at[index, "Category"] = predicted_label
-    #             index += 1
-    # # Save dataframe to test file
-    # saveData(df)
+                df.at[index, "Interest_Rating"] = predicted_label
+                index += 1
+    # Save dataframe to test file
+    saveData(df)
+
+    print(f"[i] Finished predicting interest.")
 
 # Save model
 def saveModel(model) -> bool:
@@ -173,7 +179,8 @@ def runTraining():
     vocab_size = len(dataset.tokenizer.vocab)
     embedding_dim = 128 # 128 - 97.00%
     hidden_dim = 64 # 32 - 97.00%
-    output_dim = len(set(dataset.labels))
+    # output_dim = len(set(dataset.labels))
+    output_dim = 10
 
     # Create RNN
     model = ArticlePredicterRNN(vocab_size, embedding_dim, hidden_dim, output_dim)
@@ -188,7 +195,7 @@ def runPredicter():
     best_correct = 0
     best_wrong = 0
     try:
-        print(f"\n{'#'*20}Running Predicter{'#'*20}\n")
+        print(f"\n{'#'*20} Running Predicter {'#'*20}\n")
         stats = readStats()
         predicter = stats["model"]["predicter"]
         best_acc = predicter["accuracy"]
@@ -198,6 +205,7 @@ def runPredicter():
         print("[!] Failed to load stats.\n{e}")
         return None
     for n in range(5):
+        print(f"\n{'#'*20} Running {n + 1} time out of 5 {'#'*20}\n")
         model, acc, correct, total = runTraining()
         if (acc > best_acc):
             print(f"Best accuracy so far {acc:.6f}. Saving...")
@@ -210,5 +218,5 @@ def runPredicter():
     print(f"\n{'-'*20}END{'-'*20}\nBest accuracy ever for predict model {best_acc*100:.2f}%")
 
 if __name__ == "__main__":
-    runPredicter()
+    # runPredicter()
     predictInterest()
