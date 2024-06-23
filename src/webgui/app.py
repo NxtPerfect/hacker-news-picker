@@ -8,7 +8,7 @@ def home():
     return render_template("home.html")
     # return "<h1>Hacker News Picker</h1>"
 
-@app.route('/model')
+@app.route('/info')
 def model():
     data = readStats()
     return f"{data}"
