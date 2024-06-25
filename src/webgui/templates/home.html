@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Hacker News Picker</title>
-    <link href="css/style.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
   </head>
   <body>
     <nav>
@@ -12,6 +12,9 @@
     </nav>
     <main>
       <h1>Hacker News Picker</h1>
+      {% for index, article in articles.iterrows() %}
+        <div key={{index}}><span>Article titel: {{article['Title']}}</span><spab>Category: {{article['Category']}}</span><span>Interest Rating: {{article['Interest_Rating']}}</span></div>
+      {% endfor %}
     </main>
   </body>
 </html>

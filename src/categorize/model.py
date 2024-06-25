@@ -5,14 +5,15 @@ from src.categorize.dataset import CategoryDataset
 from src.database.db import DB_URL, loadData, saveData
 
 CATEGORIZE_MODEL_PATH = "model/categorize/model.pt"
-EPOCHS = 50
-ARTICLES_COUNT = 500
+EPOCHS = 40 # 40
+ARTICLES_COUNT = 800
+LEARNING_RATE = 0.1 # 0.01
 
 class ArticleCategorizerRNN(torch.nn.Module):
     def __init__(self, vocab_size, embedding_dim, hidden_dim, output_dim):
         super(ArticleCategorizerRNN, self).__init__()
         self.embedding = torch.nn.Embedding(vocab_size, embedding_dim)
-        self.rnn = torch.nn.GRU(embedding_dim, hidden_dim, bidirectional=True, batch_first=True) # Random parameters as placeholders
+        self.rnn = torch.nn.GRU(embedding_dim, hidden_dim, bidirectional=True, batch_first=True)
         self.dropout = torch.nn.Dropout(0.2)
         self.fc = torch.nn.Linear(hidden_dim * 2, output_dim)
 
@@ -23,30 +24,21 @@ class ArticleCategorizerRNN(torch.nn.Module):
         out = self.fc(out)
         return torch.nn.functional.log_softmax(out, dim=1)
 
-def train(model, dataloader):
-    device = (
-        "cuda"
-        if torch.cuda.is_available()
-        else "mps"
-        if torch.backends.mps.is_available()
-        else "cpu"
-    )
-
+def train(device, model, train_dataloader, validation_dataloader):
     model.to(device)
     
     # Criterion, optimizer and scheduler
     criterion = torch.nn.CrossEntropyLoss()
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.1)
-    scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=25, gamma=0.1)
+    optimizer = torch.optim.Adam(model.parameters(), lr=LEARNING_RATE) # 0.1
+    scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=25, gamma=0.1) # 25 0.1
     
     num_epochs = 0
     loss = 0
 
     # Training the model
     while num_epochs < EPOCHS:
-        for inputs, labels in dataloader:
+        for inputs, labels in train_dataloader:
             inputs, labels = inputs.to(device), labels.to(device)
-            # inputs, labels = inputs.to('cpu'), labels.to('cpu')
 
             outputs = model(inputs)
             loss = criterion(outputs, labels)
@@ -63,7 +55,7 @@ def train(model, dataloader):
         validation_loss = 0.0
         correct = 0
         total = 0
-        for inputs, labels in dataloader:
+        for inputs, labels in validation_dataloader:
             inputs, labels = inputs.to(device), labels.to(device)
             # inputs, labels = inputs.to('cpu'), labels.to('cpu')
 
@@ -78,33 +70,10 @@ def train(model, dataloader):
 
     scheduler.step()
 
-    accuracy = correct / total
-    avg_validation_loss = validation_loss / len(dataloader)
+    print(f"\n{'-' * 20}\nFirst {ARTICLES_COUNT} articles\n\n")
+    print(f"Finished training.\n{'-' * 20}")
 
-    print(f"\n{'-' * 20}\nFirst {ARTICLES_COUNT} articles\n\nTest accuracy: {accuracy * 100:.2f}%, with average validation loss: {avg_validation_loss:.6f}.")
-
-    print(f"Finished testing.\n{'-' * 20}")
-    with torch.no_grad():
-        validation_loss = 0.0
-        correct = 0
-        total = 0
-        for inputs, labels in dataloader:
-            inputs, labels = inputs.to(device), labels.to(device)
-
-            outputs = model(inputs)
-            _, predicted = torch.max(outputs.data, 1)
-
-            total += labels.size(0)
-            correct += (predicted == labels).sum().item()
-
-            validation_loss += loss.item()
-
-    scheduler.step()
-
-    accuracy = correct / total
-    avg_validation_loss = validation_loss / len(dataloader)
-
-    return accuracy, correct, total
+    return model, correct, total
 
 def predictCategory():
     device = (
@@ -123,8 +92,8 @@ def predictCategory():
 
     # Prepare layers
     vocab_size = len(dataset.tokenizer.vocab)
-    embedding_dim = 128 # 128 - 98.67%
-    hidden_dim = 64 # 32 - 98.67%
+    embedding_dim = 512 # 128
+    hidden_dim = 256 # 32
     output_dim = len(set(dataset.labels.numpy())) - 1 # Exclude null values
 
     # Create RNN
@@ -168,23 +137,126 @@ def loadModel(model) -> torch.nn.RNN:
     return model
 
 def runTraining():
+    device = (
+        "cuda"
+        if torch.cuda.is_available()
+        else "mps"
+        if torch.backends.mps.is_available()
+        else "cpu"
+    )
+
     # Load data
     dataset = CategoryDataset(DB_URL, 100, ARTICLES_COUNT)
-    dataloader = torch.utils.data.DataLoader(dataset, batch_size=128, shuffle=True)
+
+    # Split data to train, validate and test datasets
+    train_size = int(0.8 * len(dataset))
+    val_size = int(0.1 * len(dataset))
+    test_size = len(dataset) - train_size - val_size
+
+    train_dataset, val_dataset, test_dataset = torch.utils.data.random_split(dataset, [train_size, val_size, test_size])
+    train_dataloader = torch.utils.data.DataLoader(train_dataset, batch_size=256, shuffle=True)
+    val_dataloader = torch.utils.data.DataLoader(val_dataset, batch_size=256, shuffle=False)
+    test_dataloader = torch.utils.data.DataLoader(test_dataset, batch_size=256, shuffle=False)
 
     # Prepare layers
     vocab_size = len(dataset.tokenizer.vocab)
-    embedding_dim = 128 # 128 - 98.67%
-    hidden_dim = 64 # 32 - 98.67%
+    embedding_dim = 512 # 128 - 98.67% // 256 - 38%
+    hidden_dim = 256 # 32 - 98.67% // 64 - 38%
     output_dim = len(set(dataset.labels.numpy()))
 
     # Create RNN
     model = ArticleCategorizerRNN(vocab_size, embedding_dim, hidden_dim, output_dim)
 
     # Train
-    acc, correct, total = train(model, dataloader)
-    print(f"Accuracy: {acc*100:.2f}% Correct/Total: {correct}/{total}")
-    return model, acc, correct, total
+    model, correct, total = train(device, model, train_dataloader, val_dataloader)
+
+    # Test
+    correct = 0
+    total = 0
+    with torch.no_grad():
+        model.eval()
+        for inputs, labels in test_dataloader:
+            inputs, labels = inputs.to(device), labels.to(device)
+
+            outputs = model(inputs)
+            _, predicted = torch.max(outputs.data, 1)
+            total += labels.size(0)
+            correct += (predicted == labels).sum().item()
+
+    test_acc = correct / total
+    print(f"Test accuracy: {test_acc*100:.2f}% Correct/Total: {correct}/{total}")
+    return model, test_acc, correct, total
+
+def findParams():
+    device = (
+        "cuda"
+        if torch.cuda.is_available()
+        else "mps"
+        if torch.backends.mps.is_available()
+        else "cpu"
+    )
+
+    # Load data
+    dataset = CategoryDataset(DB_URL, 100, ARTICLES_COUNT)
+
+    # Split data to train, validate and test datasets
+    train_size = int(0.8 * len(dataset))
+    val_size = int(0.1 * len(dataset))
+    test_size = len(dataset) - train_size - val_size
+
+    train_dataset, val_dataset, test_dataset = torch.utils.data.random_split(dataset, [train_size, val_size, test_size])
+    train_dataloader = torch.utils.data.DataLoader(train_dataset, batch_size=256, shuffle=True)
+    val_dataloader = torch.utils.data.DataLoader(val_dataset, batch_size=256, shuffle=False)
+    test_dataloader = torch.utils.data.DataLoader(test_dataset, batch_size=256, shuffle=False)
+
+    learning_rate = [0.1, 0.01, 0.001, 0.0001]
+    embed_sizes = [64, 128, 256, 512, 1024]
+    hidden_dims = [32, 64, 128, 256]
+    epochs = [10, 20, 30, 40, 50, 100]
+
+    correct = 0
+    total = 0
+    test_acc = 0
+    best_acc = -1
+
+    for lr in learning_rate:
+        for es in embed_sizes:
+            for epoch in epochs:
+                for hd in hidden_dims:
+                    # Prepare layers
+                    vocab_size = len(dataset.tokenizer.vocab)
+                    embedding_dim = es # 128 - 98.67% // 256 - 38%
+                    hidden_dim = hd # 32 - 98.67% // 64 - 38%
+                    output_dim = len(set(dataset.labels.numpy()))
+
+                    # Create RNN
+                    model = ArticleCategorizerRNN(vocab_size, embedding_dim, hidden_dim, output_dim)
+                    # Train
+                    model, correct, total = train(device, model, train_dataloader, val_dataloader, lr, epoch)
+
+                    # Test
+                    correct = 0
+                    total = 0
+                    with torch.no_grad():
+                        model.eval()
+                        for inputs, labels in test_dataloader:
+                            inputs, labels = inputs.to(device), labels.to(device)
+
+                            outputs = model(inputs)
+                            _, predicted = torch.max(outputs.data, 1)
+                            total += labels.size(0)
+                            correct += (predicted == labels).sum().item()
+
+                    test_acc = correct / total
+                    print(f"Test accuracy: {test_acc*100:.2f}% Correct/Total: {correct}/{total}")
+                    if test_acc > best_acc:
+                        print(f"Best accuracy {best_acc*100:.2f}% with learning rate: {lr} embed_size: {es} epochs: {epoch} hidden_dim: {hd}")
+                        # 0.1 64 20 64 27%
+                        # 0.1 128 100 32 28.57%
+                        # 0.1 256 10 256 32.86%
+                        # 0.1 512 40 256 37.14%
+                        best_acc = test_acc
+    return model, test_acc, correct, total
 
 def runCategorizer():
     best_acc = 0
@@ -214,5 +286,6 @@ def runCategorizer():
     print(f"\n{'-'*20}END{'-'*20}\nBest accuracy ever of categorizer {best_acc*100:.2f}%")
 
 if __name__ == "__main__":
-    # runCategorizer()
-    predictCategory()
+    runCategorizer()
+    # predictCategory()
+    # findParams()

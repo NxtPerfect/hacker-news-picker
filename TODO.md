@@ -27,23 +27,28 @@
 - [ ] Ideally, it should be able to both categorize the article, and judge if it's interesting and on what scale
 
 ## Step 1
-- [x] Model to categorize article based on title
+- [/] Model to categorize article based on title
     - Use already existing categories from file
-    - At least 90% accuracy
+    - At least 90% accuracy - currently 30%
     - RNN, especially LSTM or GRU might be good,
     but computionally expensive
     - CNN can be faster but less effective
     - Uses GRU with 98% accuracy
 
+- [ ] Find optimal hyperparameters using gridsearch
+    - for lr in lr
+    - for epoch in epochs
+    - for batch_size in batch_size
+
 ## Step 2
-- [x] Model to predict the interesting rate of an article based on title
+- [/] Model to predict the interesting rate of an article based on title
     - Needs at least 80% accuracy
     - MLP easy to implement but worse than RNN
     - RNN, better than MLP but more computionally expensive
     - [x] How to embed title + category
 
 # Generalization
-- [/] main.py should run scraper
+- [x] main.py should run scraper
     - [x] categorize articles that don't have label
         - almost getting labels, just need to each
         each value from the tensor
@@ -62,13 +67,13 @@ then there's an option to retrain the model
 
 # UI
 ## Step 1
-- [ ] What frontend will I use?
+- [x] What frontend will I use?
     - supposedly it needs python backend,
     but if i only need .csv file of data the model spits out,
     I could get away with using nextjs or htmx
     - maybe using streamlit?
     or mesop
-    - or use flask and htmx?
+    - [x] or use flask and htmx?
 
 ## Step 2
 - [ ] Create UI in Figma

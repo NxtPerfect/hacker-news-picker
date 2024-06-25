@@ -1,29 +1,29 @@
 database:
-  articles: 2116
+  articles: 2545
   categories_count: 12
   categories_list:
-  - Operating Systems
-  - Software
-  - Hardware
-  - Programming
-  - AI
-  - Websites
-  - Science
-  - Security
-  - Privacy
-  - Politics
-  - Gaming
-  - Other
+  - operating systems
+  - software
+  - hardware
+  - programming
+  - ai
+  - websites
+  - science
+  - security
+  - privacy
+  - politics
+  - gaming
+  - other
 model:
   categorizer:
-    accuracy: 0.934
+    accuracy: 0.3429
     feedback_correct: 0
     feedback_wrong: 0
-    predict_correct: 467
-    predict_wrong: 33
+    predict_correct: 24
+    predict_wrong: 46
   predicter:
-    accuracy: 0.886
+    accuracy: 0.09
     feedback_correct: 0
     feedback_wrong: 0
-    predict_correct: 443
-    predict_wrong: 57
+    predict_correct: 553
+    predict_wrong: 147
