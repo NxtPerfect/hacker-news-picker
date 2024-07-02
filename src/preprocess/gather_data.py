@@ -2,15 +2,15 @@ from bs4 import BeautifulSoup
 import requests
 import random
 import pandas as pd
-import time
+from time import perf_counter
+from concurrent.futures import ThreadPoolExecutor
+from os import cpu_count
 
 from src.database.db import DB_URL, saveData
 from src.stats.stats import readStats, updateDatabase
 
-# Check url for past posts etc
-
+# Website url to scrape with pagination
 URL = "https://news.ycombinator.com/?p="
-PAST_URL = "https://news.ycombinator.com/front?day=2024-06-17&p="
 
 # Randomize user_agent on startup or every 30 minutes
 USER_AGENT_LIST = ["Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.3", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.3", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36 Edg/125.0.0.", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:126.0) Gecko/20100101 Firefox/126.", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.3"]
@@ -39,23 +39,25 @@ PROXIES_LIST = [
         "http://211.128.96.206:80",
         "http://51.254.78.223:80",
         ]
+
 # Amount of pages to scrape
 PAGES_AMOUNT = 20
-# Time between requests, not sure if needed if i have proxies
-# but better safe than sorry
-TIMEOUT_TIME = 0
 
 def parseArticle(article):
+    # Find link
     link = article.find_next("a")
 
+    # Find title
     title = link.contents[0]
+
+    # Get link url
     link = link["href"]
     print(f"[i] Found title: '{title}' with link: '{link}'")
     return title, link
 
 def saveArticles(df, title, link) -> pd.DataFrame | None:
-    # if (df["Title"] == title).any() and (df["Link"] == link).any():
-    # if title in df["Title"].isin([title]).any().any() and df["Link"].isin([link]).any().any():
+    # Check if title and link in db
+    # if both in db, don't save
     has_title = df["Title"].isin([title]).any().any()
     has_link = df["Link"].isin([link]).any().any()
     if has_title and has_link:
@@ -70,9 +72,62 @@ def saveArticles(df, title, link) -> pd.DataFrame | None:
 
     return df_new_rows
 
+def runScraperAsync():
+    new_articles_count = 0
+    urls = list(f"{URL}{n+1}" for n in range(PAGES_AMOUNT))
+    thread_count = min(len(urls), cpu_count())
+
+    with ThreadPoolExecutor(max_workers=thread_count) as executor:
+        executor.map(requestArticle, urls)
+    # Save article
+    # Update stats
+
+def requestArticle(url) -> tuple[pd.DataFrame, int] | tuple[None, None]:
+    try:
+        new_article_count = 0
+
+        random_index = random.randint(0, len(USER_AGENT_LIST)-1)
+        user_agent = USER_AGENT_LIST[random_index]
+        random_index = random.randint(0, len(PROXIES_LIST)-1)
+        proxy = {"http": PROXIES_LIST[random_index]}
+        headers = {'User-Agent': user_agent}
+
+        page = requests.get(url, headers=headers, proxies=proxy)
+        soup = BeautifulSoup(page.content, 'html.parser')
+
+        df = pd.DataFrame()
+
+        # Find article
+        articles = soup.find_all("span", class_="titleline")
+        for article in articles:
+            # Parse the article to get title, link and age
+            print("[i] Parsing article...")
+            title, link = parseArticle(article)
+            print("[i] Article successfully parsed.")
+
+            # Append new article to existing dataframe
+            print("[u] Saving article as dataframe...")
+            new_df = saveArticles(df, title, link)
+            print("[u] Article successfully saved as dataframe.")
+
+            # Create new dataframe and concat to existing
+            if type(new_df) != pd.DataFrame:
+                print(f"Article in database")
+                continue
+
+            df = pd.concat([df, new_df])
+            new_article_count += 1
+
+        return df, new_article_count
+
+    except Exception as e:
+        print(f"!e! Request failed due to error {e}")
+        return None, None
+
 def runScraper():
     new_article_count = 0
     for n in range(PAGES_AMOUNT):
+        # Prepare headers and proxies
         random_index = random.randint(0, len(USER_AGENT_LIST)-1)
         user_agent = USER_AGENT_LIST[random_index]
         random_index = random.randint(0, len(PROXIES_LIST)-1)
@@ -88,11 +143,11 @@ def runScraper():
             page = requests.get(url, headers=headers, proxies=proxy)
             soup = BeautifulSoup(page.content, 'html.parser')
 
+            # Read db to update articles count
             df = pd.read_csv(DB_URL)
             articles_count = stats["database"]["articles"]
-            # new_dfs = []
-            # td class="title" for title and <a href> inside of span class="titleline" for link
-            # span class="age" for age of post
+
+            # Find article
             articles = soup.find_all("span", class_="titleline")
             for article in articles:
                 # Parse the article to get title, link and age
@@ -122,10 +177,6 @@ def runScraper():
             print("[u] Updating stats...")
             updateDatabase(articles_count, stats["database"]["categories_count"], stats["database"]["categories_list"])
             print("[u] Stats updated.")
-
-            # Timeout as to not spam requests and get blocked
-            print(f"[i] Sleeping for {TIMEOUT_TIME}seconds")
-            time.sleep(TIMEOUT_TIME)
         except Exception as e:
             print("Failed to get page data.")
             print(e)
@@ -133,4 +184,12 @@ def runScraper():
     print(f"\n{'-'*40}\nFinished running process with {new_article_count} new articles")
 
 if __name__ == "__main__":
+    start = perf_counter()
     runScraper()
+    stop = perf_counter()
+    print(f"\n\nTime took {(stop-start):.2f}s for {PAGES_AMOUNT} pages.")
+
+    start = perf_counter()
+    runScraperAsync()
+    stop = perf_counter()
+    print(f"\n\nTime took async {(stop-start):.2f}s for {PAGES_AMOUNT} pages.")
