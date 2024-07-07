@@ -6,12 +6,18 @@
     - [x] script should be seperate from the model, so that if at any point i want to change website to get news from
         it should only require the script to be changed, not the model
 - [x] when adding article, update stats
+- [/] aiohttp to parallelize website requests
+    - [source](https://stackoverflow.com/questions/57126286/fastest-parallel-requests-in-python)
 
 ### Optional
-- [/] add at least 5000 articles
+- [/] 1300/6000 articles
     - Maybe it's not needed
     - At least for now it's not needed
 - [x] Ensure categories are consistent, don't create categories for a singular article
+
+### Optimization
+- [ ] Parallelize web requests using threads
+- [ ] Only save to file after every page was parsed
 
 ## Step 2
 - [x] One-hot-encode the titles or some other way to turn text into numbers

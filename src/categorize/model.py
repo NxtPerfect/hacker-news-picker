@@ -5,16 +5,18 @@ from src.categorize.dataset import CategoryDataset
 from src.database.db import DB_URL, loadData, saveData
 
 CATEGORIZE_MODEL_PATH = "model/categorize/model.pt"
-EPOCHS = 40 # 40
-ARTICLES_COUNT = 800
-LEARNING_RATE = 0.1 # 0.01
+EPOCHS = 100
+ARTICLES_COUNT = 1300
+LEARNING_RATE = 1e-3 # 0.1
+EMBEDDING_DIM = 128
+HIDDEN_DIM = 64
 
 class ArticleCategorizerRNN(torch.nn.Module):
-    def __init__(self, vocab_size, embedding_dim, hidden_dim, output_dim):
+    def __init__(self, vocab_size, embedding_dim=EMBEDDING_DIM, hidden_dim=HIDDEN_DIM, output_dim=12):
         super(ArticleCategorizerRNN, self).__init__()
         self.embedding = torch.nn.Embedding(vocab_size, embedding_dim)
         self.rnn = torch.nn.GRU(embedding_dim, hidden_dim, bidirectional=True, batch_first=True)
-        self.dropout = torch.nn.Dropout(0.2)
+        self.dropout = torch.nn.Dropout(0.5)
         self.fc = torch.nn.Linear(hidden_dim * 2, output_dim)
 
     def forward(self, x):
@@ -30,7 +32,8 @@ def train(device, model, train_dataloader, validation_dataloader):
     # Criterion, optimizer and scheduler
     criterion = torch.nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=LEARNING_RATE) # 0.1
-    scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=25, gamma=0.1) # 25 0.1
+    # scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=25, gamma=0.1) # 25 0.1
+    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=5)
     
     num_epochs = 0
     loss = 0
@@ -66,9 +69,8 @@ def train(device, model, train_dataloader, validation_dataloader):
             correct += (predicted == labels).sum().item()
 
             validation_loss += loss.item()
-
-
-    scheduler.step()
+        # Run scheduler at the end of each epoch
+        scheduler.step(validation_loss)
 
     print(f"\n{'-' * 20}\nFirst {ARTICLES_COUNT} articles\n\n")
     print(f"Finished training.\n{'-' * 20}")
@@ -92,8 +94,8 @@ def predictCategory():
 
     # Prepare layers
     vocab_size = len(dataset.tokenizer.vocab)
-    embedding_dim = 512 # 128
-    hidden_dim = 256 # 32
+    embedding_dim = EMBEDDING_DIM
+    hidden_dim = HIDDEN_DIM
     output_dim = len(set(dataset.labels.numpy())) - 1 # Exclude null values
 
     # Create RNN
@@ -160,8 +162,8 @@ def runTraining():
 
     # Prepare layers
     vocab_size = len(dataset.tokenizer.vocab)
-    embedding_dim = 512 # 128 - 98.67% // 256 - 38%
-    hidden_dim = 256 # 32 - 98.67% // 64 - 38%
+    embedding_dim = EMBEDDING_DIM # 128 - 98.67% // 256 - 38%
+    hidden_dim = HIDDEN_DIM # 32 - 98.67% // 64 - 38%
     output_dim = len(set(dataset.labels.numpy()))
 
     # Create RNN

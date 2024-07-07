@@ -1,9 +1,10 @@
+#!/bin/env python
 from bs4 import BeautifulSoup
 import requests
 import random
 import pandas as pd
 from time import perf_counter
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from os import cpu_count
 
 from src.database.db import DB_URL, saveData
@@ -13,7 +14,13 @@ from src.stats.stats import readStats, updateDatabase
 URL = "https://news.ycombinator.com/?p="
 
 # Randomize user_agent on startup or every 30 minutes
-USER_AGENT_LIST = ["Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.3", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.3", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36 Edg/125.0.0.", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:126.0) Gecko/20100101 Firefox/126.", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.3"]
+USER_AGENT_LIST = [
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.3",
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.3",
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36 Edg/125.0.0.",
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:126.0) Gecko/20100101 Firefox/126.",
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.3"
+        ]
 
 # Free proxies from https://free-proxy-list.net/#list
 # 9 / 20
@@ -43,7 +50,7 @@ PROXIES_LIST = [
 # Amount of pages to scrape
 PAGES_AMOUNT = 20
 
-def parseArticle(article):
+def parseArticle(article, debug=False):
     # Find link
     link = article.find_next("a")
 
@@ -52,7 +59,7 @@ def parseArticle(article):
 
     # Get link url
     link = link["href"]
-    print(f"[i] Found title: '{title}' with link: '{link}'")
+    print(f"[i] Found title: '{title}' with link: '{link}'") if debug else None
     return title, link
 
 def saveArticles(df, title, link) -> pd.DataFrame | None:
@@ -63,26 +70,49 @@ def saveArticles(df, title, link) -> pd.DataFrame | None:
     if has_title and has_link:
         return None
 
-    df_new_rows = pd.DataFrame({
+    return pd.DataFrame({
         'Title': [title],
         'Category': [None],
         'Link': [link],
         'Interest_Rating': [None],
     })
 
-    return df_new_rows
-
 def runScraperAsync():
-    new_articles_count = 0
     urls = list(f"{URL}{n+1}" for n in range(PAGES_AMOUNT))
     thread_count = min(len(urls), cpu_count())
 
     with ThreadPoolExecutor(max_workers=thread_count) as executor:
-        executor.map(requestArticle, urls)
-    # Save article
-    # Update stats
+        futures = [executor.submit(requestArticle, url) for url in urls]
 
-def requestArticle(url) -> tuple[pd.DataFrame, int] | tuple[None, None]:
+    new_articles_count = []
+    df = pd.read_csv(DB_URL)
+
+    # Get each article as it's done
+    for future in as_completed(futures):
+        res = future.result()
+
+        if res[0]["Title"].isnull().any() or res[0]["Link"].isnull().any():
+            continue
+        df = pd.concat([df, res[0]])
+
+        new_articles_count.append(res[1])
+
+    new_article_count = 0
+    new_article_count += sum(new_articles_count)
+
+    # Save article
+    print("\n")
+    saveData(df)
+
+    # Update stats
+    stats = readStats()
+    articles_count = new_article_count + stats["database"]["articles"]
+
+    updateDatabase(articles_count, stats["database"]["categories_count"], stats["database"]["categories_list"])
+
+    print(f"Found {new_article_count} new articles")
+
+def requestArticle(url, debug=False) -> tuple[pd.DataFrame, int] | tuple[None, None]:
     try:
         new_article_count = 0
 
@@ -95,24 +125,31 @@ def requestArticle(url) -> tuple[pd.DataFrame, int] | tuple[None, None]:
         page = requests.get(url, headers=headers, proxies=proxy)
         soup = BeautifulSoup(page.content, 'html.parser')
 
-        df = pd.DataFrame()
+        df = pd.DataFrame({
+            'Title': [None],
+            'Category': [None],
+            'Link': [None],
+            'Interest_Rating': [None],
+        })
 
         # Find article
         articles = soup.find_all("span", class_="titleline")
-        for article in articles:
+        for i, article in enumerate(articles):
+            percent = ((i+1) / len(articles)) * 100.0
+            print(f"\rParsing article {i+1} out of {len(articles)} |{'█'*(i+1)}{'-'*(len(articles) - (i+1))}| {percent:.2f}%", end='')
             # Parse the article to get title, link and age
-            print("[i] Parsing article...")
+            print("[i] Parsing article...") if debug else None
             title, link = parseArticle(article)
-            print("[i] Article successfully parsed.")
+            print("[i] Article successfully parsed.") if debug else None
 
             # Append new article to existing dataframe
-            print("[u] Saving article as dataframe...")
+            print("[u] Saving article as dataframe...") if debug else None
             new_df = saveArticles(df, title, link)
-            print("[u] Article successfully saved as dataframe.")
+            print("[u] Article successfully saved as dataframe.") if debug else None
 
             # Create new dataframe and concat to existing
             if type(new_df) != pd.DataFrame:
-                print(f"Article in database")
+                print(f"Article in database") if debug else None
                 continue
 
             df = pd.concat([df, new_df])
@@ -184,10 +221,10 @@ def runScraper():
     print(f"\n{'-'*40}\nFinished running process with {new_article_count} new articles")
 
 if __name__ == "__main__":
-    start = perf_counter()
-    runScraper()
-    stop = perf_counter()
-    print(f"\n\nTime took {(stop-start):.2f}s for {PAGES_AMOUNT} pages.")
+    # start = perf_counter()
+    # runScraper()
+    # stop = perf_counter()
+    # print(f"\n\nTime took {(stop-start):.2f}s for {PAGES_AMOUNT} pages.")
 
     start = perf_counter()
     runScraperAsync()

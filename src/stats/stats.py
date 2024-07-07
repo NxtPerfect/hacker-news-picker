@@ -19,10 +19,10 @@ def updateModelCategorizer(accuracy: float, feedback_correct: int, feedback_wron
             data["model"]["categorizer"] = new_data
             with open(YAML_PATH, "w") as fw:
                 dump(data, fw, Dumper=Dumper)
-                print("Successfully updated model data.")
+                print("[u] Successfully updated model data.")
                 return True
         except Exception as e:
-            print("Failed to update model data.")
+            print("!e! Failed to update model data.")
             print(e)
             return False
 
@@ -40,10 +40,10 @@ def updateModelPredicter(accuracy: float, feedback_correct: int, feedback_wrong:
             data["model"]["predicter"] = new_data
             with open(YAML_PATH, "w") as fw:
                 dump(data, fw, Dumper=Dumper)
-                print("Successfully updated model data.")
+                print("[u] Successfully updated model data.")
                 return True
         except Exception as e:
-            print("Failed to update model data.")
+            print("!e! Failed to update model data.")
             print(e)
             return False
 
@@ -59,10 +59,10 @@ def updateDatabase(articles: int, categories_count: int, categories_list: list):
             data["database"] = new_data
             with open(YAML_PATH, "w") as fw:
                 dump(data, fw, Dumper=Dumper)
-                print("Successfully updated database data.")
+                print("[u] Successfully updated database data.")
                 return True
         except Exception as e:
-            print("Failed to update database data.")
+            print("!e! Failed to update database data.")
             print(e)
             return False
 
@@ -72,6 +72,6 @@ def readStats():
             data = load(f, Loader=Loader)
             return data
     except Exception as e:
-        print("Failed to read stats.")
+        print("!e! Failed to read stats.")
         print(e)
         return None
