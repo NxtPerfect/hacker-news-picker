@@ -151,7 +151,7 @@ def predictInterest():
                 df.at[index, "Interest_Rating"] = predicted_label
                 index += 1
     # Save dataframe to test file
-    saveData(df)
+    saveData(df, "data/rated_news.csv")
 
     print(f"[i] Finished predicting interest.")
 

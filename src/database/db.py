@@ -3,7 +3,7 @@ import pandas as pd
 DB_URL = "data/news.csv"
 
 # Title / Category / Link / Interest_Rating
-def saveData(df: pd.DataFrame, path="data/new_news.csv", mode='w'):
+def saveData(df: pd.DataFrame, path="data/news.csv", mode='w'):
     try:
         print("[u] Saving data...")
         data = pd.DataFrame(data=df)

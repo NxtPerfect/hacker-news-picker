@@ -59,7 +59,7 @@ def parseArticle(article, debug=False):
 
     # Get link url
     link = link["href"]
-    print(f"[i] Found title: '{title}' with link: '{link}'") if debug else None
+    if debug: print(f"[i] Found title: '{title}' with link: '{link}'")
     return title, link
 
 def saveArticles(df, title, link) -> pd.DataFrame | None:
@@ -86,19 +86,23 @@ def runScraperAsync():
 
     new_articles_count = []
     df = pd.read_csv(DB_URL)
-
+    results = []
     # Get each article as it's done
     for future in as_completed(futures):
         res = future.result()
+        if res[0] is not None:
+            results.append(res)
 
+    all_dfs = []
+    for res in results:
         if res[0]["Title"].isnull().any() or res[0]["Link"].isnull().any():
             continue
-        df = pd.concat([df, res[0]])
+        all_dfs.append(res[0])
 
         new_articles_count.append(res[1])
 
-    new_article_count = 0
-    new_article_count += sum(new_articles_count)
+    df = pd.concat([df] + all_dfs, ignore_index=True)
+    new_article_count = sum(new_articles_count)
 
     # Save article
     print("\n")
@@ -122,14 +126,15 @@ def requestArticle(url, debug=False) -> tuple[pd.DataFrame, int] | tuple[None, N
         proxy = {"http": PROXIES_LIST[random_index]}
         headers = {'User-Agent': user_agent}
 
-        page = requests.get(url, headers=headers, proxies=proxy)
+        with requests.Session() as s:
+            page = s.get(url, headers=headers, proxies=proxy)
         soup = BeautifulSoup(page.content, 'html.parser')
 
         df = pd.DataFrame({
-            'Title': [None],
-            'Category': [None],
-            'Link': [None],
-            'Interest_Rating': [None],
+            'Title': [],
+            'Category': [],
+            'Link': [],
+            'Interest_Rating': [],
         })
 
         # Find article
@@ -138,18 +143,18 @@ def requestArticle(url, debug=False) -> tuple[pd.DataFrame, int] | tuple[None, N
             percent = ((i+1) / len(articles)) * 100.0
             print(f"\rParsing article {i+1} out of {len(articles)} |{'█'*(i+1)}{'-'*(len(articles) - (i+1))}| {percent:.2f}%", end='')
             # Parse the article to get title, link and age
-            print("[i] Parsing article...") if debug else None
+            if debug: print("[i] Parsing article...")
             title, link = parseArticle(article)
-            print("[i] Article successfully parsed.") if debug else None
+            if debug: print("[i] Article successfully parsed.")
 
             # Append new article to existing dataframe
-            print("[u] Saving article as dataframe...") if debug else None
+            if debug: print("[u] Saving article as dataframe...")
             new_df = saveArticles(df, title, link)
-            print("[u] Article successfully saved as dataframe.") if debug else None
+            if debug: print("[u] Article successfully saved as dataframe.")
 
             # Create new dataframe and concat to existing
-            if type(new_df) != pd.DataFrame:
-                print(f"Article in database") if debug else None
+            if isinstance(new_df, pd.DataFrame):
+                if debug: print(f"Article in database")
                 continue
 
             df = pd.concat([df, new_df])

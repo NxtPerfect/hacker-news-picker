@@ -119,7 +119,7 @@ def predictCategory():
                 df.at[index, "Category"] = predicted_label
                 index += 1
     # Save dataframe to test file
-    saveData(df)
+    saveData(df, "data/categorized_news.csv")
 
     print(f"[i] Finished predicting category.")
 
