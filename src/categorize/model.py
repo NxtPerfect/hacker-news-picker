@@ -6,7 +6,7 @@ from src.database.db import DB_URL, loadData, saveData
 
 CATEGORIZE_MODEL_PATH = "model/categorize/model.pt"
 EPOCHS = 100
-ARTICLES_COUNT = 1300
+ARTICLES_COUNT = 1500
 LEARNING_RATE = 1e-3 # 0.1
 EMBEDDING_DIM = 128
 HIDDEN_DIM = 64

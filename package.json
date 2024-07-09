@@ -1,0 +1,17 @@
+{
+  "name": "hacker-news-picker",
+  "module": "index.ts",
+  "type": "module",
+  "scripts": {
+    "watch": "bun tailwindcss -i ../src/webgui/static/css/input.css -o ../../src/webgui/static/css/output.css --minify --watch"
+  },
+  "devDependencies": {
+    "bun-types": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "tailwindcss": "^3.4.4"
+  }
+}

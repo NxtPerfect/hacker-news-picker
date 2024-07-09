@@ -62,12 +62,10 @@ def parseArticle(article, debug=False):
     if debug: print(f"[i] Found title: '{title}' with link: '{link}'")
     return title, link
 
-def saveArticles(df, title, link) -> pd.DataFrame | None:
-    # Check if title and link in db
-    # if both in db, don't save
-    has_title = df["Title"].isin([title]).any().any()
-    has_link = df["Link"].isin([link]).any().any()
-    if has_title and has_link:
+def saveArticles(title, link) -> pd.DataFrame | None:
+    df = pd.read_csv(DB_URL)
+    link_check = (df["Link"]).isin([link]).any()
+    if link_check:
         return None
 
     return pd.DataFrame({
@@ -85,8 +83,8 @@ def runScraperAsync():
         futures = [executor.submit(requestArticle, url) for url in urls]
 
     new_articles_count = []
-    df = pd.read_csv(DB_URL)
     results = []
+    df = pd.read_csv(DB_URL)
     # Get each article as it's done
     for future in as_completed(futures):
         res = future.result()
@@ -114,7 +112,7 @@ def runScraperAsync():
 
     updateDatabase(articles_count, stats["database"]["categories_count"], stats["database"]["categories_list"])
 
-    print(f"Found {new_article_count} new articles")
+    print(f"Found {new_article_count} new articles." if new_article_count > 0 else "No new articles found.")
 
 def requestArticle(url, debug=False) -> tuple[pd.DataFrame, int] | tuple[None, None]:
     try:
@@ -130,13 +128,7 @@ def requestArticle(url, debug=False) -> tuple[pd.DataFrame, int] | tuple[None, N
             page = s.get(url, headers=headers, proxies=proxy)
         soup = BeautifulSoup(page.content, 'html.parser')
 
-        df = pd.DataFrame({
-            'Title': [],
-            'Category': [],
-            'Link': [],
-            'Interest_Rating': [],
-        })
-
+        new_df = None
         # Find article
         articles = soup.find_all("span", class_="titleline")
         for i, article in enumerate(articles):
@@ -149,18 +141,17 @@ def requestArticle(url, debug=False) -> tuple[pd.DataFrame, int] | tuple[None, N
 
             # Append new article to existing dataframe
             if debug: print("[u] Saving article as dataframe...")
-            new_df = saveArticles(df, title, link)
+            new_df = saveArticles(title, link)
             if debug: print("[u] Article successfully saved as dataframe.")
 
             # Create new dataframe and concat to existing
-            if isinstance(new_df, pd.DataFrame):
-                if debug: print(f"Article in database")
+            if not isinstance(new_df, pd.DataFrame):
+                if debug: print(f"[i] Article in database.")
                 continue
 
-            df = pd.concat([df, new_df])
             new_article_count += 1
 
-        return df, new_article_count
+        return new_df, new_article_count
 
     except Exception as e:
         print(f"!e! Request failed due to error {e}")

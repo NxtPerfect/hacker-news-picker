@@ -6,7 +6,7 @@ from src.database.db import DB_URL, loadData, saveData
 
 PREDICT_MODEL_PATH = "model/predict/model.pt"
 EPOCHS = 50
-ARTICLES_COUNT = 1200
+ARTICLES_COUNT = 1500
 
 class ArticlePredicterRNN(torch.nn.Module):
     def __init__(self, vocab_size, embedding_dim, hidden_dim, output_dim):
