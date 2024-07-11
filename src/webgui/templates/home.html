@@ -45,9 +45,16 @@
             <div key={{index}} class="flex flex-col w-[60ch] min-h-36 h-[20svh] bg-white font-black py-2 px-4 rounded-lg shadow-md justify-between">
               <div class="flex flex-col">
                 <h2 class="text-2xl line-clamp-2 overflow-ellipsis text-justify text-pretty">{{article['Title']}}</h2>
-                <form class="flex flex-row gap-4 w-[20ch] justify-between" method="get">
-                  <input type="text" class="flex bg-black text-white w-[15ch]"></input>
-                  <input type="number" value=0 min=0 max=10 class="font-mono bg-black text-white px-2"></input>
+                <form class="flex flex-row gap-4 w-[20ch] justify-between" method="post">
+                  <select name="category" id="category" class="px-3 py-2 text-black rounded-md w-fit">
+                    {% for category in categories %}
+                      {% if category is string and category %}
+                        <option value={{category}}>{{category.title()}}</option>
+                      {% endif %}
+                    {% endfor %}
+                  </select>
+                  <input class="font-mono bg-black text-white px-2 rounded-lg w-[8ch]" type="number" value=0 min=0 max=10 step=1></input>
+                  <button class="rounded-lg bg-neutral-500 hover:bg-neutral-400 text-white shadow-md px-2" type="submit">Save</button>
                 </form>
               </div>
               <a href={{article['Link']}} class="p-2 self-start bg-black hover:bg-neutral-600 active:bg-neutral-800 transition duration-[50] text-white w-fit rounded-lg">Read more</a>
