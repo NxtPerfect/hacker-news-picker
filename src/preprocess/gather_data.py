@@ -23,7 +23,6 @@ USER_AGENT_LIST = [
         ]
 
 # Free proxies from https://free-proxy-list.net/#list
-# 9 / 20
 PROXIES_LIST = [
         "http://155.94.241.130:3128",
         "http://128.199.202.122:3128",
@@ -63,9 +62,9 @@ def parseArticle(article, debug=False):
     return title, link
 
 def saveArticles(title, link) -> pd.DataFrame | None:
+    # Read csv, check if link already in database
     df = pd.read_csv(DB_URL)
-    link_check = (df["Link"]).isin([link]).any()
-    if link_check:
+    if link in df["Link"].values:
         return None
 
     return pd.DataFrame({
@@ -129,6 +128,7 @@ def requestArticle(url, debug=False) -> tuple[pd.DataFrame, int] | tuple[None, N
         soup = BeautifulSoup(page.content, 'html.parser')
 
         new_df = None
+        all_dfs = []
         # Find article
         articles = soup.find_all("span", class_="titleline")
         for i, article in enumerate(articles):
@@ -146,11 +146,14 @@ def requestArticle(url, debug=False) -> tuple[pd.DataFrame, int] | tuple[None, N
 
             # Create new dataframe and concat to existing
             if not isinstance(new_df, pd.DataFrame):
-                if debug: print(f"[i] Article in database.")
+                if debug: print(f"[i] Article already in database.")
                 continue
+
+            all_dfs.append(new_df)
 
             new_article_count += 1
 
+        if len(all_dfs): new_df = pd.concat(all_dfs, ignore_index=True)
         return new_df, new_article_count
 
     except Exception as e:
