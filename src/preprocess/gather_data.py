@@ -5,8 +5,6 @@ import cchardet
 import requests
 import random
 import pandas as pd
-import cProfile # For profiling
-import pstats # For profiling
 from time import perf_counter
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from os import cpu_count
