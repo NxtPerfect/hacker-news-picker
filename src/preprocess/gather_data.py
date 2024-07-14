@@ -1,8 +1,12 @@
 #!/bin/env python
 from bs4 import BeautifulSoup
+import lxml
+import cchardet
 import requests
 import random
 import pandas as pd
+import cProfile # For profiling
+import pstats # For profiling
 from time import perf_counter
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from os import cpu_count
@@ -61,9 +65,8 @@ def parseArticle(article, debug=False):
     if debug: print(f"[i] Found title: '{title}' with link: '{link}'")
     return title, link
 
-def saveArticles(title, link) -> pd.DataFrame | None:
+def saveArticles(df, title, link) -> pd.DataFrame | None:
     # Read csv, check if link already in database
-    df = pd.read_csv(DB_URL)
     if link in df["Link"].values:
         return None
 
@@ -78,12 +81,13 @@ def runScraperAsync():
     urls = list(f"{URL}{n+1}" for n in range(PAGES_AMOUNT))
     thread_count = min(len(urls), cpu_count())
 
+    df = pd.read_csv(DB_URL)
+    session = requests.Session()
     with ThreadPoolExecutor(max_workers=thread_count) as executor:
-        futures = [executor.submit(requestArticle, url) for url in urls]
+        futures = [executor.submit(requestArticle, session, url, df) for url in urls]
 
     new_articles_count = []
     results = []
-    df = pd.read_csv(DB_URL)
     # Get each article as it's done
     for future in as_completed(futures):
         res = future.result()
@@ -113,19 +117,21 @@ def runScraperAsync():
 
     print(f"Found {new_article_count} new articles." if new_article_count > 0 else "No new articles found.")
 
-def requestArticle(url, debug=False) -> tuple[pd.DataFrame, int] | tuple[None, None]:
+def requestArticle(session, url, df, debug=False) -> tuple[pd.DataFrame, int] | tuple[None, None]:
     try:
         new_article_count = 0
 
-        random_index = random.randint(0, len(USER_AGENT_LIST)-1)
-        user_agent = USER_AGENT_LIST[random_index]
         random_index = random.randint(0, len(PROXIES_LIST)-1)
-        proxy = {"http": PROXIES_LIST[random_index]}
-        headers = {'User-Agent': user_agent}
+        proxy = PROXIES_LIST[random_index]
+        session.proxies.update({"http": proxy})
 
-        with requests.Session() as s:
-            page = s.get(url, headers=headers, proxies=proxy)
-        soup = BeautifulSoup(page.content, 'html.parser')
+        random_index = random.randint(0, len(USER_AGENT_LIST)-1)
+        session.headers.update({
+            'User-Agent': USER_AGENT_LIST[random_index]
+        })
+
+        page = session.get(url)
+        soup = BeautifulSoup(page.content, 'lxml')
 
         new_df = None
         all_dfs = []
@@ -141,7 +147,7 @@ def requestArticle(url, debug=False) -> tuple[pd.DataFrame, int] | tuple[None, N
 
             # Append new article to existing dataframe
             if debug: print("[u] Saving article as dataframe...")
-            new_df = saveArticles(title, link)
+            new_df = saveArticles(df, title, link)
             if debug: print("[u] Article successfully saved as dataframe.")
 
             # Create new dataframe and concat to existing
@@ -220,12 +226,10 @@ def runScraper():
     print(f"\n{'-'*40}\nFinished running process with {new_article_count} new articles")
 
 if __name__ == "__main__":
-    # start = perf_counter()
-    # runScraper()
-    # stop = perf_counter()
-    # print(f"\n\nTime took {(stop-start):.2f}s for {PAGES_AMOUNT} pages.")
-
     start = perf_counter()
+    # cProfile.run('runScraperAsync()', 'profile_results')
     runScraperAsync()
     stop = perf_counter()
+    # stats = pstats.Stats('profile_results')
+    # stats.sort_stats('cumtime').print_stats()
     print(f"\n\nTime took async {(stop-start):.2f}s for {PAGES_AMOUNT} pages.")
