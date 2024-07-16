@@ -13,18 +13,24 @@ def home():
     interest_rating = request.args.get('interest_rating')
     articles = loadData(DB_URL)
     categories = articles["Category"].unique()
-    articles.fillna({"Category": "TODO"}, inplace=True)
-    articles.fillna({"Interest_Rating" :-1}, inplace=True)
+    articles = articles.dropna()
     if category != "" and category:
         articles = articles[(articles["Category"] == category)]
     if interest_rating != 0 and interest_rating:
-        articles = articles[(articles["Interest_Rating"] >= interest_rating)]
+        articles = articles[(articles["Interest_Rating"] >= float(interest_rating))]
     return render_template("home.html", articles=articles, categories=categories, current_category=category, current_rating=interest_rating)
 
 @app.route('/info')
 def model():
     data = readStats()
-    return f"{data}"
+    return render_template("info.html", data=data)
 
 with app.test_request_context():
     print(url_for('model'))
+
+@app.route('/edit')
+def edit():
+    articles = loadData(DB_URL)
+    categories = articles["Category"].unique()
+    articles = articles[articles.isnull().any(axis=1)]
+    return render_template("edit.html", articles=articles, categories=categories)

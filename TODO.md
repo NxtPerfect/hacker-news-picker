@@ -9,7 +9,7 @@
 - [x] aiohttp to parallelize website requests
 
 ### Optional
-- [/] 1500/6000 articles
+- [/] 2000/6000 articles
     - Maybe it's not needed
     - At least for now it's not needed
 - [x] Ensure categories are consistent, don't create categories for a singular article
@@ -93,9 +93,9 @@ then there's an option to retrain the model
             - link to article
     - [x] sort by category
     - [x] sort by interesting_rating
-    - [ ] select tag to choose category and rating
+    - [/] select tag to choose category and rating
         - then save it to file
-    - ?page to control the model
+    - [/] page to control the model
         - ?retrain model not needed if feedback works realtime
     - statistics
         - how many articles fetched

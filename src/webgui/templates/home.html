@@ -1,67 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Hacker News Picker</title>
-    <link href="{{ url_for('static', filename='css/output.css') }}" rel="stylesheet">
-  </head>
-  <body>
-    <nav class="px-4 py-2">
-      <a href='/'>Home</a>
-      <a href='/info'>Info</a>
-    </nav>
-    <main class="flex flex-col px-4 py-2 justify-center bg-black text-white">
-      <h1 class="text-4xl">Hacker News Picker</h1>
-      <p>{{articles.shape[0]}} Articles</p>
-      <form class="flex flex-row gap-4 justify-center items-center" method="get">
-        <label for="category">Choose sorting category:</label>
-        <select name="category" id="category" class="px-3 py-2 text-black rounded-md w-fit">
-          <option value="">All</option>
-          {% for category in categories %}
-            {% if category is string and category %}
-              <option value={{category}} {% if category == current_category %} selected {% endif %}>{{category.title()}}</option>
-            {% endif %}
-          {% endfor %}
-        </select>
-        <label for="interest_rating">Choose minimum rating:</label>
-        <input class="text-black max-w-[4svw] min-w-[8ch] rounded-lg py-2 px-3" name="interest_rating" id="interest_rating" type="number" {% if current_rating and current_rating != 0 %} value={{current_rating}} {% else %} value=0 {% endif %} min=0 max=10 step=1></input>
-        <button type="submit">Sort</button>
-      </form>
-      <div class="mt-8 grid grid-cols-3 gap-4 justify-items-center text-black">
-        {% for index, article in articles.iterrows() %}
-          {% if article['Category'].lower() != 'todo' %}
-            <div key={{index}} class="flex flex-col w-[60ch] min-h-36 h-[20svh] bg-white py-2 px-4 rounded-lg shadow-md justify-between">
-              <div class="flex flex-col">
-                <h2 class="text-2xl line-clamp-2 overflow-ellipsis text-justify text-pretty">{{article['Title']}}</h2>
-                <div class="flex flex-row w-full justify-between">
-                  <p class="flex">{{article['Category'].title()}}</p>
-                  <p class="font-mono bg-black text-white px-2">{{article['Interest_Rating']}}</p>
-                </div>
-              </div>
-              <a href={{article['Link']}} class="p-2 self-start bg-black hover:bg-neutral-600 active:bg-neutral-800 transition duration-[50] text-white w-fit rounded-lg">Read more</a>
-            </div>
-          {% else %}
-            <div key={{index}} class="flex flex-col w-[60ch] min-h-36 h-[20svh] bg-white font-black py-2 px-4 rounded-lg shadow-md justify-between">
-              <div class="flex flex-col">
-                <h2 class="text-2xl line-clamp-2 overflow-ellipsis text-justify text-pretty">{{article['Title']}}</h2>
-                <form class="flex flex-row gap-4 w-[20ch] justify-between" method="post">
-                  <select name="category" id="category" class="px-3 py-2 text-black rounded-md w-fit">
-                    {% for category in categories %}
-                      {% if category is string and category %}
-                        <option value={{category}}>{{category.title()}}</option>
-                      {% endif %}
-                    {% endfor %}
-                  </select>
-                  <input class="font-mono bg-black text-white px-2 rounded-lg w-[8ch]" type="number" value=0 min=0 max=10 step=1></input>
-                  <button class="rounded-lg bg-neutral-500 hover:bg-neutral-400 text-white shadow-md px-2" type="submit">Save</button>
-                </form>
-              </div>
-              <a href={{article['Link']}} class="p-2 self-start bg-black hover:bg-neutral-600 active:bg-neutral-800 transition duration-[50] text-white w-fit rounded-lg">Read more</a>
-            </div>
-          {% endif %}
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hacker News Picker</title>
+  <link href="{{ url_for('static', filename='css/output.css') }}" rel="stylesheet">
+</head>
+
+<body>
+  <nav class="px-4 py-2">
+    <a href='/'>Home</a>
+    <a href='/info'>Info</a>
+    <a href='/edit'>Edit</a>
+  </nav>
+  <main class="flex flex-col px-4 py-2 justify-center bg-black text-white">
+    <h1 class="text-4xl">Hacker News Picker</h1>
+    <p>{{articles.shape[0]}} Articles</p>
+    <form class="flex flex-row gap-4 justify-center items-center" method="get">
+      <label for="category">Choose sorting category:</label>
+      <select name="category" id="category" class="px-3 py-2 text-black rounded-md w-fit">
+        <option value="">All</option>
+        {% for category in categories %}
+        {% if category is string and category %}
+        <option value={{category}} {% if category==current_category %} selected {% endif %}>{{category.title()}}
+        </option>
+        {% endif %}
         {% endfor %}
+      </select>
+      <label for="interest_rating">Choose minimum rating:</label>
+      <input class="text-black max-w-[4svw] min-w-[8ch] rounded-lg py-2 px-3" name="interest_rating"
+        id="interest_rating" type="number" {% if current_rating and current_rating !=0 %} value={{current_rating}} {%
+        else %} value=0 {% endif %} min=0 max=10 step=1></input>
+      <button type="submit">Sort</button>
+    </form>
+    <div class="mt-8 grid grid-cols-3 gap-4 justify-items-center text-black">
+      {% for index, article in articles.iterrows() %}
+      {% if article['Category'].lower() != 'todo' %}
+      <div key={{index}}
+        class="flex flex-col w-[60ch] min-h-36 h-[20svh] bg-white py-2 px-4 rounded-lg shadow-md justify-between">
+        <div class="flex flex-col">
+          <h2 class="text-2xl line-clamp-2 overflow-ellipsis text-justify text-pretty">{{article['Title']}}</h2>
+          <div class="flex flex-row w-full justify-between">
+            <p class="flex">{{article['Category'].title()}}</p>
+            <p class="font-mono bg-black text-white px-2">{{article['Interest_Rating']}}</p>
+          </div>
+        </div>
+        <a href={{article['Link']}}
+          class="p-2 self-start bg-black hover:bg-neutral-600 active:bg-neutral-800 transition duration-[50] text-white w-fit rounded-lg">Read
+          more</a>
       </div>
-    </main>
-  </body>
+      {% else %}
+      <div key={{index}}
+        class="flex flex-col w-[60ch] min-h-36 h-[20svh] bg-white font-black py-2 px-4 rounded-lg shadow-md justify-between">
+        <div class="flex flex-col">
+          <h2 class="text-2xl line-clamp-2 overflow-ellipsis text-justify text-pretty">{{article['Title']}}</h2>
+          <form class="flex flex-row gap-4 w-[20ch] justify-between" method="post">
+            <select name="category" id="category" class="px-3 py-2 text-black rounded-md w-fit">
+              {% for category in categories %}
+              {% if category is string and category %}
+              <option value={{category}}>{{category.title()}}</option>
+              {% endif %}
+              {% endfor %}
+            </select>
+            <input class="font-mono bg-black text-white px-2 rounded-lg w-[8ch]" type="number" value=0 min=0 max=10
+              step=1></input>
+            <button class="rounded-lg bg-neutral-500 hover:bg-neutral-400 text-white shadow-md px-2"
+              type="submit">Save</button>
+          </form>
+        </div>
+        <a href={{article['Link']}}
+          class="p-2 self-start bg-black hover:bg-neutral-600 active:bg-neutral-800 transition duration-[50] text-white w-fit rounded-lg">Read
+          more</a>
+      </div>
+      {% endif %}
+      {% endfor %}
+    </div>
+  </main>
+</body>
+
 </html>

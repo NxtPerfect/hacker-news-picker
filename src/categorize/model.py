@@ -5,11 +5,14 @@ from src.categorize.dataset import CategoryDataset
 from src.database.db import DB_URL, loadData, saveData
 
 CATEGORIZE_MODEL_PATH = "model/categorize/model.pt"
-EPOCHS = 100
-ARTICLES_COUNT = 1800
-LEARNING_RATE = 1e-3 # 0.1
+EPOCHS = 35
+ARTICLES_COUNT = 2000
+LEARNING_RATE = 1e-2 # 0.1
 EMBEDDING_DIM = 128
-HIDDEN_DIM = 64
+HIDDEN_DIM = 128
+
+# Set manual seed for debugging
+torch.manual_seed(16)
 
 class ArticleCategorizerRNN(torch.nn.Module):
     def __init__(self, vocab_size, embedding_dim=EMBEDDING_DIM, hidden_dim=HIDDEN_DIM, output_dim=12):
@@ -274,16 +277,16 @@ def runCategorizer():
     except Exception as e:
         print("[!] Failed to load stats.\n{e}")
         return None
-    for n in range(5):
-        print(f"\n{'#'*20} Running {n + 1} time out of 5 {'#'*20}\n")
-        model, acc, correct, total = runTraining()
-        if (acc > best_acc):
-            print(f"Best accuracy so far {acc:.6f}. Saving...")
-            if (saveModel(model)):
-                print("Successfully saved categorizer model.")
-            best_acc = acc
-            best_correct = correct
-            best_wrong = total - correct
+    # for n in range(5):
+        # print(f"\n{'#'*20} Running {n + 1} time out of 5 {'#'*20}\n")
+    model, acc, correct, total = runTraining()
+    if (acc > best_acc):
+        print(f"Best accuracy so far {acc:.6f}. Saving...")
+        if (saveModel(model)):
+            print("Successfully saved categorizer model.")
+        best_acc = acc
+        best_correct = correct
+        best_wrong = total - correct
     print(updateModelCategorizer(round(best_acc, 4), categorizer["feedback_correct"], categorizer["feedback_wrong"], best_correct, best_wrong))
     print(f"\n{'-'*20}END{'-'*20}\nBest accuracy ever of categorizer {best_acc*100:.2f}%")
 

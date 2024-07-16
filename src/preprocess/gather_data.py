@@ -1,13 +1,13 @@
 #!/bin/env python
 from bs4 import BeautifulSoup
-import lxml
-import cchardet
+import lxml # better html parser
+import cchardet # speeds up beautifulsoup
 import requests
 import random
 import pandas as pd
 from time import perf_counter
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from os import cpu_count
+from os import cpu_count, path
 
 from src.database.db import DB_URL, saveData
 from src.stats.stats import readStats, updateDatabase
@@ -100,7 +100,8 @@ def runScraperAsync():
 
         new_articles_count.append(res[1])
 
-    df = pd.concat([df] + all_dfs, ignore_index=True)
+    filtered_dfs = [df for df in all_dfs if not df.empty and not df.isna().all().all()]
+    df = pd.concat([df] + filtered_dfs, ignore_index=True)
     new_article_count = sum(new_articles_count)
 
     # Save article
@@ -224,10 +225,12 @@ def runScraper():
     print(f"\n{'-'*40}\nFinished running process with {new_article_count} new articles")
 
 if __name__ == "__main__":
+    print(f"File size before scraping {path.getsize(DB_URL)} bytes")
     start = perf_counter()
     # cProfile.run('runScraperAsync()', 'profile_results')
     runScraperAsync()
     stop = perf_counter()
+    print(f"\nFile size after scraping {path.getsize(DB_URL)} bytes")
     # stats = pstats.Stats('profile_results')
     # stats.sort_stats('cumtime').print_stats()
     print(f"\n\nTime took async {(stop-start):.2f}s for {PAGES_AMOUNT} pages.")
