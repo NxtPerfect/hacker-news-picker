@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hacker News Picker - Edit articles</title>
+  <link href="{{ url_for('static', filename='css/output.css') }}" rel="stylesheet">
+</head>
+
+<body>
+  <nav class="px-4 py-2">
+    <a href='/'>Home</a>
+    <a href='/info'>Info</a>
+    <a href='/edit'>Edit</a>
+  </nav>
+  <main class="flex flex-col px-4 py-2 justify-center bg-black text-white">
+    <h1 class="text-2xl">Database info</h1>
+    <ul class="mt-4">
+      {% for metric, value in data["database"].items() %}
+      {% if value is iterable %}
+      <li class="flex flex-col">{{metric}}:
+        <ul class="flex flex-col ml-8">
+          {% for val in value %}
+          <li>{{val}}</li>
+          {% endfor %}
+        </ul>
+      </li>
+      {% else %}
+      <li>{{metric}}: {{value}}</li>
+      {% endif %}
+      {% endfor %}
+    </ul>
+    <form method="post" action="/retrain/categorizer">
+      <button type="submit" class="mt-4 rounded-md bg-white hover:bg-neutral-500 text-black px-2 py-2">Retrain
+        Model</button>
+    </form>
+    <h1 class="mt-8 text-2xl">Models</h1>
+    <h2 class="mt-2 text-xl">Categorizer</h2>
+    <p>Categorizes article's</p>
+    <ul class="mt-2">
+      {% for metric, value in data["model"]["categorizer"].items() %}
+      <li>{{metric}}: {{value}}</li>
+      {% endfor %}
+    </ul>
+    <h2 class="mt-4 text-xl">Predicter</h2>
+    <p>Predicts article's interest rating</p>
+    <ul class="mt-2">
+      {% for metric, value in data["model"]["predicter"].items() %}
+      <li>{{metric}}: {{value}}</li>
+      {% endfor %}
+    </ul>
+    <form method="post" action="/retrain/predicter">
+      <button type="submit" class="mt-4 rounded-md bg-white hover:bg-neutral-500 text-black px-2 py-2">Retrain
+        Model</button>
+    </form>
+  </main>
+</body>
+
+</html>
