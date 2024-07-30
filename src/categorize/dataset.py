@@ -5,10 +5,17 @@ from transformers import BertTokenizer
 
 
 class CategoryDataset(torch.utils.data.Dataset):
-    def __init__(self, file_path, max_len=100, articles_count=200) -> None:
+    def __init__(self, file_path, max_len=100) -> None:
         data = loadData(file_path)
-        if articles_count != 0:
-            data = data[:articles_count]
+
+        # Find the first None value in the 'Title' column
+        articles_count = data['Category'].isnull().idxmax()
+        
+        # If no None values are found, use the entire dataset
+        if articles_count == 0:
+            articles_count = len(data)
+        data = data[:articles_count]
+
         self.max_len = max_len
         self.features = data["Title"].values
         self.labels = data["Category"].values

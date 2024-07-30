@@ -9,7 +9,7 @@ from time import perf_counter
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from os import cpu_count, path
 
-from src.database.db import DB_URL, saveData
+from src.database.db import DB_URL, saveData, saveDataCompressed
 from src.stats.stats import readStats, updateDatabase
 
 # Website url to scrape with pagination
@@ -107,6 +107,7 @@ def runScraperAsync():
     # Save article
     print("\n")
     saveData(df)
+    saveDataCompressed(df)
 
     # Update stats
     stats = readStats()
@@ -225,12 +226,12 @@ def runScraper():
     print(f"\n{'-'*40}\nFinished running process with {new_article_count} new articles")
 
 if __name__ == "__main__":
-    print(f"File size before scraping {path.getsize(DB_URL)} bytes")
+    print(f"File size before scraping {path.getsize(DB_URL):,} bytes")
     start = perf_counter()
     # cProfile.run('runScraperAsync()', 'profile_results')
     runScraperAsync()
     stop = perf_counter()
-    print(f"\nFile size after scraping {path.getsize(DB_URL)} bytes")
+    print(f"\nFile size after scraping {path.getsize(DB_URL):,} bytes")
     # stats = pstats.Stats('profile_results')
     # stats.sort_stats('cumtime').print_stats()
     print(f"\n\nTime took async {(stop-start):.2f}s for {PAGES_AMOUNT} pages.")

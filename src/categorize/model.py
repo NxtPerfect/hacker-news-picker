@@ -5,8 +5,7 @@ from src.categorize.dataset import CategoryDataset
 from src.database.db import DB_URL, loadData, saveData
 
 CATEGORIZE_MODEL_PATH = "model/categorize/model.pt"
-EPOCHS = 35
-ARTICLES_COUNT = 2000
+EPOCHS = 25 # 25
 LEARNING_RATE = 1e-2 # 0.1
 EMBEDDING_DIM = 128
 HIDDEN_DIM = 128
@@ -75,7 +74,6 @@ def train(device, model, train_dataloader, validation_dataloader):
         # Run scheduler at the end of each epoch
         scheduler.step(validation_loss)
 
-    print(f"\n{'-' * 20}\nFirst {ARTICLES_COUNT} articles\n\n")
     print(f"Finished training.\n{'-' * 20}")
 
     return model, correct, total
@@ -151,7 +149,7 @@ def runTraining():
     )
 
     # Load data
-    dataset = CategoryDataset(DB_URL, 100, ARTICLES_COUNT)
+    dataset = CategoryDataset(DB_URL, 100)
 
     # Split data to train, validate and test datasets
     train_size = int(0.8 * len(dataset))
@@ -202,7 +200,7 @@ def findParams():
     )
 
     # Load data
-    dataset = CategoryDataset(DB_URL, 100, ARTICLES_COUNT)
+    dataset = CategoryDataset(DB_URL, 100)
 
     # Split data to train, validate and test datasets
     train_size = int(0.8 * len(dataset))
