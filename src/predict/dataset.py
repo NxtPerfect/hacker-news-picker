@@ -4,10 +4,15 @@ from transformers import BertTokenizer
 
 
 class InterestDataset(torch.utils.data.Dataset):
-    def __init__(self, file_path, max_len=100, articles_count=200) -> None:
+    def __init__(self, file_path, max_len=100) -> None:
         data = loadData(file_path)
-        if articles_count != 0:
-            data = data[:articles_count]
+
+        articles_count = min(data['Category'].isnull().idxmax(), data['Interest_Rating'].isnull().idxmax())
+
+        if articles_count == 0:
+            articles_count = len(data)
+        data = data[:articles_count]
+
         self.max_len = max_len
         self.features = (data["Title"] + ' ' + data["Category"]).values # also include categories
         self.labels = data["Interest_Rating"].values

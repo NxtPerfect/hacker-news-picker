@@ -89,7 +89,7 @@ def predictCategory():
 
     print(f"[i] Started predicting category...")
 
-    dataset = CategoryDataset(DB_URL, 100, 0)
+    dataset = CategoryDataset(DB_URL, 100)
     dataloader = torch.utils.data.DataLoader(dataset, batch_size=128, shuffle=True)
 
 
