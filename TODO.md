@@ -104,3 +104,6 @@ then there's an option to retrain the model
         - accuracy based on user feedback
 
 - [ ] Implement it
+
+
+- [ ] Rewrite scraper with golang
