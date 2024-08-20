@@ -49,9 +49,10 @@ PROXIES_LIST = [
         ]
 
 # Amount of pages to scrape
-PAGES_AMOUNT = 20
+PAGES_AMOUNT = 25
 
 def parseArticle(article, debug=False):
+    if debug: print("[i] Parsing article...")
     # Find link
     link = article.find_next("a")
 
@@ -61,12 +62,16 @@ def parseArticle(article, debug=False):
     # Get link url
     link = link["href"]
     if debug: print(f"[i] Found title: '{title}' with link: '{link}'")
+    if debug: print("[i] Article successfully parsed.")
     return title, link
 
-def saveArticles(df, title, link) -> pd.DataFrame | None:
+def articleIntoDataframe(df, title, link, debug=False) -> pd.DataFrame | None:
+    if debug: print("[u] Saving article as dataframe...")
     # Read csv, check if link already in database
     if link in df["Link"].values:
         return None
+
+    if debug: print("[u] Article successfully saved as dataframe.")
 
     return pd.DataFrame({
         'Title': [title],
@@ -120,45 +125,59 @@ def runThreads(urls, thread_count):
 
     return getCompletedThreads(futures)
 
-def runScraperAsync():
+def asyncRunScraper():
     urls = getUrls(PAGES_AMOUNT)
     thread_count = min(len(urls), cpu_count())
 
     results = runThreads(urls, thread_count)
     saveResultsToCsv(results)
 
-def requestArticle(session, url, df, debug=False) -> tuple[pd.DataFrame, int] | tuple[None, None]:
-    new_article_count = 0
-
+def getRandomProxy():
     random_index = random.randint(0, len(PROXIES_LIST)-1)
-    proxy = PROXIES_LIST[random_index]
+    randomProxy = PROXIES_LIST[random_index]
+    return randomProxy
+
+def getRandomUserAgent():
+    random_index = random.randint(0, len(USER_AGENT_LIST)-1)
+    randomUserAgent = USER_AGENT_LIST[random_index]
+    return randomUserAgent
+
+def prepareSession(session):
+    proxy = getRandomProxy()
     session.proxies.update({"http": proxy})
 
-    random_index = random.randint(0, len(USER_AGENT_LIST)-1)
+    userAgent = getRandomUserAgent()
     session.headers.update({
-        'User-Agent': USER_AGENT_LIST[random_index]
+        'User-Agent': userAgent
     })
+    return session
 
+def requestPage(url, session):
+    page = session.get(url)
+    return page
+
+def parsePageForArticles(page):
+    soup = BeautifulSoup(page.content, 'lxml')
+    articles = soup.find_all("span", class_="titleline")
+    return articles
+
+def requestArticle(session, url, df, debug=False) -> tuple[pd.DataFrame, int] | tuple[None, None]:
+    session = prepareSession(session)
     try:
-        page = session.get(url)
-        soup = BeautifulSoup(page.content, 'lxml')
+        page = requestPage(url, session)
+        articles = parsePageForArticles(page)
 
         new_df = None
         all_dfs = []
-        # Find article
-        articles = soup.find_all("span", class_="titleline")
+
         for i, article in enumerate(articles):
             percent = ((i+1) / len(articles)) * 100.0
             print(f"\rParsing article {i+1} out of {len(articles)} |{'█'*(i+1)}{'-'*(len(articles) - (i+1))}| {percent:.2f}%", end='')
             # Parse the article to get title, link and age
-            if debug: print("[i] Parsing article...")
             title, link = parseArticle(article)
-            if debug: print("[i] Article successfully parsed.")
 
             # Append new article to existing dataframe
-            if debug: print("[u] Saving article as dataframe...")
-            new_df = saveArticles(df, title, link)
-            if debug: print("[u] Article successfully saved as dataframe.")
+            new_df = articleIntoDataframe(df, title, link)
 
             # Create new dataframe and concat to existing
             if not isinstance(new_df, pd.DataFrame):
@@ -167,7 +186,7 @@ def requestArticle(session, url, df, debug=False) -> tuple[pd.DataFrame, int] | 
 
             all_dfs.append(new_df)
 
-            new_article_count += 1
+        new_article_count = len(all_dfs)
 
         if len(all_dfs): new_df = pd.concat(all_dfs, ignore_index=True)
         return new_df, new_article_count
@@ -209,7 +228,7 @@ def runScraper():
 
                 # Append new article to existing dataframe
                 print("[u] Saving article as dataframe...")
-                new_df = saveArticles(df, title, link)
+                new_df = articleIntoDataframe(df, title, link)
                 print("[u] Article successfully saved as dataframe.")
 
                 # If new dataframe is empty, article exists in db, skip
@@ -243,6 +262,6 @@ def time(func):
 
 if __name__ == "__main__":
     print(f"File size before scraping {path.getsize(DB_URL):,} bytes")
-    runningTime = time(runScraperAsync)
+    runningTime = time(asyncRunScraper)
     print(f"\nFile size after scraping {path.getsize(DB_URL):,} bytes")
     print(f"\n\nTime took async {(runningTime):.2f}s for {PAGES_AMOUNT} pages.")

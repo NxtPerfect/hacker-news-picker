@@ -1,10 +1,10 @@
 # from src.categorize.model import predictCategory, runCategorizer
 # from src.predict.model import predictInterest, runPredicter
-from src.preprocess.gather_data import runScraper, runScraperAsync
+from src.preprocess.gather_data import runScraper, asyncRunScraper
 
 def runMain():
     # Preprocess data
-    runScraperAsync()
+    asyncRunScraper()
     
     # # Run categorizer
     # runCategorizer()

@@ -1,6 +1,7 @@
-articles: 11265
-categories_count: 12
-categories_list:
+database:
+  articles: 11289
+  categories_count: 12
+  categories_list:
   - operating systems
   - software
   - hardware
