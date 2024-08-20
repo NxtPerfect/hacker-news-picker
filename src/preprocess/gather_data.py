@@ -75,61 +75,71 @@ def saveArticles(df, title, link) -> pd.DataFrame | None:
         'Interest_Rating': [None],
     })
 
-def runScraperAsync():
-    urls = list(f"{URL}{n+1}" for n in range(PAGES_AMOUNT))
-    thread_count = min(len(urls), cpu_count())
+def getUrls(pagesAmount):
+    return list(f"{URL}{n+1}" for n in range(pagesAmount))
 
-    df = pd.read_csv(DB_URL)
-    session = requests.Session()
-    with ThreadPoolExecutor(max_workers=thread_count) as executor:
-        futures = [executor.submit(requestArticle, session, url, df) for url in urls]
+def filterDataframe(all_dfs):
+    return [df for df in all_dfs if not df.empty and not df.isna().all().all()]
 
-    new_articles_count = []
+def updateStats(all_dfs):
+    # new_article_count = sum(new_articles_count)
+    new_article_count = len(all_dfs)
+    stats = readStats()
+    articles_count = new_article_count + stats["database"]["articles"]
+
+    updateDatabase(articles_count, stats["database"]["categories_count"], stats["database"]["categories_list"])
+    print(f"Found {new_article_count} new articles." if new_article_count > 0 else "No new articles found.")
+
+def saveResultsToCsv(results):
+    all_dfs = []
+
+    for res in results:
+        if res[0]["Title"].isnull().any() or res[0]["Link"].isnull().any():
+            continue
+        all_dfs.append(res[0])
+
+    filtered_dfs = filterDataframe(all_dfs)
+    saveData(filtered_dfs)
+
+    updateStats(all_dfs)
+
+def getCompletedThreads(futures):
     results = []
     # Get each article as it's done
     for future in as_completed(futures):
         res = future.result()
         if res[0] is not None:
             results.append(res)
+    return results
 
-    all_dfs = []
-    for res in results:
-        if res[0]["Title"].isnull().any() or res[0]["Link"].isnull().any():
-            continue
-        all_dfs.append(res[0])
+def runThreads(urls, thread_count):
+    df = pd.read_csv(DB_URL)
+    session = requests.Session()
+    with ThreadPoolExecutor(max_workers=thread_count) as executor:
+        futures = [executor.submit(requestArticle, session, url, df) for url in urls]
 
-        new_articles_count.append(res[1])
+    return getCompletedThreads(futures)
 
-    filtered_dfs = [df for df in all_dfs if not df.empty and not df.isna().all().all()]
-    df = pd.concat([df] + filtered_dfs, ignore_index=True)
-    new_article_count = sum(new_articles_count)
+def runScraperAsync():
+    urls = getUrls(PAGES_AMOUNT)
+    thread_count = min(len(urls), cpu_count())
 
-    # Save article
-    print("\n")
-    saveData(df)
-    saveDataCompressed(df)
-
-    # Update stats
-    stats = readStats()
-    articles_count = new_article_count + stats["database"]["articles"]
-
-    updateDatabase(articles_count, stats["database"]["categories_count"], stats["database"]["categories_list"])
-
-    print(f"Found {new_article_count} new articles." if new_article_count > 0 else "No new articles found.")
+    results = runThreads(urls, thread_count)
+    saveResultsToCsv(results)
 
 def requestArticle(session, url, df, debug=False) -> tuple[pd.DataFrame, int] | tuple[None, None]:
+    new_article_count = 0
+
+    random_index = random.randint(0, len(PROXIES_LIST)-1)
+    proxy = PROXIES_LIST[random_index]
+    session.proxies.update({"http": proxy})
+
+    random_index = random.randint(0, len(USER_AGENT_LIST)-1)
+    session.headers.update({
+        'User-Agent': USER_AGENT_LIST[random_index]
+    })
+
     try:
-        new_article_count = 0
-
-        random_index = random.randint(0, len(PROXIES_LIST)-1)
-        proxy = PROXIES_LIST[random_index]
-        session.proxies.update({"http": proxy})
-
-        random_index = random.randint(0, len(USER_AGENT_LIST)-1)
-        session.headers.update({
-            'User-Agent': USER_AGENT_LIST[random_index]
-        })
-
         page = session.get(url)
         soup = BeautifulSoup(page.content, 'lxml')
 
@@ -225,13 +235,14 @@ def runScraper():
             return None
     print(f"\n{'-'*40}\nFinished running process with {new_article_count} new articles")
 
+def time(func):
+    start = perf_counter()
+    func()
+    stop = perf_counter()
+    return stop-start
+
 if __name__ == "__main__":
     print(f"File size before scraping {path.getsize(DB_URL):,} bytes")
-    start = perf_counter()
-    # cProfile.run('runScraperAsync()', 'profile_results')
-    runScraperAsync()
-    stop = perf_counter()
+    runningTime = time(runScraperAsync)
     print(f"\nFile size after scraping {path.getsize(DB_URL):,} bytes")
-    # stats = pstats.Stats('profile_results')
-    # stats.sort_stats('cumtime').print_stats()
-    print(f"\n\nTime took async {(stop-start):.2f}s for {PAGES_AMOUNT} pages.")
+    print(f"\n\nTime took async {(runningTime):.2f}s for {PAGES_AMOUNT} pages.")

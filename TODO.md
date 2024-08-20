@@ -106,4 +106,5 @@ then there's an option to retrain the model
 - [ ] Implement it
 
 
-- [ ] Rewrite scraper with golang
+- [ ] Clean up code
+    - [ ] Fails to save file

@@ -4,6 +4,8 @@ DB_URL = "data/news.csv"
 
 # Title / Category / Link / Interest_Rating
 def saveData(df: pd.DataFrame, path="data/news.csv", mode='w'):
+    currentDf = loadData()
+    currentDf = pd.concat([currentDf] + df, ignore_index=True)
     try:
         print("[u] Saving data...")
         data = pd.DataFrame(data=df)
