@@ -9,7 +9,7 @@ from time import perf_counter
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from os import cpu_count, path
 
-from src.database.db import DB_URL, saveData, saveDataCompressed
+from src.database.db import DB_URL, appendDataToExistingFile
 from src.stats.stats import readStats, updateDatabase
 
 # Website url to scrape with pagination
@@ -106,7 +106,7 @@ def saveResultsToCsv(results):
         all_dfs.append(res[0])
 
     filtered_dfs = filterDataframe(all_dfs)
-    saveData(filtered_dfs)
+    appendDataToExistingFile(filtered_dfs, DB_URL)
 
     updateStats(all_dfs)
 

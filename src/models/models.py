@@ -1,4 +1,5 @@
 import torch
+from pandas import DataFrame
 
 # HACK: For debugging only
 torch.manual_seed(16)
@@ -48,6 +49,8 @@ class PredicterRNN(torch.nn.Module):
     embedding_dim = 128
     hidden_dim = 64
     model_path = "model/predict/model.pt"
+    predicted_database_path = "data/predicted_news.csv"
+    device = "cuda"
 
     def __init__(self, vocab_size, output_dim):
         super(PredicterRNN, self).__init__()
@@ -59,6 +62,8 @@ class PredicterRNN(torch.nn.Module):
         self.criterion = torch.nn.CrossEntropyLoss()
         self.optimizer = torch.optim.Adam(self.parameters(), lr=self.LEARNING_RATE)
         self.scheduler = torch.optim.lr_scheduler.StepLR(self.optimizer, step_size=25, gamma=0.1)
+
+        self.device = getDevice()
 
     def forward(self, x):
         embedded = self.embedding(x)
@@ -72,6 +77,8 @@ class CategorizerRNN(torch.nn.Module):
     embedding_dim = 128
     hidden_dim = 128
     model_path = "model/categorize/model.pt"
+    categorized_database_path = "data/categorized_news.csv"
+    device = "cuda"
 
     def __init__(self, vocab_size, output_dim=12):
         super(CategorizerRNN, self).__init__()
@@ -83,6 +90,8 @@ class CategorizerRNN(torch.nn.Module):
         self.criterion = torch.nn.CrossEntropyLoss()
         self.optimizer = torch.optim.Adam(self.parameters(), lr=self.learning_rate) # 0.1
         self.scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(self.optimizer, 'min', patience=5)
+
+        self.device = getDevice()
 
     def forward(self, x):
         embedded = self.embedding(x)
@@ -136,3 +145,19 @@ class CategorizerRNN(torch.nn.Module):
             self.scheduler.step(validation_loss)
 
         return correct, total
+    def predict(self, df: DataFrame, dataloader, dataset):
+        index = 0
+        with torch.no_grad():
+            for inputs, labels in dataloader:
+                inputs, labels = inputs.to(self.device), labels.to(self.device)
+
+                outputs = self(inputs)
+                _, predicted = torch.max(outputs.data, 1)
+
+                for pred in predicted:
+                    predicted_label = dataset.category_labels[int(pred)]
+                    # print(f"Predicted label {predicted_label}")
+                    # Save new labels to dataframe
+                    df.at[index, "Category"] = predicted_label
+                    index += 1
+        return df

@@ -3,7 +3,7 @@ import torch
 
 from src.models.datasets import InterestDataset
 from src.models.models import PredicterRNN, saveModel, loadModel
-from src.database.db import DB_URL, loadData, saveData
+from src.database.db import DB_URL, loadData, saveNewData
 
 EPOCHS = 25 # 50
 
@@ -90,7 +90,7 @@ def predictInterest():
     model = loadModel(model)
     model.to(device)
 
-    df = loadData("data/new_news.csv")
+    df = loadData()
     index = 0
     with torch.no_grad():
         for inputs, _ in dataloader:
@@ -106,7 +106,7 @@ def predictInterest():
                 df.at[index, "Interest_Rating"] = predicted_label
                 index += 1
     # Save dataframe to test file
-    saveData(df, "data/rated_news.csv")
+    saveNewData(df, model.predicted_database_path)
 
     print(f"[i] Finished predicting interest.")
 

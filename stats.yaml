@@ -1,5 +1,5 @@
 database:
-  articles: 11578
+  articles: 11580
   categories_count: 12
   categories_list:
   - operating systems
@@ -17,13 +17,9 @@ database:
 model:
   categorizer:
     accuracy: 0.4317
-    feedback_correct: 0
-    feedback_wrong: 0
     predict_correct: 275
     predict_wrong: 362
   predicter:
     accuracy: 0.3107
-    feedback_correct: 0
-    feedback_wrong: 0
     predict_correct: 160
     predict_wrong: 355
