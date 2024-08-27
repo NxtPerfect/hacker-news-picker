@@ -1,30 +1,11 @@
-from src.stats.stats import readStats, updateModelPredicter
+from src.stats.stats import readStats, updateModel
 import torch
 
-from src.predict.dataset import InterestDataset
+from src.models.datasets import InterestDataset
+from src.models.models import PredicterRNN, saveModel, loadModel
 from src.database.db import DB_URL, loadData, saveData
 
-PREDICT_MODEL_PATH = "model/predict/model.pt"
 EPOCHS = 25 # 50
-LEARNING_RATE = 1e-3 # 0.1
-
-# For debugging
-torch.manual_seed(16)
-
-class ArticlePredicterRNN(torch.nn.Module):
-    def __init__(self, vocab_size, embedding_dim, hidden_dim, output_dim):
-        super(ArticlePredicterRNN, self).__init__()
-        self.embedding = torch.nn.Embedding(vocab_size, embedding_dim)
-        self.rnn = torch.nn.GRU(embedding_dim, hidden_dim, bidirectional=True, batch_first=True) # Random parameters as placeholders
-        self.dropout = torch.nn.Dropout(0.5)
-        self.fc = torch.nn.Linear(hidden_dim * 2, output_dim)
-
-    def forward(self, x):
-        embedded = self.embedding(x)
-        rnn_out, _ = self.rnn(embedded)
-        out = self.dropout(rnn_out[:, -1, :])
-        out = self.fc(out)
-        return torch.nn.functional.log_softmax(out, dim=1)
 
 def train(model, train_dataloader, val_dataloader):
     device = (
@@ -39,7 +20,7 @@ def train(model, train_dataloader, val_dataloader):
     
     # Criterion, optimizer and scheduler
     criterion = torch.nn.CrossEntropyLoss()
-    optimizer = torch.optim.Adam(model.parameters(), lr=LEARNING_RATE)
+    optimizer = torch.optim.Adam(model.parameters(), lr=model.LEARNING_RATE)
     scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=25, gamma=0.1)
 
     num_epochs = 0
@@ -95,18 +76,17 @@ def predictInterest():
     print(f"[i] Starting predicting interest...")
 
     dataset = InterestDataset("data/new_news.csv", 100)
+
     dataloader = torch.utils.data.DataLoader(dataset, batch_size=128, shuffle=True)
 
 
     # Prepare layers
     vocab_size = len(dataset.tokenizer.vocab)
-    embedding_dim = 128
-    hidden_dim = 64
-    output_dim = 10
+    output_dim = len(set(dataset.labels.numpy()))
 
     # TODO: Input size is equal to how many articles there are, which is bad bad
     # Create RNN
-    model = ArticlePredicterRNN(vocab_size, embedding_dim, hidden_dim, output_dim)
+    model = PredicterRNN(vocab_size, output_dim)
     model = loadModel(model)
     model.to(device)
 
@@ -130,21 +110,6 @@ def predictInterest():
 
     print(f"[i] Finished predicting interest.")
 
-# Save model
-def saveModel(model) -> bool:
-    try:
-        torch.save(model.state_dict(), PREDICT_MODEL_PATH)
-        return True
-    except Exception as e:
-        print("Failed to save model.")
-        print(e)
-        return False
-
-def loadModel(model) -> torch.nn.RNN:
-    model.load_state_dict(torch.load(PREDICT_MODEL_PATH))
-    model.eval()
-    return model
-
 def runTraining():
     device = (
         "cuda"
@@ -155,25 +120,15 @@ def runTraining():
     )
     # Load data
     dataset = InterestDataset(DB_URL, 100)
-    # Split data to train, validate and test datasets
-    train_size = int(0.8 * len(dataset))
-    val_size = int(0.1 * len(dataset))
-    test_size = len(dataset) - train_size - val_size
 
-    train_dataset, val_dataset, test_dataset = torch.utils.data.random_split(dataset, [train_size, val_size, test_size])
-    train_dataloader = torch.utils.data.DataLoader(train_dataset, batch_size=256, shuffle=True)
-    val_dataloader = torch.utils.data.DataLoader(val_dataset, batch_size=256, shuffle=False)
-    test_dataloader = torch.utils.data.DataLoader(test_dataset, batch_size=256, shuffle=False)
+    train_dataloader, val_dataloader, test_dataloader = getTrainValidationTestDataloadersFromDataset(dataset)
 
     # Prepare layers
     vocab_size = len(dataset.tokenizer.vocab)
-    embedding_dim = 128 # 128 - 97.00%
-    hidden_dim = 64 # 32 - 97.00%
-    # output_dim = len(set(dataset.labels))
-    output_dim = 10
+    output_dim = len(set(dataset.labels.numpy()))
 
     # Create RNN
-    model = ArticlePredicterRNN(vocab_size, embedding_dim, hidden_dim, output_dim)
+    model = PredicterRNN(vocab_size, output_dim)
 
     # Train
     model, correct, total = train(model, train_dataloader, val_dataloader)
@@ -219,7 +174,7 @@ def runPredicter():
         best_acc = acc
         best_correct = correct
         best_wrong = total - correct
-    print(updateModelPredicter(round(best_acc, 4), predicter["feedback_correct"], predicter["feedback_wrong"], best_correct, best_wrong))
+    print(updateModel("predicter", round(best_acc, 4), predicter["feedback_correct"], predicter["feedback_wrong"], best_correct, best_wrong))
     print(f"\n{'-'*20}END{'-'*20}\nBest accuracy ever for predict model {best_acc*100:.2f}%")
 
 if __name__ == "__main__":

@@ -13,7 +13,8 @@ from src.database.db import DB_URL, saveData, saveDataCompressed
 from src.stats.stats import readStats, updateDatabase
 
 # Website url to scrape with pagination
-URL = "https://news.ycombinator.com/?p="
+URL = "https://news.ycombinator.com/"
+PAGINATION = "?p="
 
 # Randomize user_agent on startup or every 30 minutes
 USER_AGENT_LIST = [
@@ -61,6 +62,7 @@ def parseArticle(article, debug=False):
 
     # Get link url
     link = link["href"]
+    if link.startswith('item?id='): link = f'{URL}{link}'
     if debug: print(f"[i] Found title: '{title}' with link: '{link}'")
     if debug: print("[i] Article successfully parsed.")
     return title, link
@@ -81,7 +83,7 @@ def articleIntoDataframe(df, title, link, debug=False) -> pd.DataFrame | None:
     })
 
 def getUrls(pagesAmount):
-    return list(f"{URL}{n+1}" for n in range(pagesAmount))
+    return list(f"{URL}{PAGINATION}{n+1}" for n in range(pagesAmount))
 
 def filterDataframe(all_dfs):
     return [df for df in all_dfs if not df.empty and not df.isna().all().all()]
@@ -123,7 +125,8 @@ def runThreads(urls, thread_count):
     with ThreadPoolExecutor(max_workers=thread_count) as executor:
         futures = [executor.submit(requestArticle, session, url, df) for url in urls]
 
-    return getCompletedThreads(futures)
+    results = getCompletedThreads(futures)
+    return results
 
 def asyncRunScraper():
     urls = getUrls(PAGES_AMOUNT)
@@ -161,98 +164,45 @@ def parsePageForArticles(page):
     articles = soup.find_all("span", class_="titleline")
     return articles
 
+def parseArticlesAndSaveToDataframe(articles, debug=False):
+    new_df = None
+    all_dfs = []
+    df = pd.read_csv(DB_URL)
+
+    for i, article in enumerate(articles):
+        percent = ((i+1) / len(articles)) * 100.0
+        print(f"\rParsing article {i+1} out of {len(articles)} |{'█'*(i+1)}{'-'*(len(articles) - (i+1))}| {percent:.2f}%", end='')
+        # Parse the article to get title, link and age
+        title, link = parseArticle(article)
+
+        # Append new article to existing dataframe
+        new_df = articleIntoDataframe(df, title, link)
+
+        # Create new dataframe and concat to existing
+        if not isinstance(new_df, pd.DataFrame):
+            if debug: print(f"[i] Article already in database.")
+            continue
+
+        all_dfs.append(new_df)
+
+    new_article_count = len(all_dfs)
+
+    if len(all_dfs): new_df = pd.concat(all_dfs, ignore_index=True)
+    return new_df, new_article_count
+
+
 def requestArticle(session, url, df, debug=False) -> tuple[pd.DataFrame, int] | tuple[None, None]:
     session = prepareSession(session)
     try:
         page = requestPage(url, session)
         articles = parsePageForArticles(page)
 
-        new_df = None
-        all_dfs = []
+        new_df, new_article_count = parseArticlesAndSaveToDataframe(articles)
 
-        for i, article in enumerate(articles):
-            percent = ((i+1) / len(articles)) * 100.0
-            print(f"\rParsing article {i+1} out of {len(articles)} |{'█'*(i+1)}{'-'*(len(articles) - (i+1))}| {percent:.2f}%", end='')
-            # Parse the article to get title, link and age
-            title, link = parseArticle(article)
-
-            # Append new article to existing dataframe
-            new_df = articleIntoDataframe(df, title, link)
-
-            # Create new dataframe and concat to existing
-            if not isinstance(new_df, pd.DataFrame):
-                if debug: print(f"[i] Article already in database.")
-                continue
-
-            all_dfs.append(new_df)
-
-        new_article_count = len(all_dfs)
-
-        if len(all_dfs): new_df = pd.concat(all_dfs, ignore_index=True)
         return new_df, new_article_count
-
     except Exception as e:
         print(f"!e! Request failed due to error {e}")
         return None, None
-
-def runScraper():
-    new_article_count = 0
-    for n in range(PAGES_AMOUNT):
-        # Prepare headers and proxies
-        random_index = random.randint(0, len(USER_AGENT_LIST)-1)
-        user_agent = USER_AGENT_LIST[random_index]
-        random_index = random.randint(0, len(PROXIES_LIST)-1)
-        proxy = {"http": PROXIES_LIST[random_index]}
-        headers = {'User-Agent': user_agent}
-
-        stats = readStats()
-
-        try:
-            url = f"{URL}{n+1}"
-            print(f"\n{30*'#'}\n")
-            print(f"[i] Currently looking at {url}")
-            page = requests.get(url, headers=headers, proxies=proxy)
-            soup = BeautifulSoup(page.content, 'html.parser')
-
-            # Read db to update articles count
-            df = pd.read_csv(DB_URL)
-            articles_count = stats["database"]["articles"]
-
-            # Find article
-            articles = soup.find_all("span", class_="titleline")
-            for article in articles:
-                # Parse the article to get title, link and age
-                print("[i] Parsing article...")
-                title, link = parseArticle(article)
-                print("[i] Article successfully parsed.")
-
-                # Append new article to existing dataframe
-                print("[u] Saving article as dataframe...")
-                new_df = articleIntoDataframe(df, title, link)
-                print("[u] Article successfully saved as dataframe.")
-
-                # If new dataframe is empty, article exists in db, skip
-                if type(new_df) != pd.DataFrame:
-                    print("[s] Already exists in the database, skipping...")
-                    continue
-
-                print("[u] Adding article to database.")
-                df = pd.concat([df, new_df])
-                articles_count += 1
-                new_article_count += 1
-
-            print("[u] Saving df to file...")
-            saveData(df, DB_URL)
-            print("[u] Filed saved successfully.")
-
-            print("[u] Updating stats...")
-            updateDatabase(articles_count, stats["database"]["categories_count"], stats["database"]["categories_list"])
-            print("[u] Stats updated.")
-        except Exception as e:
-            print("Failed to get page data.")
-            print(e)
-            return None
-    print(f"\n{'-'*40}\nFinished running process with {new_article_count} new articles")
 
 def time(func):
     start = perf_counter()
@@ -261,7 +211,7 @@ def time(func):
     return stop-start
 
 if __name__ == "__main__":
-    print(f"File size before scraping {path.getsize(DB_URL):,} bytes")
+    # print(f"File size before scraping {path.getsize(DB_URL):,} bytes")
     runningTime = time(asyncRunScraper)
-    print(f"\nFile size after scraping {path.getsize(DB_URL):,} bytes")
+    # print(f"\nFile size after scraping {path.getsize(DB_URL):,} bytes")
     print(f"\n\nTime took async {(runningTime):.2f}s for {PAGES_AMOUNT} pages.")

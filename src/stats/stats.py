@@ -6,38 +6,20 @@ except ImportError:
 
 YAML_PATH = "stats.yaml"
 
-def updateModelCategorizer(accuracy: float, feedback_correct: int, feedback_wrong: int, predict_correct: int, predict_wrong: int):
+def updateModel(modelType: str, accuracy: float, feedback_correct: int, feedback_wrong: int, predict_correct: int, predict_wrong: int):
     # accuracy: 0 # in percentage * 100
     # feedback_correct: 0 # feedbacks about correct prediction
     # feedback_wrong: 0 # feedbacks about wrong prediction 
     # predict_correct: 0 # predicted correct during training
     # predict_wrong: 0 # predicted wrong during training
+    if modelType not in ["categorizer", "predicter"]:
+        raise Exception("Model Type to update isn't categorizer or predicter.")
+
     with open(YAML_PATH, "r") as f:
         data = load(f, Loader=Loader)
         new_data = {'accuracy': accuracy, 'feedback_correct': feedback_correct, 'feedback_wrong': feedback_wrong, 'predict_correct': predict_correct, 'predict_wrong': predict_wrong}
         try:
-            data["model"]["categorizer"] = new_data
-            with open(YAML_PATH, "w") as fw:
-                dump(data, fw, Dumper=Dumper)
-                print("[u] Successfully updated model data.")
-                return True
-        except Exception as e:
-            print("!e! Failed to update model data.")
-            print(e)
-            return False
-
-
-def updateModelPredicter(accuracy: float, feedback_correct: int, feedback_wrong: int, predict_correct: int, predict_wrong: int):
-    # accuracy: 0 # in percentage * 100
-    # feedback_correct: 0 # feedbacks about correct prediction
-    # feedback_wrong: 0 # feedbacks about wrong prediction 
-    # predict_correct: 0 # predicted correct during training
-    # predict_wrong: 0 # predicted wrong during training
-    with open(YAML_PATH, "r") as f:
-        data = load(f, Loader=Loader)
-        new_data = {'accuracy': accuracy, 'feedback_correct': feedback_correct, 'feedback_wrong': feedback_wrong, 'predict_correct': predict_correct, 'predict_wrong': predict_wrong}
-        try:
-            data["model"]["predicter"] = new_data
+            data["model"][modelType] = new_data
             with open(YAML_PATH, "w") as fw:
                 dump(data, fw, Dumper=Dumper)
                 print("[u] Successfully updated model data.")
