@@ -4,7 +4,7 @@ DB_URL = "data/news.csv"
 
 def appendDataToExistingFile(df: pd.DataFrame, path: str):
     currentDf = loadData(path)
-    currentDf = pd.concat([currentDf] + df, ignore_index=True)
+    currentDf = pd.concat([currentDf, df], ignore_index=True)
     try:
         print("[u] Saving data...")
         data = pd.DataFrame(data=currentDf)
@@ -21,18 +21,18 @@ def compressedAppendExistingDataToFile(df: pd.DataFrame, path: str):
     try:
         print("[u] Saving data...")
         data = pd.DataFrame(data=df)
-        data.to_csv(path, index=False, mode='w', compression='gzip')
+        data.to_csv(path, index=False, mode='w', compression='bz2')
         print("[u] Data saved successfully.")
         return True
     except Exception as e:
         print(f"!E! Failed to save compressed file with error: {e}")
         return False
 
-def saveNewData(df: pd.DataFrame, path:str):
+def saveNewData(df: pd.DataFrame, path: str):
     try:
         print("[u] Saving data...")
         data = pd.DataFrame(data=df)
-        data.to_csv(path, index=False, mode='w', compression='gzip')
+        data.to_csv(path, index=False, mode='w')
         print("[u] Data saved successfully.")
         return True
     except Exception as e:

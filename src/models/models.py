@@ -37,15 +37,15 @@ def getTrainValidationTestDataloadersFromDataset(dataset):
     test_size = len(dataset) - train_size - val_size
 
     train_dataset, val_dataset, test_dataset = torch.utils.data.random_split(dataset, [train_size, val_size, test_size])
-    train_dataloader = torch.utils.data.DataLoader(train_dataset, batch_size=256, shuffle=True)
-    val_dataloader = torch.utils.data.DataLoader(val_dataset, batch_size=256, shuffle=False)
-    test_dataloader = torch.utils.data.DataLoader(test_dataset, batch_size=256, shuffle=False)
+    train_dataloader = torch.utils.data.DataLoader(train_dataset, batch_size=16, shuffle=True)
+    val_dataloader = torch.utils.data.DataLoader(val_dataset, batch_size=16, shuffle=False)
+    test_dataloader = torch.utils.data.DataLoader(test_dataset, batch_size=16, shuffle=False)
 
     return train_dataloader, val_dataloader, test_dataloader
 
 
 class PredicterRNN(torch.nn.Module):
-    learning_rate = 1e-3 # 0.1
+    learning_rate = 1e-3 # 1e-3
     embedding_dim = 128
     hidden_dim = 64
     model_path = "model/predict/model.pt"
@@ -60,7 +60,7 @@ class PredicterRNN(torch.nn.Module):
         self.fc = torch.nn.Linear(self.hidden_dim * 2, output_dim)
 
         self.criterion = torch.nn.CrossEntropyLoss()
-        self.optimizer = torch.optim.Adam(self.parameters(), lr=self.LEARNING_RATE)
+        self.optimizer = torch.optim.Adam(self.parameters(), lr=self.learning_rate)
         self.scheduler = torch.optim.lr_scheduler.StepLR(self.optimizer, step_size=25, gamma=0.1)
 
         self.device = getDevice()
@@ -73,12 +73,13 @@ class PredicterRNN(torch.nn.Module):
         return torch.nn.functional.log_softmax(out, dim=1)
 
 class CategorizerRNN(torch.nn.Module):
-    learning_rate = 1e-2 # 0.1
+    learning_rate = 1e-4 # 0.1 1e-2
     embedding_dim = 128
     hidden_dim = 128
     model_path = "model/categorize/model.pt"
     categorized_database_path = "data/categorized_news.csv"
-    device = "cuda"
+    device = getDevice()
+    # device = "cpu"
 
     def __init__(self, vocab_size, output_dim=12):
         super(CategorizerRNN, self).__init__()
@@ -91,7 +92,7 @@ class CategorizerRNN(torch.nn.Module):
         self.optimizer = torch.optim.Adam(self.parameters(), lr=self.learning_rate) # 0.1
         self.scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(self.optimizer, 'min', patience=5)
 
-        self.device = getDevice()
+        # self.device = getDevice()
 
     def forward(self, x):
         embedded = self.embedding(x)
@@ -104,11 +105,10 @@ class CategorizerRNN(torch.nn.Module):
         num_epochs = 0
         loss = 0
 
-        device = getDevice()
         # Training the model
         while num_epochs < EPOCHS:
             for inputs, labels in train_dataloader:
-                inputs, labels = inputs.to(device), labels.to(device)
+                inputs, labels = inputs.to(self.device), labels.to(self.device)
 
                 outputs = self(inputs)
                 loss = self.criterion(outputs, labels)
@@ -122,8 +122,6 @@ class CategorizerRNN(torch.nn.Module):
         return loss
 
     def evaluate(self, validation_dataloader, loss):
-        device = getDevice()
-
         # Evaluation for training data
         self.eval()
         with torch.no_grad():
@@ -131,7 +129,7 @@ class CategorizerRNN(torch.nn.Module):
             correct = 0
             total = 0
             for inputs, labels in validation_dataloader:
-                inputs, labels = inputs.to(device), labels.to(device)
+                inputs, labels = inputs.to(self.device), labels.to(self.device)
                 # inputs, labels = inputs.to('cpu'), labels.to('cpu')
 
                 outputs = self(inputs)
@@ -156,7 +154,6 @@ class CategorizerRNN(torch.nn.Module):
 
                 for pred in predicted:
                     predicted_label = dataset.category_labels[int(pred)]
-                    # print(f"Predicted label {predicted_label}")
                     # Save new labels to dataframe
                     df.at[index, "Category"] = predicted_label
                     index += 1

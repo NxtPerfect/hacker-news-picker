@@ -9,7 +9,7 @@ from time import perf_counter
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from os import cpu_count, path
 
-from src.database.db import DB_URL, appendDataToExistingFile
+from src.database.db import DB_URL, appendDataToExistingFile 
 from src.stats.stats import readStats, updateDatabase
 
 # Website url to scrape with pagination
@@ -86,7 +86,11 @@ def getUrls(pagesAmount):
     return list(f"{URL}{PAGINATION}{n+1}" for n in range(pagesAmount))
 
 def filterDataframe(all_dfs):
-    return [df for df in all_dfs if not df.empty and not df.isna().all().all()]
+    if len(all_dfs) == 0:
+        return pd.DataFrame()
+    dataframe = [df for df in all_dfs if not df.empty and not df.isna().all().all()]
+    dataframe = pd.concat(dataframe, ignore_index=True)
+    return dataframe
 
 def updateStats(all_dfs):
     # new_article_count = sum(new_articles_count)

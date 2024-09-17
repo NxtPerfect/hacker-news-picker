@@ -1,6 +1,6 @@
 database:
-  articles: 11580
-  categories_count: 12
+  articles: 12758
+  categories_count: 13
   categories_list:
   - operating systems
   - software
@@ -13,13 +13,14 @@ database:
   - privacy
   - politics
   - gaming
+  - lifehack
   - other
 model:
   categorizer:
-    accuracy: 0.4317
-    predict_correct: 275
-    predict_wrong: 362
+    accuracy: 0.2967
+    predict_correct: 189
+    predict_wrong: 448
   predicter:
-    accuracy: 0.3107
-    predict_correct: 160
-    predict_wrong: 355
+    accuracy: 0.0359
+    predict_correct: 173
+    predict_wrong: 342

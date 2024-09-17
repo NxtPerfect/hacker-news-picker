@@ -79,14 +79,16 @@ def saveBestModel(acc, best_acc, model):
 
     return acc > best_acc
 
-# TODO: Dataset depending on model
 def runTraining():
-    dataset = CategoryDataset(DB_URL, 100)
+    dataset = CategoryDataset(DB_URL)
     train_dataloader, val_dataloader, test_dataloader = getTrainValidationTestDataloadersFromDataset(dataset)
 
     vocab_size = len(dataset.tokenizer.vocab)
     output_dim = len(set(dataset.labels.numpy()))
     model = CategorizerRNN(vocab_size, output_dim)
+
+    # Prevent gradient explosion by clipping max gradient
+    torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
 
     loss = train(model, train_dataloader)
     model, correct, total = evaluate(model, val_dataloader, loss)
@@ -98,11 +100,11 @@ def runTraining():
 def predictCategory():
     print(f"[i] Started predicting category...")
 
-    dataset = CategoryDataset(DB_URL, 100)
-    dataloader = torch.utils.data.DataLoader(dataset, batch_size=128, shuffle=True)
+    dataset = CategoryDataset(DB_URL, False)
+    dataloader = torch.utils.data.DataLoader(dataset, batch_size=24, shuffle=True)
 
     vocab_size = len(dataset.tokenizer.vocab)
-    output_dim = len(set(dataset.labels.numpy()))
+    output_dim = len(set(dataset.labels.numpy()))-1
     model = CategorizerRNN(vocab_size, output_dim)
     model = loadModel(model)
     model.to(model.device)
@@ -111,9 +113,9 @@ def predictCategory():
     if type(df) == None:
         raise Exception("Loaded data from csv failed")
 
-    df = model.predict(df, dataloader, dataset)
+    new_df = model.predict(df, dataloader, dataset)
     # Save dataframe to test file
-    saveNewData(df, model.categorized_database_path)
+    saveNewData(new_df, model.categorized_database_path)
 
     print(f"[i] Finished predicting category.")
 

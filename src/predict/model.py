@@ -2,7 +2,7 @@ from src.stats.stats import readStats, updateModel
 import torch
 
 from src.models.datasets import InterestDataset
-from src.models.models import PredicterRNN, saveModel, loadModel
+from src.models.models import PredicterRNN, getTrainValidationTestDataloadersFromDataset, saveModel, loadModel
 from src.database.db import DB_URL, loadData, saveNewData
 
 EPOCHS = 25 # 50
@@ -20,7 +20,7 @@ def train(model, train_dataloader, val_dataloader):
     
     # Criterion, optimizer and scheduler
     criterion = torch.nn.CrossEntropyLoss()
-    optimizer = torch.optim.Adam(model.parameters(), lr=model.LEARNING_RATE)
+    optimizer = torch.optim.Adam(model.parameters(), lr=model.learning_rate)
     scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=25, gamma=0.1)
 
     num_epochs = 0
@@ -75,7 +75,7 @@ def predictInterest():
 
     print(f"[i] Starting predicting interest...")
 
-    dataset = InterestDataset("data/new_news.csv", 100)
+    dataset = InterestDataset("data/categorized_news.csv", -1)
 
     dataloader = torch.utils.data.DataLoader(dataset, batch_size=128, shuffle=True)
 
@@ -90,7 +90,7 @@ def predictInterest():
     model = loadModel(model)
     model.to(device)
 
-    df = loadData()
+    df = loadData(DB_URL)
     index = 0
     with torch.no_grad():
         for inputs, _ in dataloader:
@@ -171,12 +171,12 @@ def runPredicter():
         print(f"Best accuracy so far {acc:.6f}. Saving...")
         if (saveModel(model)):
             print("Successfully saved predict model.")
-        best_acc = acc
+        best_acc = round(acc, 4)
         best_correct = correct
         best_wrong = total - correct
-    print(updateModel("predicter", round(best_acc, 4), predicter["feedback_correct"], predicter["feedback_wrong"], best_correct, best_wrong))
+    print(updateModel("predicter", best_acc, best_correct, best_wrong))
     print(f"\n{'-'*20}END{'-'*20}\nBest accuracy ever for predict model {best_acc*100:.2f}%")
 
 if __name__ == "__main__":
     runPredicter()
-    # predictInterest()
+    predictInterest()

@@ -4,16 +4,16 @@ from transformers import BertTokenizer
 from sklearn.preprocessing import LabelEncoder
 
 class InterestDataset(torch.utils.data.Dataset):
-    def __init__(self, file_path, max_len=100) -> None:
+    def __init__(self, file_path, max_len, training=True) -> None:
         data = loadData(file_path)
 
-        articles_count = min(data['Category'].isnull().idxmax(), data['Interest_Rating'].isnull().idxmax())
+        articles_count = min(data['Category'].isnull().idxmax(), data['Interest_Rating'].isnull().idxmax()) if training else 0
 
         if articles_count == 0:
             articles_count = len(data)
         data = data[:articles_count]
 
-        self.max_len = max_len
+        self.max_len = max_len if max_len != -1 else articles_count
         self.features = (data["Title"] + ' ' + data["Category"]).values # also include categories
         self.labels = data["Interest_Rating"].values
         self.tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
@@ -43,18 +43,18 @@ class InterestDataset(torch.utils.data.Dataset):
 
 
 class CategoryDataset(torch.utils.data.Dataset):
-    def __init__(self, file_path, max_len=100) -> None:
+    def __init__(self, file_path, training=True) -> None:
         data = loadData(file_path)
 
         # Find the first None value in the 'Title' column
-        articles_count = data['Category'].isnull().idxmax()
+        articles_count = data['Category'].isnull().idxmax() if training else 0
         
         # If no None values are found, use the entire dataset
         if articles_count == 0:
             articles_count = len(data)
         data = data[:articles_count]
 
-        self.max_len = max_len
+        self.max_len = articles_count
         self.features = data["Title"].values
         self.labels = data["Category"].values
         self.tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
