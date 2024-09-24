@@ -189,6 +189,7 @@ def parseArticlesAndSaveToDataframe(articles, debug=False):
 
         all_dfs.append(new_df)
 
+    print()
     new_article_count = len(all_dfs)
 
     if len(all_dfs): new_df = pd.concat(all_dfs, ignore_index=True)

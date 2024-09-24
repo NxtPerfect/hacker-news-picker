@@ -1,11 +1,12 @@
+from src.preprocess.gather_data import time
 from src.stats.stats import readStats, updateModel
 import torch
 
 from src.models.datasets import CategoryDataset
-from src.models.models import CategorizerRNN, saveModel, loadModel, getTrainValidationTestDataloadersFromDataset
+from src.models.models import CategorizerRNN, plotMetrics, saveModel, loadModel, getTrainValidationTestDataloadersFromDataset
 from src.database.db import DB_URL, loadData, saveNewData
 
-EPOCHS = 25 # best accuracy using 25
+EPOCHS = 100 # best accuracy using 25/50
 
 def train(model, train_dataloader):
     model.to(model.device)
@@ -93,6 +94,8 @@ def runTraining():
     loss = train(model, train_dataloader)
     model, correct, total = evaluate(model, val_dataloader, loss)
     test_acc, correct, total = testModel(model, test_dataloader)
+
+    plotMetrics(model)
 
     return model, test_acc, correct, total
 

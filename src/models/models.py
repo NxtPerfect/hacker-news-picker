@@ -1,8 +1,20 @@
 import torch
 from pandas import DataFrame
+import matplotlib.pyplot as plt
 
 # HACK: For debugging only
 torch.manual_seed(16)
+
+class Metrics():
+    numOfEpochs = 0
+    losses = []
+    accuracies = []
+
+def plotMetrics(model):
+    plt.plot(model.metrics.losses)
+    plt.xlabel("Num of epoch")
+    plt.ylabel("Loss")
+    plt.show()
 
 def getDevice():
     device = (
@@ -73,26 +85,28 @@ class PredicterRNN(torch.nn.Module):
         return torch.nn.functional.log_softmax(out, dim=1)
 
 class CategorizerRNN(torch.nn.Module):
-    learning_rate = 1e-4 # 0.1 1e-2
+    learning_rate = 1e-3 # 0.1 1e-2
     embedding_dim = 128
     hidden_dim = 128
     model_path = "model/categorize/model.pt"
     categorized_database_path = "data/categorized_news.csv"
     device = getDevice()
+    metrics = Metrics()
     # device = "cpu"
 
     def __init__(self, vocab_size, output_dim=12):
         super(CategorizerRNN, self).__init__()
         self.embedding = torch.nn.Embedding(vocab_size, self.embedding_dim)
         self.rnn = torch.nn.GRU(self.embedding_dim, self.hidden_dim, bidirectional=True, batch_first=True)
-        self.dropout = torch.nn.Dropout(0.5)
+        self.dropout = torch.nn.Dropout(0.8) # 0.5
         self.fc = torch.nn.Linear(self.hidden_dim * 2, output_dim)
 
         self.criterion = torch.nn.CrossEntropyLoss()
-        self.optimizer = torch.optim.Adam(self.parameters(), lr=self.learning_rate) # 0.1
+        self.optimizer = torch.optim.Adam(self.parameters(), lr=self.learning_rate)
         self.scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(self.optimizer, 'min', patience=5)
 
         # self.device = getDevice()
+        self.metrics = Metrics()
 
     def forward(self, x):
         embedded = self.embedding(x)
@@ -116,8 +130,11 @@ class CategorizerRNN(torch.nn.Module):
                 self.optimizer.zero_grad()
                 loss.backward()
                 self.optimizer.step()
+                print(f"\rLoss: {loss:.8f}", end='')
             num_epochs += 1
-            print(f"Epoch: {num_epochs}, loss: {loss.item():.8f}")
+            print(f"\nEpoch: {num_epochs} loss: {loss.item():.8f}")
+            self.metrics.numOfEpochs = num_epochs
+            self.metrics.losses.append(loss.item())
 
         return loss
 

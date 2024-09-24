@@ -108,3 +108,5 @@ then there's an option to retrain the model
 
 - [ ] Clean up code
     - [ ] Fails to save file
+
+- [ ] The model doesn't learn, 5 and 50 epochs all have 29.67% accuracy

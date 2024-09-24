@@ -53,6 +53,7 @@ class CategoryDataset(torch.utils.data.Dataset):
         if articles_count == 0:
             articles_count = len(data)
         data = data[:articles_count]
+        print(f"Picked: {articles_count} articles to train on.")
 
         self.max_len = articles_count
         self.features = data["Title"].values
