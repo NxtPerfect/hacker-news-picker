@@ -42,7 +42,8 @@ def saveNewData(df: pd.DataFrame, path: str):
 def loadDataWithoutNulls(path: str):
     try:
         df = pd.read_csv(path, skip_blank_lines=True).dropna(how="all")
-        return df
+        articles_count = df['Category'].isnull().idxmax()
+        return df[:articles_count]
     except Exception as e:
         print(f"!E! Failed to load data.\n{e}")
         return None

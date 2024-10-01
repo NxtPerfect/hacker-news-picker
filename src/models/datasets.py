@@ -1,4 +1,4 @@
-from src.database.db import loadData
+from src.database.db import loadData, loadDataWithoutNulls
 import torch
 from transformers import BertTokenizer
 from sklearn.preprocessing import LabelEncoder
@@ -44,18 +44,15 @@ class InterestDataset(torch.utils.data.Dataset):
 
 class CategoryDataset(torch.utils.data.Dataset):
     def __init__(self, file_path, training=True) -> None:
-        data = loadData(file_path)
+        data = loadDataWithoutNulls(file_path) if training else loadData(file_path)
 
-        # Find the first None value in the 'Title' column
-        articles_count = data['Category'].isnull().idxmax() if training else 0
-        
-        # If no None values are found, use the entire dataset
-        if articles_count == 0:
-            articles_count = len(data)
-        data = data[:articles_count]
-        print(f"Picked: {articles_count} articles to train on.")
+        if type(data).__name__ != "DataFrame":
+            print("Loaded data is empty.", type(data).__name__)
+            return
 
-        self.max_len = articles_count
+        print(f"Picked: {len(data)} articles to train on.")
+
+        self.max_len = len(data) # articles_count
         self.features = data["Title"].values
         self.labels = data["Category"].values
         self.tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')

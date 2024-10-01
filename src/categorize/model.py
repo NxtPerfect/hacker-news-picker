@@ -6,7 +6,7 @@ from src.models.datasets import CategoryDataset
 from src.models.models import CategorizerRNN, plotMetrics, saveModel, loadModel, getTrainValidationTestDataloadersFromDataset
 from src.database.db import DB_URL, loadData, saveNewData
 
-EPOCHS = 100 # best accuracy using 25/50
+EPOCHS = 35 # best accuracy using 25/50 ||| 33 - 0.95 loss
 
 def train(model, train_dataloader):
     model.to(model.device)
@@ -107,7 +107,7 @@ def predictCategory():
     dataloader = torch.utils.data.DataLoader(dataset, batch_size=24, shuffle=True)
 
     vocab_size = len(dataset.tokenizer.vocab)
-    output_dim = len(set(dataset.labels.numpy()))-1
+    output_dim = len(set(dataset.labels.numpy()))
     model = CategorizerRNN(vocab_size, output_dim)
     model = loadModel(model)
     model.to(model.device)

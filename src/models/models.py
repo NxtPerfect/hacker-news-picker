@@ -11,9 +11,11 @@ class Metrics():
     accuracies = []
 
 def plotMetrics(model):
-    plt.plot(model.metrics.losses)
+    plt.style.use('dark_background')
+    plt.plot(model.metrics.losses, label='Loss', color='blue')
+    plt.plot(model.metrics.accuracies, label='Accuracy', color='orange')
     plt.xlabel("Num of epoch")
-    plt.ylabel("Loss")
+    plt.ylabel("Loss and Accuracy")
     plt.show()
 
 def getDevice():
@@ -121,20 +123,30 @@ class CategorizerRNN(torch.nn.Module):
 
         # Training the model
         while num_epochs < EPOCHS:
+            correct = 0
+            total = 0
             for inputs, labels in train_dataloader:
                 inputs, labels = inputs.to(self.device), labels.to(self.device)
 
                 outputs = self(inputs)
                 loss = self.criterion(outputs, labels)
 
+                _, predicted = torch.max(outputs.data, 1)
+
+                total += labels.size(0)
+                correct += (predicted == labels).sum().item()
+
                 self.optimizer.zero_grad()
                 loss.backward()
                 self.optimizer.step()
                 print(f"\rLoss: {loss:.8f}", end='')
+
             num_epochs += 1
-            print(f"\nEpoch: {num_epochs} loss: {loss.item():.8f}")
+            accuracy = 100 * correct / total
+            print(f"\nEpoch: {num_epochs} loss: {loss.item():.8f} accuracy {accuracy:.2f}%")
             self.metrics.numOfEpochs = num_epochs
             self.metrics.losses.append(loss.item())
+            self.metrics.accuracies.append(accuracy)
 
         return loss
 
